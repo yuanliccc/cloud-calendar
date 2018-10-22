@@ -48,6 +48,13 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.yl</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -57,6 +64,12 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+
+        <repository>
+            <id>YuanLi-maven-repository</id>
+            <name>YuanLi-maven-repository</name>
+            <url>https://raw.github.com/YuanLicc/maven-repository/1.0/</url>
         </repository>
     </repositories>
 

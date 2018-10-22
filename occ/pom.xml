@@ -11,5 +11,11 @@
 
     <artifactId>occ</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>group.calendar</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
