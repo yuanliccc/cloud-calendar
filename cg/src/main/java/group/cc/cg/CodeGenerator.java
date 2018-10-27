@@ -3,8 +3,10 @@ package group.cc.cg;
 import com.google.common.base.CaseFormat;
 import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.*;
+import org.mybatis.generator.internal.DefaultCommentGenerator;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.io.File;
