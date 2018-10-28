@@ -22,7 +22,11 @@ import java.util.Properties;
  * </ul>
  * @author YuanLi
  */
-public class ParameterReader {
+class ParameterReader {
+
+    public static final String TABLES_KEY = "tables";
+
+    public static final String AUTHOR_KEY = "author";
 
     /**
      * module 名称，如果是子模块，请填写，否则不填写或忽略
@@ -177,6 +181,10 @@ public class ParameterReader {
         // 添加 mapper package_path
         map.put(CONTROLLER_PACKAGE_PATH_KEY, add(map.get(BASE_PACKAGE_PATH_KEY),
                 packageConvertPath(ifNullReturnEmpty((String) properties.get(CONTROLLER_PACKAGE_KEY)))));
+
+        map.put(TABLES_KEY, ifNullThrowException((String)properties.get(TABLES_KEY), TABLES_KEY));
+
+        map.put(AUTHOR_KEY, ifNullReturnEmpty((String)properties.get(AUTHOR_KEY)));
 
         return map;
     }
