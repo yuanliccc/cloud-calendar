@@ -41,7 +41,7 @@ class ParameterReader {
     /**
      * 在获取工作目录后，我们希望得到 resources 文件路径，如在 maven 项目中的 src/main/resources
      */
-    public static final String RESOURCES_PATH_KEY = "java_path";
+    public static final String RESOURCES_PATH_KEY = "resources_path";
 
     /**
      * 代码生成后的基础包，如 com.alibaba，代码将生成在此包名下的子包或该包下，具体看下面是否配置完整。
@@ -143,7 +143,7 @@ class ParameterReader {
                 packageConvertPath(ifNullReturnEmpty((String) properties.get(BASE_PACKAGE_KEY)))));
 
         // 添加 model package
-        map.put(MODEL_PACKAGE_KEY, add(map.get(BASE_PACKAGE_KEY),
+        map.put(MODEL_PACKAGE_KEY, addPackage(map.get(BASE_PACKAGE_KEY),
                 ifNullReturnEmpty((String) properties.get(MODEL_PACKAGE_KEY))));
 
         // 添加 model_package_path
@@ -151,7 +151,7 @@ class ParameterReader {
                 packageConvertPath(ifNullReturnEmpty((String) properties.get(MODEL_PACKAGE_KEY)))));
 
         // 添加 service package
-        map.put(SERVICE_PACKAGE_KEY, add(map.get(BASE_PACKAGE_KEY),
+        map.put(SERVICE_PACKAGE_KEY, addPackage(map.get(BASE_PACKAGE_KEY),
                 ifNullReturnEmpty((String) properties.get(SERVICE_PACKAGE_KEY))));
 
         // 添加 service_package_path
@@ -159,7 +159,7 @@ class ParameterReader {
                 packageConvertPath(ifNullReturnEmpty((String) properties.get(SERVICE_PACKAGE_KEY)))));
 
         // 添加 service impl package
-        map.put(SERVICE_IMPL_KEY, add(map.get(BASE_PACKAGE_KEY),
+        map.put(SERVICE_IMPL_KEY, addPackage(map.get(BASE_PACKAGE_KEY),
                 ifNullReturnEmpty((String) properties.get(SERVICE_IMPL_KEY))));
 
         // 添加 service impl package_path
@@ -167,7 +167,7 @@ class ParameterReader {
                 packageConvertPath(ifNullReturnEmpty((String) properties.get(SERVICE_IMPL_KEY)))));
 
         // 添加 mapper package
-        map.put(MAPPER_PACKAGE_KEY, add(map.get(BASE_PACKAGE_KEY),
+        map.put(MAPPER_PACKAGE_KEY, addPackage(map.get(BASE_PACKAGE_KEY),
                 ifNullReturnEmpty((String) properties.get(MAPPER_PACKAGE_KEY))));
 
         // 添加 mapper package_path
@@ -175,7 +175,7 @@ class ParameterReader {
                 packageConvertPath(ifNullReturnEmpty((String) properties.get(MAPPER_PACKAGE_KEY)))));
 
         // 添加 controller package
-        map.put(CONTROLLER_PACKAGE_KEY, add(map.get(BASE_PACKAGE_KEY),
+        map.put(CONTROLLER_PACKAGE_KEY, addPackage(map.get(BASE_PACKAGE_KEY),
                 ifNullReturnEmpty((String) properties.get(CONTROLLER_PACKAGE_KEY))));
 
         // 添加 mapper package_path
@@ -194,6 +194,23 @@ class ParameterReader {
         return String.format("/%s/", packageName.contains(".")
                         ? packageName.replaceAll("\\.", "/")
                         : packageName);
+    }
+
+    private static String addPackage(String pack, String add) {
+        if(add == null || pack == null) {
+            return "";
+        }
+        add = add.trim();
+
+        if(add.equals("")) {
+            return pack;
+        }
+        else if(add.startsWith(".")){
+            return pack + add;
+        }
+        else {
+            return pack + "." + add;
+        }
     }
 
     private static String add(String path, String add) {

@@ -27,7 +27,7 @@ public class MybatisConfigurer {
         factory.setDataSource(dataSource);
         factory.setTypeAliasesPackage(MODEL_PACKAGE);
 
-        /*//配置分页插件，详情请查阅官方文档
+        //配置分页插件，详情请查阅官方文档
         PageHelper pageHelper = new PageHelper();
         Properties properties = new Properties();
         properties.setProperty("pageSizeZero", "true");//分页尺寸为0时查询所有纪录不再执行分页
@@ -36,7 +36,7 @@ public class MybatisConfigurer {
         pageHelper.setProperties(properties);
 
         //添加插件
-        factory.setPlugins(new Interceptor[]{pageHelper});*/
+        factory.setPlugins(new Interceptor[]{pageHelper});
 
         //添加XML目录
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -50,7 +50,7 @@ public class MybatisConfigurer {
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
         mapperScannerConfigurer.setBasePackage(MAPPER_PACKAGE);
 
-        //配置通用 Mapper，详情请查阅官方文档
+        //配置通用Mapper，详情请查阅官方文档
         Properties properties = new Properties();
         properties.setProperty("mappers", MAPPER_INTERFACE_REFERENCE);
         properties.setProperty("notEmpty", "false");//insert、update是否判断字符串类型!='' 即 test="str != null"表达式内是否追加 and str != ''
@@ -61,4 +61,5 @@ public class MybatisConfigurer {
     }
 
 }
+
 
