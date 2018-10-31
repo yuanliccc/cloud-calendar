@@ -11,8 +11,9 @@ import javax.annotation.Resource;
 
 
 /**
- * Created by ${author} on ${date}.
- */
+ * @author ${author}
+ * @date ${date}
+*/
 @Service
 @Transactional
 public class ${modelNameUpperCamel}ServiceImpl extends AbstractService<${modelNameUpperCamel}> implements ${modelNameUpperCamel}Service {
