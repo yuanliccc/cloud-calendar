@@ -6,6 +6,7 @@ import group.cc.bms.model.Org;
 import group.cc.bms.service.OrgService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ public class OrgController {
     @Resource
     private OrgService orgService;
 
+    @ApiOperation(value = "添加 org")
     @PostMapping("/add")
     public Result add(Org org) {
         orgService.save(org);
