@@ -1,4 +1,4 @@
-## cloud-calendar [![Build Status](https://travis-ci.org/yuanliccc/cloud-calendar.svg?branch=master)](https://travis-ci.org/yuanliccc/cloud-calendar) [![codecov.io](https://codecov.io/gh/yuanliccc/cloud-calendar/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/yuanliccc/cloud-calendar?branch=master) [[![GitHub version](https://badge.fury.io/gh/yuanliccc%2Fcloud-calendar.svg)](https://badge.fury.io/gh/yuanliccc%2Fcloud-calendar)](https://badge.fury.io/gh/yuanliccc%2Fcloud-calendar)
+## cloud-calendar [![Build Status](https://travis-ci.org/yuanliccc/cloud-calendar.svg?branch=master)](https://travis-ci.org/yuanliccc/cloud-calendar) [![codecov.io](https://codecov.io/gh/yuanliccc/cloud-calendar/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/yuanliccc/cloud-calendar?branch=master) [![GitHub version](https://badge.fury.io/gh/yuanliccc%2Fcloud-calendar.svg)](https://badge.fury.io/gh/yuanliccc%2Fcloud-calendar)
 
 云日历
 
