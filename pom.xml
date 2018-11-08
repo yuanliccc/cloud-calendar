@@ -28,6 +28,8 @@
         <druid.starter.version>1.1.10</druid.starter.version>
         <mybatis.connector.version>8.0.13</mybatis.connector.version>
         <swagger.version>2.2.2</swagger.version>
+
+        <jedis.version>2.9.0</jedis.version>
     </properties>
 
     <!-- Inherit defaults from Spring Boot -->
@@ -46,6 +48,7 @@
         <module>org</module>
         <module>cg</module>
         <module>core</module>
+        <module>jedis</module>
     </modules>
 
     <name>cloud-calendar</name>
