@@ -37,6 +37,8 @@ public class JedisConfigReader implements Reader<JedisConfig> {
 
         Properties properties = PropertiesReaderUtil.getProperties(this.jedisFilePath);
 
+        JedisConfig jedisConfig = new JedisConfig();
+
 
 
         return null;
