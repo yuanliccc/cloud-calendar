@@ -23,86 +23,112 @@ public class JedisConfig {
     private String[] passwords;
 
     /**
-     * 最大连接数 {@link #maxTotal}
+     * 最大连接数 {@link #maxTotal}，默认值 ： 8
      */
     public static final String MAX_TOTAL_KEY = "redis.pool.maxTotal";
+
+    public static final int DEFAULT_MAX_TOTAL = 8;
 
     private int maxTotal;
 
     /**
-     * 最大空闲连接数 {@link #maxIdle}
+     * 最大空闲连接数 {@link #maxIdle}，默认值 8
      */
     public static final String MAX_IDLE_KEY = "redis.pool.maxIdle";
+
+    public static final int DEFAULT_MAX_IDLE = 8;
 
     private int maxIdle;
 
     /**
-     * 最小空闲连接数 {@link #minIdle}
+     * 最小空闲连接数 {@link #minIdle}，默认值 0
      */
     public static final String MIN_IDLE_KEY = "redis.pool.minIdle";
+
+    public static final int DEFAULT_MIN_IDLE = 0;
 
     private int minIdle;
 
     /**
-     * 当无连接可用时，是否允许阻塞等待，设置等待时间 {@code MAX_WAIT_MILLIS_KEY} {@link #blockedWhenExhausted}
+     * 当无连接可用时，是否允许阻塞等待，设置等待时间 {@code MAX_WAIT_MILLIS_KEY} {@link #blockedWhenExhausted}，
+     * 默认值 true
      */
     public static final String BLOCKED_WHEN_EXHAUSTED_KEY = "redis.pool.blockedWhenExhausted";
 
-    private long blockedWhenExhausted;
+    public static final boolean DEFAULT_BLOCKED_WHEN_EXHAUSTED = true;
+
+    private boolean blockedWhenExhausted;
 
     /**
-     * 最大等待时间 {@link #maxWaitMillis}
+     * 最大等待时间 {@link #maxWaitMillis}，默认值 -1，表示永远不超时
      */
     public static final String MAX_WAIT_MILLIS_KEY = "redis.pool.maxWaitMillis";
+
+    public static final long DEFAULT_MAX_WAIT_MILLIS = -1;
 
     private long maxWaitMillis;
 
     /**
-     * 获取连接时，是否进行连接有效性测试，检测会进行 ping 操作, true or false {@link #testOnBorrow}
+     * 获取连接时，是否进行连接有效性测试，检测会进行 ping 操作, true or false {@link #testOnBorrow}，默认值 false
      */
-    public static final String TEST_ON_BORROW = "redis.pool.testOnBorrow";
+    public static final String TEST_ON_BORROW_KEY = "redis.pool.testOnBorrow";
+
+    public static final boolean DEFAULT_TEST_ON_BORROW = false;
 
     private boolean testOnBorrow;
 
     /**
-     * 释放连接时，是否进行连接有效性测试，检测会进行 ping 操作 {@link #testOnReturn}
+     * 释放连接时，是否进行连接有效性测试，检测会进行 ping 操作 {@link #testOnReturn}，默认值 false
      */
     public static final String TEST_ON_RETURN_KEY = "redis.pool.testOnReturn";
+
+    public static final boolean DEFAULT_TEST_ON_RETURN = false;
 
     private boolean testOnReturn;
 
     /**
-     * 是否开启 jmx 监控 {@link #jmxEnable}
+     * 是否开启 jmx 监控 {@link #jmxEnable}，默认值 true
      */
     public static final String JMX_ENABLE_KEY = "redis.pool.jmxEnable";
+
+    public static final boolean DEFAULT_JMX_ENABLE = true;
 
     private boolean jmxEnable;
 
     /**
-     * 是否开启空闲检测，默认 false {@link #testWhileIdle}
+     * 是否开启空闲检测，默认 false {@link #testWhileIdle}，默认值 false
      */
     public static final String TEST_WHILE_IDLE_KEY = "redis.pool.testWhileIdle";
+
+    public static final boolean DEFAULT_TEST_WHILE_IDLE = false;
 
     private boolean testWhileIdle;
 
     /**
-     * 空闲资源的检测周期，单位 millis，默认 -1 -> 不检测 {@link #timeBetweenEvictionRunsMillis}
+     * 空闲资源的检测周期，单位 millis {@link #timeBetweenEvictionRunsMillis}，默认值 30000
      */
-    public static final String TIME_BETWEEN_EVICTION_RUNS_MILLIS_KEY = "redis.pool.timeBetweenEvictionRunsMillis";
+    public static final String TIME_BETWEEN_EVICTION_RUNS_MILLIS_KEY
+            = "redis.pool.timeBetweenEvictionRunsMillis";
+
+    public static final long DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS = 30000;
 
     private long timeBetweenEvictionRunsMillis;
 
     /**
-     * 空闲资源最小存活时间，达到时间后将会被移除，单位 millis {@link #minEvictableIdleTimeMillis}
+     * 空闲资源最小存活时间，达到时间后将会被移除，单位 millis {@link #minEvictableIdleTimeMillis}，默认 60000
      */
     public static final String MIN_EVICTABLE_IDLE_TIME_MILLIS_KEY = "redis.pool.minEvictableIdleTimeMillis";
+
+    public static final long DEFAULT_MIN_EVICTABLE_IDLE_TIME_MILLIS = 60000;
 
     private long minEvictableIdleTimeMillis;
 
     /**
-     * 空闲资源检测时的采样数 {@link #numTestsPerEvictionRun}
+     * 空闲资源检测时的采样数 {@link #numTestsPerEvictionRun}，默认值 3
      */
     public static final String NUM_TESTS_PER_EVICTION_RUN_KEY = "redis.pool.numTestsPerEvictionRun";
+
+    public static final int DEFAULT_NUM_TESTS_PER_EVICTION_RUN = 3;
 
     private int numTestsPerEvictionRun;
 
@@ -150,11 +176,11 @@ public class JedisConfig {
         this.minIdle = minIdle;
     }
 
-    public long getBlockedWhenExhausted() {
+    public boolean getBlockedWhenExhausted() {
         return blockedWhenExhausted;
     }
 
-    public void setBlockedWhenExhausted(long blockedWhenExhausted) {
+    public void setBlockedWhenExhausted(boolean blockedWhenExhausted) {
         this.blockedWhenExhausted = blockedWhenExhausted;
     }
 
