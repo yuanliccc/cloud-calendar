@@ -13,8 +13,6 @@ import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-import static group.cc.core.ProjectConstant.*;
-
 /**
  * Mybatis & Mapper & PageHelper 配置
  */
@@ -23,9 +21,10 @@ public class MybatisConfigurer {
 
     @Bean
     public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
+
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(dataSource);
-        factory.setTypeAliasesPackage(MODEL_PACKAGE);
+        //factory.setTypeAliasesPackage(MODEL_PACKAGE);
 
         //配置分页插件，详情请查阅官方文档
         PageHelper pageHelper = new PageHelper();
@@ -46,15 +45,17 @@ public class MybatisConfigurer {
 
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
+
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
-        mapperScannerConfigurer.setBasePackage(MAPPER_PACKAGE);
+        //mapperScannerConfigurer.setBasePackage(MAPPER_PACKAGE);
 
         //配置通用Mapper，详情请查阅官方文档
         Properties properties = new Properties();
-        properties.setProperty("mappers", MAPPER_INTERFACE_REFERENCE);
+        //properties.setProperty("mappers", MAPPER_INTERFACE_REFERENCE);
         properties.setProperty("notEmpty", "false");//insert、update是否判断字符串类型!='' 即 test="str != null"表达式内是否追加 and str != ''
         properties.setProperty("IDENTITY", "MYSQL");
+
         mapperScannerConfigurer.setProperties(properties);
 
         return mapperScannerConfigurer;

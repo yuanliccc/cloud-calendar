@@ -55,6 +55,7 @@ public abstract class AbstractService<T> implements Service<T> {
             Field field = modelClass.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(model, value);
+
             return mapper.selectOne(model);
         } catch (ReflectiveOperationException e) {
             throw new ServiceException(e.getMessage(), e);
