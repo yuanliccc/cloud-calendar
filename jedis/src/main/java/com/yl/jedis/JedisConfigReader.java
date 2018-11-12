@@ -43,13 +43,16 @@ public class JedisConfigReader implements Reader<JedisConfig> {
         Properties properties = PropertiesReaderUtil.getProperties(this.jedisFilePath);
         JedisConfig jedisConfig = new JedisConfig();
 
-        jedisConfig.setServers(StringUtil
-                .nullToEmpty(properties.getProperty(SERVERS_KEY))
-                .split(","));
+        jedisConfig.setServer(StringUtil
+                .nullToEmpty(properties.getProperty(SERVERS_KEY)));
 
-        jedisConfig.setPasswords(StringUtil
-                .nullToEmpty(properties.getProperty(PASSWORDS_KEY))
-                .split(","));
+        jedisConfig.setPort(nullToDefault(properties.get(PORT_KEY),
+                DEFAULT_PORT));
+
+        jedisConfig.setTimeout(nullToDefault(properties.get(TIMEOUT_KEY), DEFAULT_TIMEOUT));
+
+        jedisConfig.setPassword(StringUtil
+                .nullToEmpty(properties.getProperty(PASSWORDS_KEY)));
 
         jedisConfig.setMaxTotal(nullToDefault(properties.get(MAX_TOTAL_KEY),
                 DEFAULT_MAX_TOTAL));
@@ -90,6 +93,13 @@ public class JedisConfigReader implements Reader<JedisConfig> {
         return jedisConfig;
     }
 
+    /**
+     * null 值时返回给定默认值，否则返回给定值，且强制转换为默认值类型
+     * @param aim 给定值
+     * @param defaultValue 默认值
+     * @param <T> 默认值类型及返回值类型
+     * @return
+     */
     private <T> T nullToDefault(Object aim, T defaultValue) {
 
         return aim == null ? defaultValue : (T)aim;

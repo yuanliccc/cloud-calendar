@@ -8,19 +8,37 @@ package com.yl.jedis;
 public class JedisConfig {
 
     /**
-     * Redis 服务器 ip + 端口，逗号分隔
-     * {@link #servers}
+     * Redis 服务器 ip
+     * {@link #server}
      */
-    public static final String SERVERS_KEY = "redis.servers";
+    public static final String SERVERS_KEY = "redis.server";
 
-    private String[] servers;
+    private String server;
 
     /**
-     * Redis 服务器密码，逗号分隔 {@link #passwords}
+     * Redis 服务器端口 {@link #port}，默认 6379
      */
-    public static final String PASSWORDS_KEY = "redis.passwords";
+    public static final String PORT_KEY = "redis.port";
 
-    private String[] passwords;
+    public static final int DEFAULT_PORT = 6379;
+
+    private int port;
+
+    /**
+     * Redis 连接超时 {@link #timeout}
+     */
+    public static final String TIMEOUT_KEY = "redis.password";
+
+    public static final int DEFAULT_TIMEOUT = 2000;
+
+    private int timeout;
+
+    /**
+     * Redis 服务器密码 {@link #password}
+     */
+    public static final String PASSWORDS_KEY = "redis.password";
+
+    private String password;
 
     /**
      * 最大连接数 {@link #maxTotal}，默认值 ： 8
@@ -136,20 +154,28 @@ public class JedisConfig {
     public JedisConfig() {
     }
 
-    public String[] getServers() {
-        return servers;
+    public String getServer() {
+        return server;
     }
 
-    public void setServers(String[] servers) {
-        this.servers = servers;
+    public void setServer(String server) {
+        this.server = server;
     }
 
-    public String[] getPasswords() {
-        return passwords;
+    public int getTimeout() {
+        return timeout;
     }
 
-    public void setPasswords(String[] passwords) {
-        this.passwords = passwords;
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getMaxTotal() {
@@ -230,6 +256,14 @@ public class JedisConfig {
 
     public void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
         this.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public long getMinEvictableIdleTimeMillis() {

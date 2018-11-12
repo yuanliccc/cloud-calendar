@@ -1,9 +1,7 @@
 package com.yl.jedis;
 
-
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import java.util.Map;
 
 /**
  * Redis 连接池管理器 - 单例模式
@@ -11,12 +9,35 @@ import java.util.Map;
  */
 public class JedisPoolManager {
 
-    private static volatile transient JedisPoolManager jedisPoolManager;
+    private JedisPool jedisPool;
 
-    private static Map<String, JedisPool> jedisPools;
+    private static class Internal {
 
-    private JedisPoolManager() {}
+        private static volatile transient JedisPoolManager jedisPoolManager
+                = new JedisPoolManager();
+    }
 
+    private JedisPoolManager() {
+        jedisPool = new JedisPoolFactory(JedisConfigReader.JEDIS_DEFAULT_CONFIG_FILE)
+                .create();
+    }
 
+    public static JedisPoolManager getInstance() {
+        return Internal.jedisPoolManager;
+    }
+
+    public Jedis getResource() {
+
+        return jedisPool.getResource();
+    }
+
+    public void destroy() {
+
+        jedisPool.destroy();
+    }
+
+    public void close() {
+        jedisPool.close();
+    }
 
 }
