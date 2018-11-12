@@ -56,9 +56,15 @@ public class CodeGenerator {
         genControllers(tableNames, params);
     }
 
+    /**
+     * 为指定 context 添加指定表名的配置
+     * @param tableNames 指定表名，以逗号隔开
+     * @param context 上下文
+     */
     private static void addTablesConfig(String tableNames, Context context) {
 
         for(String tableName : tableNames.split(",")) {
+
             TableConfiguration tableConfiguration = new TableConfiguration(context);
             tableConfiguration.setTableName(tableName);
             tableConfiguration.setGeneratedKey(new GeneratedKey("id", "Mysql", true, null));
@@ -66,7 +72,11 @@ public class CodeGenerator {
         }
     }
 
-
+    /**
+     * 生成 model 及 mapper
+     * @param tableNames 表名，逗号隔开
+     * @param params 生成所需参数集合
+     */
     public static void genModelAndMapper(String tableNames, Map<String, String> params) {
         Context context = new Context(ModelType.FLAT);
         context.setId("Potato");
@@ -127,6 +137,12 @@ public class CodeGenerator {
         }
     }
 
+    /**
+     * 生成 Service 及 ServiceImpl
+     * @param tableNames
+     * @param params
+     * @see #genService(String, Map)
+     */
     public static void genServices(String tableNames, Map<String, String> params) {
 
         for(String tableName : tableNames.split(",")) {
@@ -134,6 +150,11 @@ public class CodeGenerator {
         }
     }
 
+    /**
+     * 生成 Service 及 ServiceImpl
+     * @param tableName
+     * @param params
+     */
     public static void genService(String tableName, Map<String, String> params) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();

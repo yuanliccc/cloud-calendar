@@ -189,6 +189,11 @@ class ParameterReader {
         return map;
     }
 
+    /**
+     * package 如 com.alibaba 转换为 com/alibaba
+     * @param packageName 如 com.alibaba
+     * @return
+     */
     private static String packageConvertPath(String packageName) {
 
         return String.format("/%s/", packageName.contains(".")
@@ -196,6 +201,12 @@ class ParameterReader {
                         : packageName);
     }
 
+    /**
+     * package 追加，如 com.alibaba, fastjson 追加为：com.alibaba.fastjson
+     * @param pack 如：com.alibaba
+     * @param add 如：fastjson 或者 .fastjson
+     * @return
+     */
     private static String addPackage(String pack, String add) {
         if(add == null || pack == null) {
             return "";
@@ -213,6 +224,12 @@ class ParameterReader {
         }
     }
 
+    /**
+     * 文件路径追加，如 com/alibaba，fastjson 追加为 com/alibaba/fastjson
+     * @param path 如：com/alibaba
+     * @param add 如：fastjson 或者 /fastjson
+     * @return
+     */
     private static String add(String path, String add) {
         if(add == null || path == null) {
             return "";
@@ -236,6 +253,7 @@ class ParameterReader {
      * @return value.trim()
      */
     private static String ifNullReturnEmpty(String value) {
+
         return value == null ? "" : value.trim();
     }
 
