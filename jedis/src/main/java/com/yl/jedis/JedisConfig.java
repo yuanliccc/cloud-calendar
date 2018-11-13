@@ -123,12 +123,12 @@ public class JedisConfig {
     private boolean testWhileIdle;
 
     /**
-     * 空闲资源的检测周期，单位 millis {@link #timeBetweenEvictionRunsMillis}，默认值 30000
+     * 空闲资源的检测周期，单位 millis {@link #timeBetweenEvictionRunsMillis}，默认值 -1
      */
     public static final String TIME_BETWEEN_EVICTION_RUNS_MILLIS_KEY
             = "redis.pool.timeBetweenEvictionRunsMillis";
 
-    public static final long DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS = 30000;
+    public static final long DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS = -1;
 
     private long timeBetweenEvictionRunsMillis;
 
