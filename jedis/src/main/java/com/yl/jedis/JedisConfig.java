@@ -27,7 +27,7 @@ public class JedisConfig {
     /**
      * Redis 连接超时 {@link #timeout}
      */
-    public static final String TIMEOUT_KEY = "redis.password";
+    public static final String TIMEOUT_KEY = "redis.timeout";
 
     public static final int DEFAULT_TIMEOUT = 2000;
 
