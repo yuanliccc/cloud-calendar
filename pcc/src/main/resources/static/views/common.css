@@ -1,0 +1,19 @@
+.no-margin {
+    margin: 0;
+}
+
+.t-center {
+    text-align: center;
+}
+
+.flex-row {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.flex-column {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
