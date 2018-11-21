@@ -1,0 +1,29 @@
+.content {
+    width: 100%;
+    margin-top: 100px;
+}
+
+.content-container {
+    width: 80%;
+    height: 400px;
+    margin: 0 auto;
+}
+
+.content-left {
+    width: 700px;
+}
+
+.content-right {
+    width: 350px;
+    margin-left: 30px;
+}
+
+.img-size {
+    width: 700px;
+    height: 400px;
+}
+
+.img-item {
+    width: 700px;
+    height: 400px;
+}

@@ -12,6 +12,8 @@
 
 
     <build>
+        <finalName>pcc</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
