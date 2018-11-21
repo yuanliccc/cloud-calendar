@@ -94,3 +94,47 @@ public class Application {
 }
 ```
 
+### SpringBoot 项目相关
+
+由于 SpringBoot 项目启动使用内部的 tomcat 相关包进行启动，所以需要注意以下几点：
+
+#### 配置插件
+
+需要在 pom.xml 中配置插件来打包项目
+
+```
+<plugin>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-maven-plugin</artifactId>
+</plugin>
+```
+
+#### 如何打包子项目
+
+根据 pom.xml  中的配置打包为 jar 包或者 war 包。
+
+```shell
+mvn package -pl [module] -am
+```
+
+如打包 pcc 模块：
+
+```shell
+mvn package -pl pcc -am
+```
+
+#### 如何启动
+
+IDE 中直接可以启动，linux 下启动如下：
+
+```shell
+java -jar -server.port=80 xxx.jar
+```
+
+上面启动方式为非后台方式，后台方式启动如下：
+
+```shell
+nohup java -jar -server.port=80 xxx.jar
+```
+
+后台启动的关闭可通过 ps 查看进程，然后关闭对应进程。
