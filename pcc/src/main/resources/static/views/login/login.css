@@ -3,31 +3,86 @@ body {
 }
 
 .login-block {
-    margin-top: 100px;
+    margin-top: 50px;
     width: 100%;
 }
 
 .login-container-bg {
-    width: 400px;
-    height: 350px;
+    width: 390px;
     background-size: 100%;
+    margin-right: 60px;
+}
+
+.simple-info-block {
+    width: 400px;
+    height: 380px;
+    margin-left: 60px;
+}
+
+.simple-info-title {
+    height: 40px;
+    text-align: center;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.icon-block {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 13px;
+}
+
+.icon-container {
+    width: 133px;
+    height: 110px;
+}
+
+.simple-info-desc {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.icon-desc {
+    margin-top: 5px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+.icon-div {
+    width: 65px;
+    height: 65px;
+    font-size: 35px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 auto;
+    text-align: center;
+    color: #2196f3;
+}
+
+.line {
+    height: 380px;
+    border: 1px solid rgba(158, 158, 158, 0.24);
 }
 
 .login-container {
     width: 100%;
     height: 100%;
-    background: white;
     border-bottom-color: rgb(0, 0, 0);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 5px 0px,
-    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
-    rgba(0, 0, 0, 0.12) 0px 3px 1px -2px;
     border-radius: 4px;
 }
 
 .login-container-header {
     width: 100%;
     text-align: center;
-    height: 53px;
+    height: 48px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -42,11 +97,14 @@ body {
 
 .login-container-content {
     margin-top: 20px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 5px 0px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 3px 1px -2px;
 }
 
 .login-container-content-block {
     width: 80%;
-
+    margin-top: 10px;
+    margin-bottom: 22px;
 }
 
 .login-input-item {
@@ -69,8 +127,6 @@ body {
 }
 
 .login-submit-block {
-    display: flex;
-    justify-content: center;
     width: 100%;
     margin-top: 12px;
 }
@@ -78,19 +134,4 @@ body {
 .login-radio {
     margin-top: 8px;
     color: #5555559c;
-}
-
-.login-submit-btn {
-    width: 80%;
-    height: 40px;
-    border-radius: 20px;
-    background: rgba(33, 150, 243, 0.85);
-    color: white;
-    font-size: 16px;
-    border: 0;
-    outline: none;
-}
-
-.login-submit-btn:hover {
-    background: #2196f3;
 }

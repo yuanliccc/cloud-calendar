@@ -1,3 +1,7 @@
+body {
+    background: #f2f2f2;
+}
+
 .no-margin {
     margin: 0;
 }
@@ -27,7 +31,9 @@
     background: rgb(33, 150, 243);
     height: 60px;
     width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px,
+    rgba(0, 0, 0, 0.14) 0px 4px 5px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
 }
 
 .logo-block {
@@ -47,4 +53,19 @@
 .logo-a:hover {
     text-decoration: none;
     color: white;
+}
+
+.submit-btn {
+    width: 80%;
+    height: 40px;
+    border-radius: 20px;
+    background: rgba(33, 150, 243, 0.85);
+    color: white;
+    font-size: 16px;
+    border: 0;
+    outline: none;
+}
+
+.submit-btn:hover {
+    background: #2196f3;
 }
