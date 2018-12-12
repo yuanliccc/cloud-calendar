@@ -9,8 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>df</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>mail</artifactId>
+
+    <properties>
+        <mail.version>1.4.7</mail.version>
+        <velocity.starter.version>1.4.7.RELEASE</velocity.starter.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -18,6 +22,17 @@
             <artifactId>core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-    </dependencies>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-velocity</artifactId>
+            <version>${velocity.starter.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${mail.version}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -49,6 +49,7 @@
         <module>cg</module>
         <module>core</module>
         <module>jedis</module>
+        <module>mail</module>
     </modules>
 
     <name>cloud-calendar</name>
