@@ -4,6 +4,10 @@ import com.yl.common.util.PropertiesReaderUtil;
 
 import java.util.*;
 
+/**
+ * 邮箱列表 - 协议、服务器地址
+ * @author YuanLi
+ */
 public class MailHostsHolder {
 
     public static final String configPath = "mail-server.properties";
