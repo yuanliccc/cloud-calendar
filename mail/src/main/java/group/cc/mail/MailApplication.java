@@ -8,10 +8,10 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication
 @EnableSwagger2
 @MapperScan(value = "group.cc.mail.dao")
-public class Application {
+public class MailApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(MailApplication.class, args);
     }
 }

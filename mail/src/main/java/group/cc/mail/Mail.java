@@ -1,6 +1,7 @@
 package group.cc.mail;
 
 import com.yl.common.parse.Parser;
+import com.yl.common.validate.Validator;
 
 /**
  * 邮箱简单抽象实体
@@ -33,11 +34,34 @@ public class Mail {
         this.serverName = serverName;
     }
 
-    public static class MailParser implements Parser<String, Mail> {
+    /**
+     * mail 建造器，唯一生成 Mail 对象的方法（提供邮箱的验证及 Mail 对象的构造）
+     * @author YuanLi
+     */
+    public static class MailBuilder {
 
-        @Override
-        public Mail parse(String mail) {
-            return null;
+        private String mail;
+
+        private Validator<String> mailValidator;
+
+        private Parser<String, String[]> parser;
+
+        public MailBuilder(String mail,
+                           Validator<String> mailValidator,
+                           Parser<String, String[]> mailParser) {
+            this.mail = mail;
+            this.mailValidator = mailValidator;
+            this.parser = mailParser;
+        }
+
+        public Mail build() throws MailException {
+            // 验证邮箱正确性
+            if(!mailValidator.validate(mail)) {
+                throw new MailException("Default mail test wrong, please check it!");
+            }
+            String[] mailParseResult = parser.parse(mail);
+
+            return new Mail(mailParseResult[0], mailParseResult[1]);
         }
     }
 }
