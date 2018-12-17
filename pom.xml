@@ -50,6 +50,7 @@
         <module>core</module>
         <module>jedis</module>
         <module>mail</module>
+        <module>rabbitmq</module>
     </modules>
 
     <name>cloud-calendar</name>
