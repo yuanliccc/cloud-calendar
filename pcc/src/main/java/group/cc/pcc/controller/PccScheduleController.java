@@ -1,0 +1,61 @@
+package group.cc.pcc.controller;
+
+import group.cc.core.Result;
+import group.cc.core.ResultGenerator;
+import group.cc.pcc.model.PccSchedule;
+import group.cc.pcc.service.PccScheduleService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.web.bind.annotation.*;
+import io.swagger.annotations.ApiOperation;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+/**
+ * @author yuanli
+ * @date 2018/12/23
+ */
+@RestController
+@RequestMapping("/pcc/schedule")
+public class PccScheduleController {
+    @Resource
+    private PccScheduleService pccScheduleService;
+
+    @ApiOperation(value="添加 PccSchedule")
+    @PostMapping
+    public Result add(@RequestBody PccSchedule pccSchedule) {
+        pccScheduleService.save(pccSchedule);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation(value="删除 PccSchedule")
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Integer id) {
+        pccScheduleService.deleteById(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation(value="更新 PccSchedule")
+    @PutMapping
+    public Result update(@RequestBody PccSchedule pccSchedule) {
+        pccScheduleService.update(pccSchedule);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation(value="通过 Id 查询 PccSchedule 详情")
+    @GetMapping("/{id}")
+    public Result detail(@PathVariable Integer id) {
+        PccSchedule pccSchedule = pccScheduleService.findById(id);
+        return ResultGenerator.genSuccessResult(pccSchedule);
+    }
+
+    @ApiOperation(value="分页查询 PccSchedule 列表")
+    @GetMapping
+    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+        PageHelper.startPage(page, size);
+        List<PccSchedule> list = pccScheduleService.findAll();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+}
