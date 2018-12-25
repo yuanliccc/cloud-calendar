@@ -10,6 +10,7 @@ public class JedisConfigConverter implements Converter<JedisConfig, GenericObjec
 
     @Override
     public GenericObjectPoolConfig convert(JedisConfig converted) {
+
         GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
 
         genericObjectPoolConfig.setMaxIdle(converted.getMaxIdle());
