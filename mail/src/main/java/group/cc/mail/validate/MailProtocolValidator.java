@@ -23,6 +23,6 @@ public class MailProtocolValidator implements Validator<String> {
             return false;
         }
 
-        return mailProtocolPattern.matches(s);
+        return s.matches(mailProtocolPattern);
     }
 }

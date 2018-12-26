@@ -1,83 +1,94 @@
 package group.cc.rabbitmq.configurer;
 
-import org.springframework.amqp.core.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
-/*@Configuration*/
+/**
+ * RabbitMQ 通用配置
+ * @author YuanLi
+ */
+@Configuration
 public class RabbitMQConfigurer {
 
-    public final static String QUEUE_NAME = "spring-boot-queue";
+    private static final Logger log = LoggerFactory.getLogger(RabbitMQConfigurer.class);
 
-    public final static String EXCHANGE_NAME = "spring-boot-exchange";
+    @Autowired
+    private Environment env;
 
-    public final static String ROUTING_KEY = "spring-boot-key";
+    @Autowired
+    private CachingConnectionFactory connectionFactory;
 
-    private String mqRabbitHost;
+    @Autowired
+    private SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer;
 
-    private int mqRabbitPort;
+    /**
+     * 单一消费者
+     * @return
+     */
+    @Bean("singleListenerContainer")
+    public SimpleRabbitListenerContainerFactory listenerContainer() {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 
-    private String mqRabbitUserName;
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
 
-    private String mqRabbitPassword;
+        factory.setConcurrentConsumers(1);
+        factory.setMaxConcurrentConsumers(1);
+        factory.setPrefetchCount(1);
+        factory.setTxSize(1);
 
-    private String mqRabbitVirtualHost;
+        factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
 
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(this.mqRabbitHost,this.mqRabbitPort);
+        return factory;
+    }
 
-        connectionFactory.setUsername(this.mqRabbitUserName);
-        connectionFactory.setPassword(this.mqRabbitPassword);
-        connectionFactory.setVirtualHost(this.mqRabbitVirtualHost);
-        connectionFactory.setPublisherConfirms(true);
+    /**
+     * 多个消费者
+     * @return
+     */
+    @Bean("multiListenerContainer")
+    public SimpleRabbitListenerContainerFactory multiListenerContainer() {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 
-        return connectionFactory;
+        factoryConfigurer.configure(factory, connectionFactory);
+
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
+        factory.setAcknowledgeMode(AcknowledgeMode.NONE);
+
+        factory.setConcurrentConsumers(env.getProperty("spring.rabbitmq.listener.concurrency", int.class));
+        factory.setMaxConcurrentConsumers(env.getProperty("spring.rabbitmq.listener.max-concurrency", int.class));
+        factory.setPrefetchCount(env.getProperty("spring.rabbitmq.listener.prefetch", int.class));
+
+        return factory;
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory());
-        return template;
-    }
+        connectionFactory.setPublisherConfirms(true);
+        connectionFactory.setPublisherReturns(true);
 
-    @Bean
-    public DirectExchange defaultExchange() {
-        return new DirectExchange(EXCHANGE_NAME);
-    }
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMandatory(true);
 
-    @Bean
-    public Queue queue() {
-        return new Queue(QUEUE_NAME, true);
-    }
-
-    @Bean
-    public Binding binding() {
-
-        return BindingBuilder.bind(queue()).to(defaultExchange()).with(ROUTING_KEY);
-    }
-
-    @Bean
-    public SimpleMessageListenerContainer messageContainer() {
-
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory());
-        container.setQueues(queue());
-        container.setExposeListenerChannel(true);
-        container.setMaxConcurrentConsumers(1);
-        container.setConcurrentConsumers(1);
-        container.setAcknowledgeMode(AcknowledgeMode.MANUAL);
-        container.setMessageListener(new ChannelAwareMessageListener() {
-
-            public void onMessage(Message message, com.rabbitmq.client.Channel channel) throws Exception {
-                byte[] body = message.getBody();
-                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-            }
+        rabbitTemplate.setConfirmCallback((CorrelationData correlationData, boolean ack, String cause) -> {
+            log.info("消息发送成功 : correlationData({}),ack({}),cause({})", correlationData, ack, cause);
         });
-        return container;
+        rabbitTemplate.setReturnCallback((Message message, int replyCode, String replyText, String exchange, String routingKey) -> {
+            log.info("消息丢失 : exchange({}),route({}),replyCode({}),replyText({}),message:{}", exchange, routingKey, replyCode, replyText, message);
+        });
+
+        return rabbitTemplate;
     }
 }

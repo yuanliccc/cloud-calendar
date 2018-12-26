@@ -21,6 +21,8 @@ public class MailHostsHolder {
         // 获取 keys
         Enumeration enumeration = properties.propertyNames();
 
+        mailHosts = new HashMap<>();
+
         // 遍历获取值
         while (enumeration.hasMoreElements()) {
             String key = (String) enumeration.nextElement();

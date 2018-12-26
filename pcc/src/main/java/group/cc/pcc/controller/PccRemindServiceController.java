@@ -22,7 +22,7 @@ public class PccRemindServiceController {
     @Resource
     private PccRemindServiceService pccRemindServiceService;
 
-    @ApiOperation(value="添加 PccRemindService")
+    @ApiOperation("添加 PccRemindService")
     @PostMapping
     public Result add(@RequestBody PccRemindService pccRemindService) {
         pccRemindServiceService.save(pccRemindService);
