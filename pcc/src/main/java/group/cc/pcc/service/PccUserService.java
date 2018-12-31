@@ -9,4 +9,5 @@ import group.cc.core.Service;
  */
 public interface PccUserService extends Service<PccUser> {
 
+    PccUser get(PccUser pccUser);
 }

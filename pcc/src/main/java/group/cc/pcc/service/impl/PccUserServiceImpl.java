@@ -6,6 +6,8 @@ import group.cc.pcc.service.PccUserService;
 import group.cc.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 
@@ -20,4 +22,9 @@ public class PccUserServiceImpl extends AbstractService<PccUser> implements PccU
     @Resource
     private PccUserMapper pccUserMapper;
 
+    @Override
+    public PccUser get(PccUser pccUser) {
+
+        return pccUserMapper.selectOne(pccUser);
+    }
 }

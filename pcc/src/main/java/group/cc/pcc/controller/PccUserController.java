@@ -58,4 +58,15 @@ public class PccUserController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /* 新增 API */
+
+    @ApiOperation("部分属性匹配一条数据，匹配到多条抛出异常；适用于电话号码，密码查询")
+    @PostMapping("/get")
+    public Result get(@RequestBody PccUser pccUser) {
+
+        PccUser detail = pccUserService.get(pccUser);
+
+        return  ResultGenerator.genSuccessResult(detail);
+    }
 }
