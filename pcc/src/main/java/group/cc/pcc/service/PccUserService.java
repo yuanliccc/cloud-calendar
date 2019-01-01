@@ -9,4 +9,5 @@ import group.cc.core.Service;
  */
 public interface PccUserService extends Service<PccUser> {
 
+    PccUser find(String username, String password);
 }

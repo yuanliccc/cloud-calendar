@@ -58,4 +58,12 @@ public class PccUserController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /* 新增 API */
+
+    public Result detail(@RequestParam String username, @RequestParam String password) {
+        PccUser pccUser = pccUserService.find(username, password);
+
+        return ResultGenerator.genSuccessResult(pccUser);
+    }
 }

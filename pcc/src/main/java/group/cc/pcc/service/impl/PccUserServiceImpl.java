@@ -20,4 +20,8 @@ public class PccUserServiceImpl extends AbstractService<PccUser> implements PccU
     @Resource
     private PccUserMapper pccUserMapper;
 
+    @Override
+    public PccUser find(String username, String password) {
+        return pccUserMapper.;
+    }
 }
