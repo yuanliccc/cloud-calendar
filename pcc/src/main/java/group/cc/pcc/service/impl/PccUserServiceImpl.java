@@ -6,8 +6,6 @@ import group.cc.pcc.service.PccUserService;
 import group.cc.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Condition;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 
