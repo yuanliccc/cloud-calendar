@@ -8,6 +8,5 @@ import group.cc.core.Service;
  * @date 2018/11/19
  */
 public interface PccUserService extends Service<PccUser> {
-
-    PccUser find(String username, String password);
+    PccUser get(PccUser pccUser);
 }
