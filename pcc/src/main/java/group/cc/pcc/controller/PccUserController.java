@@ -16,6 +16,7 @@ import java.util.List;
  * @author yuanli
  * @date 2018/11/19
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/pcc/user")
 public class PccUserController {
