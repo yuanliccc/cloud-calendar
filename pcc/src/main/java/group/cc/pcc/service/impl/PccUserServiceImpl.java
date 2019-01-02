@@ -20,9 +20,7 @@ public class PccUserServiceImpl extends AbstractService<PccUser> implements PccU
     @Resource
     private PccUserMapper pccUserMapper;
 
-    @Override
     public PccUser get(PccUser pccUser) {
-
         return pccUserMapper.selectOne(pccUser);
     }
 }
