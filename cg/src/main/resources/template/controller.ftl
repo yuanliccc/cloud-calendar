@@ -19,6 +19,7 @@ import java.util.List;
  * @author ${author}
  * @date ${date}
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("${baseRequestMapping}")
 public class ${modelNameUpperCamel}Controller {
