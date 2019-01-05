@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yuanli
@@ -58,5 +60,14 @@ public class PccScheduleController {
         List<PccSchedule> list = pccScheduleService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation(value="从起始日期到截止日期内（包含起始日期及截止日期），每日发布的任务数量")
+    @GetMapping("day/count")
+    public Result dayCount(@RequestParam Date startDate, @RequestParam Date endDate, @RequestParam Integer pccUserId) {
+
+        List<Map<String, Object>> list = pccScheduleService.dayCount(startDate, endDate, pccUserId);
+
+        return ResultGenerator.genSuccessResult(list);
     }
 }

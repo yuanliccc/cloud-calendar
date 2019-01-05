@@ -8,6 +8,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication
 @EnableSwagger2
 @MapperScan(value = "group.cc.pcc.dao")
+@org.mybatis.spring.annotation.MapperScan("group.cc.pcc.dao")
 public class PccApplication {
 
     public static void main(String[] args) {
