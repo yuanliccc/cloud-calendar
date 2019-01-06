@@ -6,6 +6,8 @@ import group.cc.pcc.service.PccScheduleService;
 import group.cc.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -26,8 +28,11 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
 
     @Override
     public List<Map<String, Object>> dayCount(Date startDate, Date endDate, Integer pccUserId) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
 
+        /*Example example = new Example(PccSchedule.class);
+        Example.Criteria criteria = example.createCriteria();*/
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
 
         return pccScheduleMapper.dayCount(simpleDateFormat.format(startDate), simpleDateFormat.format(endDate), pccUserId);
     }
