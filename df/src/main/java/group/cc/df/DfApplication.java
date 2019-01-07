@@ -1,4 +1,4 @@
-package group.cc.pcc;
+package group.cc.df;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,9 +7,9 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @EnableSwagger2
-@MapperScan(value = "group.cc.pcc.dao")
-public class PccApplication {
+@MapperScan(value = "group.cc.df.dao")
+public class DfApplication {
     public static void main(String[] args) {
-        SpringApplication.run(PccApplication.class, args);
+        SpringApplication.run(DfApplication.class, args);
     }
 }
