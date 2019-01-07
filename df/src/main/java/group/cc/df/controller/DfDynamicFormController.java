@@ -16,6 +16,7 @@ import java.util.List;
  * @author gxd
  * @date 2018/12/07
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/df/dynamic/form")
 public class DfDynamicFormController {
@@ -57,5 +58,12 @@ public class DfDynamicFormController {
         List<DfDynamicForm> list = dfDynamicFormService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation(value="test")
+    @PostMapping("/test")
+    public Result test(@RequestBody String str) {
+      System.out.println(str);
+      return ResultGenerator.genSuccessResult();
     }
 }
