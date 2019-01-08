@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -22,5 +23,10 @@ public class PccUserServiceImpl extends AbstractService<PccUser> implements PccU
 
     public PccUser get(PccUser pccUser) {
         return pccUserMapper.selectOne(pccUser);
+    }
+
+    @Override
+    public List<PccUser> friends(Integer pccUserId) {
+        return pccUserMapper.friends(pccUserId);
     }
 }

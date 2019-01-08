@@ -2,6 +2,8 @@ package group.cc.pcc.service;
 import group.cc.pcc.model.PccUser;
 import group.cc.core.Service;
 
+import java.util.List;
+
 
 /**
  * @author yuanli
@@ -9,4 +11,6 @@ import group.cc.core.Service;
  */
 public interface PccUserService extends Service<PccUser> {
     PccUser get(PccUser pccUser);
+
+    List<PccUser> friends(Integer pccUserId);
 }

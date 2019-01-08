@@ -62,6 +62,8 @@ public class PccScheduleController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    /* 新增 API*/
+
     @ApiOperation(value="从起始日期到截止日期内（包含起始日期及截止日期），每日发布的任务数量")
     @GetMapping("day/count")
     public Result dayCount(@RequestParam Date startDate, @RequestParam Date endDate, @RequestParam Integer pccUserId) {
@@ -70,4 +72,5 @@ public class PccScheduleController {
 
         return ResultGenerator.genSuccessResult(list);
     }
+
 }
