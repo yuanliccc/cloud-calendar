@@ -5,11 +5,9 @@ import group.cc.pcc.model.PccSchedule;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-
 import java.util.List;
 import java.util.Map;
 
-@org.apache.ibatis.annotations.Mapper
 public interface PccScheduleMapper extends Mapper<PccSchedule> {
 
     @Select("select " +
@@ -23,5 +21,5 @@ public interface PccScheduleMapper extends Mapper<PccSchedule> {
             "AND " +
             "DATE_FORMAT(s.create_time,'%Y%m%d') <= #{endDate} " +
             "GROUP BY DATE_FORMAT(s.create_time,'%Y-%m-%d')")
-    List<Map<String,Object>> dayCount(@Param("startDate") String startDate,@Param("endDate") String endDate,@Param("pccUserId") Integer pccUserId);
+    List<Map<String,Object>> dayCount(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("pccUserId") Integer pccUserId);
 }

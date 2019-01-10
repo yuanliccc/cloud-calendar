@@ -22,6 +22,8 @@ public class PccRemindService {
     @Column(name = "is_usable")
     private Boolean isUsable;
 
+    private String api;
+
     /**
      * 获取主键
      *
@@ -74,5 +76,19 @@ public class PccRemindService {
      */
     public void setIsUsable(Boolean isUsable) {
         this.isUsable = isUsable;
+    }
+
+    /**
+     * @return api
+     */
+    public String getApi() {
+        return api;
+    }
+
+    /**
+     * @param api
+     */
+    public void setApi(String api) {
+        this.api = api;
     }
 }

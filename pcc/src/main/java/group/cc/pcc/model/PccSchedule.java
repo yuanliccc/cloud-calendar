@@ -31,10 +31,9 @@ public class PccSchedule {
     private Integer pccUserId;
 
     /**
-     * 提醒服务（主键）
+     * 任务内容
      */
-    @Column(name = "pcc_remind_service_id")
-    private Integer pccRemindServiceId;
+    private String content;
 
     /**
      * 获取主键
@@ -109,20 +108,20 @@ public class PccSchedule {
     }
 
     /**
-     * 获取提醒服务（主键）
+     * 获取任务内容
      *
-     * @return pcc_remind_service_id - 提醒服务（主键）
+     * @return content - 任务内容
      */
-    public Integer getPccRemindServiceId() {
-        return pccRemindServiceId;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * 设置提醒服务（主键）
+     * 设置任务内容
      *
-     * @param pccRemindServiceId 提醒服务（主键）
+     * @param content 任务内容
      */
-    public void setPccRemindServiceId(Integer pccRemindServiceId) {
-        this.pccRemindServiceId = pccRemindServiceId;
+    public void setContent(String content) {
+        this.content = content;
     }
 }

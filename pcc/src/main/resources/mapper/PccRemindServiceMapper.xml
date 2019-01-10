@@ -8,5 +8,6 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="is_usable" jdbcType="BIT" property="isUsable" />
+    <result column="api" jdbcType="VARCHAR" property="api" />
   </resultMap>
 </mapper>
