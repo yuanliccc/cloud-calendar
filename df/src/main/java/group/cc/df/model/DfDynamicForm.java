@@ -9,19 +9,19 @@ public class DfDynamicForm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String action;
+    private String name;
 
     private String method;
 
+    private String action;
+
     private String enctype;
 
-    private String name;
+    @Column(name = "employee_id")
+    private Integer employeeId;
 
-    @Column(name = "user_id")
-    private Integer userId;
-
-    @Column(name = "createTime")
-    private Date createtime;
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * @return id
@@ -35,48 +35,6 @@ public class DfDynamicForm {
      */
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    /**
-     * @return action
-     */
-    public String getAction() {
-        return action;
-    }
-
-    /**
-     * @param action
-     */
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    /**
-     * @return method
-     */
-    public String getMethod() {
-        return method;
-    }
-
-    /**
-     * @param method
-     */
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    /**
-     * @return enctype
-     */
-    public String getEnctype() {
-        return enctype;
-    }
-
-    /**
-     * @param enctype
-     */
-    public void setEnctype(String enctype) {
-        this.enctype = enctype;
     }
 
     /**
@@ -94,30 +52,72 @@ public class DfDynamicForm {
     }
 
     /**
-     * @return user_id
+     * @return method
      */
-    public Integer getUserId() {
-        return userId;
+    public String getMethod() {
+        return method;
     }
 
     /**
-     * @param userId
+     * @param method
      */
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     /**
-     * @return createTime
+     * @return action
      */
-    public Date getCreatetime() {
-        return createtime;
+    public String getAction() {
+        return action;
     }
 
     /**
-     * @param createtime
+     * @param action
      */
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    /**
+     * @return enctype
+     */
+    public String getEnctype() {
+        return enctype;
+    }
+
+    /**
+     * @param enctype
+     */
+    public void setEnctype(String enctype) {
+        this.enctype = enctype;
+    }
+
+    /**
+     * @return employee_id
+     */
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    /**
+     * @param employeeId
+     */
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    /**
+     * @return create_time
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * @param createTime
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

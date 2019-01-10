@@ -14,43 +14,44 @@ import java.util.List;
 
 /**
  * @author gxd
- * @date 2018/12/07
+ * @date 2019/01/10
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/df/form/item")
 public class DfFormItemController {
     @Resource
     private DfFormItemService dfFormItemService;
 
-    @ApiOperation(value="添加 DfFormItem")
+    @ApiOperation("添加 DfFormItem")
     @PostMapping
     public Result add(@RequestBody DfFormItem dfFormItem) {
         dfFormItemService.save(dfFormItem);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="删除 DfFormItem")
+    @ApiOperation("删除 DfFormItem")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         dfFormItemService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="更新 DfFormItem")
+    @ApiOperation("更新 DfFormItem")
     @PutMapping
     public Result update(@RequestBody DfFormItem dfFormItem) {
         dfFormItemService.update(dfFormItem);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="通过 Id 查询 DfFormItem 详情")
+    @ApiOperation("通过 Id 查询 DfFormItem 详情")
     @GetMapping("/{id}")
     public Result detail(@PathVariable Integer id) {
         DfFormItem dfFormItem = dfFormItemService.findById(id);
         return ResultGenerator.genSuccessResult(dfFormItem);
     }
 
-    @ApiOperation(value="分页查询 DfFormItem 列表")
+    @ApiOperation("分页查询 DfFormItem 列表")
     @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);

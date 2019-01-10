@@ -6,11 +6,11 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="action" jdbcType="VARCHAR" property="action" />
-    <result column="method" jdbcType="VARCHAR" property="method" />
-    <result column="enctype" jdbcType="VARCHAR" property="enctype" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="createTime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="action" jdbcType="VARCHAR" property="action" />
+    <result column="enctype" jdbcType="VARCHAR" property="enctype" />
+    <result column="employee_id" jdbcType="INTEGER" property="employeeId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
 </mapper>

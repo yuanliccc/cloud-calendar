@@ -6,10 +6,12 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="dynamic_form_id" jdbcType="INTEGER" property="dynamicFormId" />
+    <result column="form_id" jdbcType="INTEGER" property="formId" />
     <result column="label" jdbcType="VARCHAR" property="label" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="form_type_id" jdbcType="INTEGER" property="formTypeId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="display_index" jdbcType="INTEGER" property="displayIndex" />
   </resultMap>
 </mapper>

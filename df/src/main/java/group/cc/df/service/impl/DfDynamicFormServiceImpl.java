@@ -1,5 +1,7 @@
 package group.cc.df.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import group.cc.df.dao.DfDynamicFormMapper;
 import group.cc.df.model.DfDynamicForm;
 import group.cc.df.service.DfDynamicFormService;
@@ -12,7 +14,7 @@ import javax.annotation.Resource;
 
 /**
  * @author gxd
- * @date 2018/12/07
+ * @date 2019/01/10
  */
 @Service
 @Transactional
@@ -20,4 +22,8 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     @Resource
     private DfDynamicFormMapper dfDynamicFormMapper;
 
+    @Override
+    public void saveDynamicForm(String formJson) {
+
+    }
 }

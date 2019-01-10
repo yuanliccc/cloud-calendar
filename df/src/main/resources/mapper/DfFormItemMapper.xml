@@ -9,6 +9,6 @@
     <result column="form_field_id" jdbcType="INTEGER" property="formFieldId" />
     <result column="value" jdbcType="VARCHAR" property="value" />
     <result column="label" jdbcType="VARCHAR" property="label" />
-    <result column="item_index" jdbcType="INTEGER" property="itemIndex" />
+    <result column="item_index" jdbcType="VARCHAR" property="itemIndex" />
   </resultMap>
 </mapper>
