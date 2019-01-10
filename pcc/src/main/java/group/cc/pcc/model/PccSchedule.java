@@ -36,6 +36,11 @@ public class PccSchedule {
     private String content;
 
     /**
+     * 截止时间
+     */
+    private Date deadline;
+
+    /**
      * 获取主键
      *
      * @return id - 主键
@@ -123,5 +128,23 @@ public class PccSchedule {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    /**
+     * 获取截止时间
+     *
+     * @return deadline - 截止时间
+     */
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    /**
+     * 设置截止时间
+     *
+     * @param deadline 截止时间
+     */
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
     }
 }

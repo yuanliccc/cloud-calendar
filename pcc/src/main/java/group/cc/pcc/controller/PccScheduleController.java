@@ -3,6 +3,7 @@ package group.cc.pcc.controller;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.pcc.model.PccSchedule;
+import group.cc.pcc.model.dto.PccScheduleDto;
 import group.cc.pcc.service.PccScheduleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -71,6 +72,28 @@ public class PccScheduleController {
         List<Map<String, Object>> list = pccScheduleService.dayCount(startDate, endDate, pccUserId);
 
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    @ApiOperation(value="新增 pccSchedule")
+    @PostMapping("add")
+    public Result add(@RequestBody PccScheduleDto pccScheduleDto) {
+
+        pccScheduleService.add(pccScheduleDto);
+
+        return ResultGenerator.genSuccessResult();
+    }
+
+
+    @ApiOperation(value="分页查询 PccSchedule 列表")
+    @GetMapping("relation")
+    public Result relationList(@RequestParam(defaultValue = "0") Integer page,
+                               @RequestParam(defaultValue = "0") Integer size,
+                               @RequestParam Integer pccUserId) {
+
+        PageHelper.startPage(page, size);
+        List<Map<String,Object>> list = pccScheduleService.relationList(pccUserId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 
 }
