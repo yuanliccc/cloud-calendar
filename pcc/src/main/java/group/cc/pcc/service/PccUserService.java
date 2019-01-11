@@ -3,6 +3,7 @@ import group.cc.pcc.model.PccUser;
 import group.cc.core.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -13,4 +14,6 @@ public interface PccUserService extends Service<PccUser> {
     PccUser get(PccUser pccUser);
 
     List<PccUser> friends(Integer pccUserId);
+
+    List<Map<String,Object>> friendsDetail(Integer pccUserId);
 }
