@@ -34,8 +34,8 @@ public class DfDynamicFormController {
 
     @ApiOperation("通过JSON字符串添加动态表单")
     @PostMapping("/addDynamicForm")
-    public Result add(@RequestBody Map<String, Object> formJson) {
-        System.out.println(formJson);
+    public Result addDynamicForm(@RequestBody Map<String, Object> dfMap) {
+        dfDynamicFormService.saveDynamicForm(dfMap);
         return null;
     }
 
