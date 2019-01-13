@@ -13,4 +13,12 @@
     <result column="employee_id" jdbcType="INTEGER" property="employeeId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+
+  <insert id="saveDynamicForm" keyProperty="id" useGeneratedKeys="true" parameterType="group.cc.df.model.DfDynamicForm">
+    INSERT INTO df_dynamic_form(name,method, action, enctype, employee_id,create_time) VALUES
+    (#{name}, #{method}, #{action}, #{enctype}, #{employeeId}, #{createTime})
+    <selectKey resultType="int" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
 </mapper>

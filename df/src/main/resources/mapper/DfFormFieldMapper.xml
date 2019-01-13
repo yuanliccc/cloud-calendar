@@ -14,4 +14,12 @@
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="display_index" jdbcType="INTEGER" property="displayIndex" />
   </resultMap>
+
+  <insert id="saveFormField" keyProperty="id" useGeneratedKeys="true" parameterType="group.cc.df.model.DfFormField">
+    INSERT INTO df_form_field(form_id, label, name, type, value, parent_id, display_index) VALUES
+    (#{formId}, #{label}, #{name}, #{type}, #{value}, #{parentId}, #{displayIndex})
+    <selectKey resultType="int" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
 </mapper>

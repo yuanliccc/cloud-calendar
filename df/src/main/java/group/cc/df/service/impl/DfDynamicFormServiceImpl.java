@@ -1,9 +1,8 @@
 package group.cc.df.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import group.cc.df.dao.DfDynamicFormMapper;
-import group.cc.df.dto.GridColumn;
+import group.cc.df.dao.DfFormFieldMapper;
+import group.cc.df.dao.DfFormItemMapper;
 import group.cc.df.model.DfDynamicForm;
 import group.cc.df.model.DfFormField;
 import group.cc.df.model.DfFormItem;
@@ -11,11 +10,10 @@ import group.cc.df.service.DfDynamicFormService;
 import group.cc.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -28,88 +26,218 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     @Resource
     private DfDynamicFormMapper dfDynamicFormMapper;
 
+    @Resource
+    private DfFormFieldMapper dfFormFieldMapper;
+
+    @Resource
+    private DfFormItemMapper dfFormItemMapper;
+
     @Override
     public void saveDynamicForm(Map<String, Object> dfMap) {
-        Map<String, Object> configMap = (Map<String, Object>) dfMap.get("config");
-        System.out.println(configMap.get("labelWidth"));
-        System.out.println(configMap.get("labelPosition"));
-        System.out.println(configMap.get("name"));
-        System.out.println(configMap.get("method"));
+        DfDynamicForm df = handleFormConfig(dfMap);
+
+        df.setCreateTime(new Date());
+        df.setEmployeeId(0);
+
+        // 在这里存储动态表单
+        dfDynamicFormMapper.saveDynamicForm(df);
+        int dfFormId = df.getId();
+        System.out.println("动态表单存储后: " + dfFormId);
 
         List<Map<String, Object>> fieldList = (List<Map<String, Object>>) dfMap.get("list");
 
-        for (Map<String, Object> map: fieldList) {
-            String type = (String) map.get("type");
-            String name = (String) map.get("name");
-            String defaultValue = null;
-            List<DfFormItem> itemList = null;
-            List<GridColumn> columnList = null;
+        saveFormField(fieldList , null, dfFormId, -1);
+    }
 
-            if (!type.equals("grid")) {
-                Map<String, Object> optionsMap = (Map<String, Object>) map.get("options");
-                defaultValue = (String) optionsMap.get("defaultValue");
+    private void saveFormField(List<Map<String, Object>> fieldList, Integer displayIndex, int dfFormId, int parentId) {
+        for (Map<String, Object> fieldMap: fieldList) {
+            DfFormField dfField = handleGeneralField(fieldMap);
 
-                if (type.equals("checkbox") || type.equals("radio") || type.equals("select")) {
-                    List<Map<String, Object>> itemConfigList = (List<Map<String, Object>>) optionsMap.get("options");
-                    itemList = new ArrayList<>();
+            if (dfField == null) {
+                break;
+            }
 
-                    for (int i = 0; i < itemConfigList.size(); i++) {
-                        Map<String, Object> itemConfigMap = itemConfigList.get(i);
-                        String value = (String) itemConfigMap.get("value");
+            if (displayIndex == null) {
+                dfField.setDisplayIndex(0);
+            } else {
+                dfField.setDisplayIndex(displayIndex);
+            }
 
-                        DfFormItem dfFormItem = new DfFormItem();
-                        dfFormItem.setLabel(value);
-                        dfFormItem.setValue(value);
-                        dfFormItem.setItemIndex(String.valueOf(i));
+            if (parentId != -1) {
+                dfField.setParentId(parentId);
+            }
 
-                        itemList.add(dfFormItem);
+            String fieldType = dfField.getType();
+            String defaultValue = "";
+
+            dfField.setValue(defaultValue);
+
+            if (!fieldType.equals("grid")) {
+                Map<String, Object> optionsMap = (Map<String, Object>) fieldMap.get("options");
+
+                if (fieldType.equals("checkbox")) {
+                    List<String> checkboxList = (List<String>) optionsMap.get("defaultValue");
+
+                    for (String str: checkboxList) {
+                        defaultValue += str + ",";
+                    }
+
+                    if (!defaultValue.equals("")) {
+                        defaultValue = defaultValue.substring(0, defaultValue.length() - 1);
+                    }
+
+                } else if (fieldType.equals("date")) {
+                    String dateUTC = (String) optionsMap.get("defaultValue");
+                    defaultValue = UTC2Date(dateUTC);
+                } else {
+                    defaultValue = (String) optionsMap.get("defaultValue");
+                }
+
+                dfField.setValue(defaultValue);
+                dfField.setFormId(dfFormId);
+
+                // 存储表单域
+                dfFormFieldMapper.saveFormField(dfField);
+               int formFieldId = dfField.getId();
+               System.out.println(dfField.getLabel() + "表单域存储后: " + formFieldId);
+
+                if (fieldType.equals("checkbox") || fieldType.equals("radio") || fieldType.equals("select")) {
+                    List<DfFormItem> itemList = handleFieldItem(optionsMap);
+
+                    // 存储表单域条目
+                    for (DfFormItem item: itemList) {
+                        item.setFormFieldId(formFieldId);
+                        dfFormItemMapper.insert(item);
                     }
                 }
             } else {
-                List<Map<String, Object>> columns = (List<Map<String, Object>>) map.get("columns");
-                columnList = new ArrayList<>();
+                dfField.setFormId(dfFormId);
+                // 保存表单域信息
+                dfFormFieldMapper.saveFormField(dfField);
+                int formFieldId = dfField.getId();
 
-                for (Map<String, Object> columnMap: columns) {
-                    int span = (int) columnMap.get("span");
-                    List<Map<String, Object>> list = (List<Map<String, Object>>) columnMap.get("list");
-
-                    GridColumn gridColumn = new GridColumn();
-                    gridColumn.setSpan(span);
-                    gridColumn.setList(list);
-
-                    columnList.add(gridColumn);
-                }
-
+                List<Map<String, Object>> columnList = (List<Map<String, Object>>) fieldMap.get("columns");
+                handleColumns(columnList, dfFormId, formFieldId);
             }
+        }
+    }
 
-            System.out.println("type:" + type);
-            System.out.println("name: " + name);
-            System.out.println("defaultValue: " + defaultValue);
-            if (itemList != null) {
-                System.out.println("itemList: ");
-                for (DfFormItem item: itemList) {
-                    System.out.println(item.getValue());
-                }
-            }
-            if (columnList != null) {
-                System.out.println("columnList: ");
-                for (GridColumn gridColumn: columnList) {
-                    List<Map<String, Object>> columnItem = gridColumn.getList();
-                    for (Map<String, Object> map1: columnItem) {
-                        System.out.println(map1.get("name"));
-                    }
-                }
-            }
-            System.out.println("#############################");
+    /**
+     * 将UTC格式的时间字符串转为Java标准格式
+     * @param dateUTC
+     * @return
+     */
+    private String UTC2Date(String dateUTC) {
+        String dateStr = "";
+
+        if (dateUTC.equals("")) {
+            return dateStr;
         }
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS Z");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        dateUTC = dateUTC.replace("Z", " UTC");
+
+        try {
+            Date date = format.parse(dateUTC);
+            dateStr = sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return dateStr;
     }
 
-    private DfFormField handleGeneralComponents() {
-        return null;
+    /**
+     * 处理动态表单的配置
+     * @param dfMap
+     * @return
+     */
+    private DfDynamicForm handleFormConfig(Map<String, Object> dfMap) {
+        Map<String, Object> configMap = null;
+        DfDynamicForm df = null;
+
+        if (dfMap != null) {
+            configMap = (Map<String, Object>) dfMap.get("config");
+        }
+
+        if (configMap != null) {
+            String name = (String) configMap.get("name");
+            String method = (String) configMap.get("method");
+
+            df = new DfDynamicForm();
+
+            df.setName(name);
+            df.setMethod(method);
+        }
+
+        return df;
     }
 
-    private DfFormField handleItem() {
-        return null;
+    /**
+     * 处理通用的表单域信息
+     * @param fieldMap
+     * @return
+     */
+    private DfFormField handleGeneralField(Map<String, Object> fieldMap) {
+        DfFormField dfField = null;
+
+        if (fieldMap != null) {
+            String type = (String) fieldMap.get("type");
+            String name = (String) fieldMap.get("name");
+
+            dfField = new DfFormField();
+
+            dfField.setType(type);
+            dfField.setLabel(name);
+        }
+
+        return dfField;
     }
+
+    /**
+     * 处理包含条目的表单域信息(多选框,单选框,下拉框)
+     * @param optionsMap
+     * @return
+     */
+    private List<DfFormItem> handleFieldItem(Map<String, Object> optionsMap) {
+        List<DfFormItem> itemList = null;
+        List<Map<String, Object>> optionsList = (List<Map<String, Object>>) optionsMap.get("options");
+
+        if (optionsList.size() > 0) {
+            itemList = new ArrayList<>();
+        }
+
+        for (int i = 0; i < optionsList.size(); i++) {
+            Map<String, Object> itemConfigMap = optionsList.get(i);
+
+            String value = (String) itemConfigMap.get("value");
+
+            DfFormItem dfFormItem = new DfFormItem();
+
+            dfFormItem.setLabel(value);
+            dfFormItem.setValue(value);
+            dfFormItem.setItemIndex(String.valueOf(i));
+
+            itemList.add(dfFormItem);
+        }
+        return itemList;
+    }
+
+    /**
+     * 处理栅栏布局中的子列表
+     * @param columnList
+     */
+    private void handleColumns(List<Map<String, Object>> columnList, int dfFormId, int parentId) {
+        if (columnList.size() > 0) {
+            int count = 0;
+
+            for (Map<String, Object> columnMap: columnList) {
+                List<Map<String, Object>> list = (List<Map<String, Object>>) columnMap.get("list");
+                saveFormField(list, count++, dfFormId, parentId);
+            }
+        }
+    }
+
 }
