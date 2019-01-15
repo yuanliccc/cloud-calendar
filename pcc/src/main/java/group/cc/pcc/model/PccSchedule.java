@@ -40,6 +40,12 @@ public class PccSchedule {
      */
     private Date deadline;
 
+    @Column(name = "is_delete")
+    private String isDelete;
+
+    @Column(name = "additional_info_type_id")
+    private Integer additionalInfoTypeId;
+
     /**
      * 获取主键
      *
@@ -146,5 +152,33 @@ public class PccSchedule {
      */
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    /**
+     * @return is_delete
+     */
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    /**
+     * @param isDelete
+     */
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    /**
+     * @return additional_info_type_id
+     */
+    public Integer getAdditionalInfoTypeId() {
+        return additionalInfoTypeId;
+    }
+
+    /**
+     * @param additionalInfoTypeId
+     */
+    public void setAdditionalInfoTypeId(Integer additionalInfoTypeId) {
+        this.additionalInfoTypeId = additionalInfoTypeId;
     }
 }

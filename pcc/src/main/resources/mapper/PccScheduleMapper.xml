@@ -11,5 +11,7 @@
     <result column="pcc_user_id" jdbcType="INTEGER" property="pccUserId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="is_delete" jdbcType="CHAR" property="isDelete" />
+    <result column="additional_info_type_id" jdbcType="INTEGER" property="additionalInfoTypeId" />
   </resultMap>
 </mapper>
