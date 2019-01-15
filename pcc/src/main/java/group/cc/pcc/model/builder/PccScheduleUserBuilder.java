@@ -13,6 +13,7 @@ public class PccScheduleUserBuilder {
 
         pccScheduleUser.setPccUserId(pccUserId);
         pccScheduleUser.setPccScheduleId(pccScheduleId);
+        pccScheduleUser.setIsComplete("否");
 
         return pccScheduleUser;
     }

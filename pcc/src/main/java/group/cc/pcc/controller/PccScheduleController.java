@@ -96,4 +96,40 @@ public class PccScheduleController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    @ApiOperation(value="分页查询 PccSchedule 列表")
+    @GetMapping("create")
+    public Result createList(@RequestParam(defaultValue = "0") Integer page,
+                               @RequestParam(defaultValue = "0") Integer size,
+                               @RequestParam Integer pccUserId) {
+
+        PageHelper.startPage(page, size);
+        List<Map<String,Object>> list = pccScheduleService.createList(pccUserId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation(value="分页查询 PccSchedule 列表")
+    @GetMapping("untreated")
+    public Result untreatedList(@RequestParam(defaultValue = "0") Integer page,
+                             @RequestParam(defaultValue = "0") Integer size,
+                             @RequestParam Integer pccUserId) {
+
+        PageHelper.startPage(page, size);
+        List<Map<String,Object>> list = pccScheduleService.untreated(pccUserId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation(value="分页查询 PccSchedule 列表")
+    @GetMapping("treated")
+    public Result treatedList(@RequestParam(defaultValue = "0") Integer page,
+                                @RequestParam(defaultValue = "0") Integer size,
+                                @RequestParam Integer pccUserId) {
+
+        PageHelper.startPage(page, size);
+        List<Map<String,Object>> list = pccScheduleService.treated(pccUserId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
 }

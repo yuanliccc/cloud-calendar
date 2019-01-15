@@ -75,4 +75,19 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
     public List<Map<String,Object>> relationList(Integer pccUserId) {
         return pccScheduleMapper.relationList(pccUserId);
     }
+
+    @Override
+    public List<Map<String, Object>> createList(Integer pccUserId) {
+        return pccScheduleMapper.createList(pccUserId);
+    }
+
+    @Override
+    public List<Map<String, Object>> untreated(Integer pccUserId) {
+        return pccScheduleMapper.untreatedList(pccUserId);
+    }
+
+    @Override
+    public List<Map<String, Object>> treated(Integer pccUserId) {
+        return pccScheduleMapper.treatedList(pccUserId);
+    }
 }

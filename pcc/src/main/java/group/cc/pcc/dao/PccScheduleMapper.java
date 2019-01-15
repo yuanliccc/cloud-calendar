@@ -24,27 +24,56 @@ public interface PccScheduleMapper extends Mapper<PccSchedule> {
     List<Map<String,Object>> dayCount(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("pccUserId") Integer pccUserId);
 
     @Select("SELECT " +
-            "ps.id AS id, " +
-            "ps.content AS content, " +
-            "ps.create_time AS creatTime, " +
-            "ps.remind_time AS remindTime, " +
-            "pu1.NAME AS createUserName, " +
-            "pu1.id AS createUserId, " +
-            "ps.deadline AS deadline, " +
-            "psu.id AS psuId, " +
-            "psu.pcc_user_id AS receiverId, " +
-            "pu2.name AS receiverName, " +
-            "psu.is_complete as isComplete, " +
-            "psu.complete_date AS completeDate " +
+            "* " +
             "FROM " +
-            "pcc_schedule AS ps " +
-            "LEFT JOIN pcc_schedule_user AS psu ON ps.id = psu.pcc_schedule_id " +
-            "LEFT JOIN pcc_user AS pu1 ON pu1.id = ps.pcc_user_id " +
-            "LEFT JOIN pcc_user AS pu2 ON pu2.id = psu.pcc_user_id " +
+            "pcc_schedule_view AS psv " +
             "WHERE " +
-            "ps.pcc_user_id = #{pccUserId} " +
-            "OR psu.pcc_user_id = #{pccUserId} " +
-            "ORDER BY " +
-            "ps.create_time DESC")
+            "psv.createUserId = #{pccUserId} " +
+            "OR  " +
+            "FIND_IN_SET(#{pccUserId}, psv.receiverIds)")
     List<Map<String,Object>> relationList(@Param("pccUserId") Integer pccUserId);
+
+    @Select("SELECT " +
+            "* " +
+            "FROM " +
+            "pcc_schedule_view AS psv " +
+            "WHERE " +
+            "psv.createUserId = #{pccUserId}")
+    List<Map<String, Object>> createList(@Param("pccUserId") Integer pccUserId);
+
+    @Select("SELECT " +
+            "* " +
+            "FROM " +
+            "pcc_schedule_view AS psv " +
+            "WHERE " +
+            "substring_index( " +
+            "REVERSE( " +
+            "substring_index( " +
+            "psv.isCompletes, " +
+            "',', " +
+            "FIND_IN_SET(#{pccUserId}, psv.receiverIds) " +
+            ") " +
+            "), " +
+            "',', " +
+            "1 " +
+            ") = '否'")
+    List<Map<String, Object>> untreatedList(@Param("pccUserId") Integer pccUserId);
+
+    @Select("SELECT " +
+            "* " +
+            "FROM " +
+            "pcc_schedule_view AS psv " +
+            "WHERE " +
+            "substring_index( " +
+            "REVERSE( " +
+            "substring_index( " +
+            "psv.isCompletes, " +
+            "',', " +
+            "FIND_IN_SET(#{pccUserId}, psv.receiverIds) " +
+            ") " +
+            "), " +
+            "',', " +
+            "1 " +
+            ") = '是'")
+    List<Map<String, Object>> treatedList(@Param("pccUserId") Integer pccUserId);
 }

@@ -19,4 +19,10 @@ public interface PccScheduleService extends Service<PccSchedule> {
     void add(PccScheduleDto pccScheduleDto);
 
     List<Map<String,Object>> relationList(Integer pccUserId);
+
+    List<Map<String,Object>> createList(Integer pccUserId);
+
+    List<Map<String,Object>> untreated(Integer pccUserId);
+
+    List<Map<String,Object>> treated(Integer pccUserId);
 }
