@@ -16,7 +16,7 @@ public class DfFormItem {
     private String label;
 
     @Column(name = "item_index")
-    private Integer itemIndex;
+    private String itemIndex;
 
     /**
      * @return id
@@ -77,14 +77,14 @@ public class DfFormItem {
     /**
      * @return item_index
      */
-    public Integer getItemIndex() {
+    public String getItemIndex() {
         return itemIndex;
     }
 
     /**
      * @param itemIndex
      */
-    public void setItemIndex(Integer itemIndex) {
+    public void setItemIndex(String itemIndex) {
         this.itemIndex = itemIndex;
     }
 }

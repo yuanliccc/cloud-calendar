@@ -6,10 +6,20 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="dynamic_form_id" jdbcType="INTEGER" property="dynamicFormId" />
+    <result column="form_id" jdbcType="INTEGER" property="formId" />
     <result column="label" jdbcType="VARCHAR" property="label" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="form_type_id" jdbcType="INTEGER" property="formTypeId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="display_index" jdbcType="INTEGER" property="displayIndex" />
   </resultMap>
+
+  <insert id="saveFormField" keyProperty="id" useGeneratedKeys="true" parameterType="group.cc.df.model.DfFormField">
+    INSERT INTO df_form_field(form_id, label, name, type, value, parent_id, display_index) VALUES
+    (#{formId}, #{label}, #{name}, #{type}, #{value}, #{parentId}, #{displayIndex})
+    <selectKey resultType="int" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
 </mapper>

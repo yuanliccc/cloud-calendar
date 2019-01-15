@@ -8,17 +8,22 @@ public class DfFormField {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "dynamic_form_id")
-    private Integer dynamicFormId;
+    @Column(name = "form_id")
+    private Integer formId;
 
     private String label;
 
     private String name;
 
-    @Column(name = "form_type_id")
-    private Integer formTypeId;
+    private String type;
 
     private String value;
+
+    @Column(name = "parent_id")
+    private Integer parentId;
+
+    @Column(name = "display_index")
+    private Integer displayIndex;
 
     /**
      * @return id
@@ -35,17 +40,17 @@ public class DfFormField {
     }
 
     /**
-     * @return dynamic_form_id
+     * @return form_id
      */
-    public Integer getDynamicFormId() {
-        return dynamicFormId;
+    public Integer getFormId() {
+        return formId;
     }
 
     /**
-     * @param dynamicFormId
+     * @param formId
      */
-    public void setDynamicFormId(Integer dynamicFormId) {
-        this.dynamicFormId = dynamicFormId;
+    public void setFormId(Integer formId) {
+        this.formId = formId;
     }
 
     /**
@@ -77,17 +82,17 @@ public class DfFormField {
     }
 
     /**
-     * @return form_type_id
+     * @return type
      */
-    public Integer getFormTypeId() {
-        return formTypeId;
+    public String getType() {
+        return type;
     }
 
     /**
-     * @param formTypeId
+     * @param type
      */
-    public void setFormTypeId(Integer formTypeId) {
-        this.formTypeId = formTypeId;
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**
@@ -102,5 +107,33 @@ public class DfFormField {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * @return parent_id
+     */
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    /**
+     * @param parentId
+     */
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    /**
+     * @return display_index
+     */
+    public Integer getDisplayIndex() {
+        return displayIndex;
+    }
+
+    /**
+     * @param displayIndex
+     */
+    public void setDisplayIndex(Integer displayIndex) {
+        this.displayIndex = displayIndex;
     }
 }

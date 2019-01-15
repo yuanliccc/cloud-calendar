@@ -1,5 +1,6 @@
 package group.cc.df.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.df.model.DfDynamicForm;
@@ -11,10 +12,11 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gxd
- * @date 2018/12/07
+ * @date 2019/01/10
  */
 @CrossOrigin("*")
 @RestController
@@ -23,47 +25,47 @@ public class DfDynamicFormController {
     @Resource
     private DfDynamicFormService dfDynamicFormService;
 
-    @ApiOperation(value="添加 DfDynamicForm")
+    @ApiOperation("添加 DfDynamicForm")
     @PostMapping
     public Result add(@RequestBody DfDynamicForm dfDynamicForm) {
         dfDynamicFormService.save(dfDynamicForm);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="删除 DfDynamicForm")
+    @ApiOperation("通过JSON字符串添加动态表单")
+    @PostMapping("/addDynamicForm")
+    public Result addDynamicForm(@RequestBody Map<String, Object> dfMap) {
+        dfDynamicFormService.saveDynamicForm(dfMap);
+        return null;
+    }
+
+    @ApiOperation("删除 DfDynamicForm")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         dfDynamicFormService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="更新 DfDynamicForm")
+    @ApiOperation("更新 DfDynamicForm")
     @PutMapping
     public Result update(@RequestBody DfDynamicForm dfDynamicForm) {
         dfDynamicFormService.update(dfDynamicForm);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="通过 Id 查询 DfDynamicForm 详情")
+    @ApiOperation("通过 Id 查询 DfDynamicForm 详情")
     @GetMapping("/{id}")
     public Result detail(@PathVariable Integer id) {
         DfDynamicForm dfDynamicForm = dfDynamicFormService.findById(id);
         return ResultGenerator.genSuccessResult(dfDynamicForm);
     }
 
-    @ApiOperation(value="分页查询 DfDynamicForm 列表")
+    @ApiOperation("分页查询 DfDynamicForm 列表")
     @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<DfDynamicForm> list = dfDynamicFormService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
-    }
-
-    @ApiOperation(value="test")
-    @PostMapping("/test")
-    public Result test(@RequestBody String str) {
-      System.out.println(str);
-      return ResultGenerator.genSuccessResult();
     }
 }
