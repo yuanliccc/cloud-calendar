@@ -9,4 +9,6 @@ import group.cc.core.Service;
  */
 public interface PccScheduleUserService extends Service<PccScheduleUser> {
 
+    void complete(Integer pccUserId, Integer pccScheduleId);
+
 }

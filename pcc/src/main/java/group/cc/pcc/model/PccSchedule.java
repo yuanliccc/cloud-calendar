@@ -43,9 +43,6 @@ public class PccSchedule {
     @Column(name = "is_delete")
     private String isDelete;
 
-    @Column(name = "additional_info_type_id")
-    private Integer additionalInfoTypeId;
-
     /**
      * 获取主键
      *
@@ -168,17 +165,4 @@ public class PccSchedule {
         this.isDelete = isDelete;
     }
 
-    /**
-     * @return additional_info_type_id
-     */
-    public Integer getAdditionalInfoTypeId() {
-        return additionalInfoTypeId;
-    }
-
-    /**
-     * @param additionalInfoTypeId
-     */
-    public void setAdditionalInfoTypeId(Integer additionalInfoTypeId) {
-        this.additionalInfoTypeId = additionalInfoTypeId;
-    }
 }

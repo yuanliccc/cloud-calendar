@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 /**
@@ -20,4 +21,8 @@ public class PccScheduleUserServiceImpl extends AbstractService<PccScheduleUser>
     @Resource
     private PccScheduleUserMapper pccScheduleUserMapper;
 
+    @Override
+    public void complete(Integer pccUserId, Integer pccScheduleId) {
+        pccScheduleUserMapper.complete(pccUserId, pccScheduleId, new Date());
+    }
 }

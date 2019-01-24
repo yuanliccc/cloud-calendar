@@ -1,6 +1,7 @@
 package group.cc.pcc.service;
 import group.cc.pcc.model.PccSchedule;
 import group.cc.core.Service;
+import group.cc.pcc.model.dto.PccScheduleComplete;
 import group.cc.pcc.model.dto.PccScheduleDto;
 
 import java.util.Date;
@@ -25,4 +26,8 @@ public interface PccScheduleService extends Service<PccSchedule> {
     List<Map<String,Object>> untreated(Integer pccUserId);
 
     List<Map<String,Object>> treated(Integer pccUserId);
+
+    void complete(PccScheduleComplete pccScheduleComplete);
+
+    List<Map<String,Object>> additionalInfoList(Integer pccScheduleId);
 }

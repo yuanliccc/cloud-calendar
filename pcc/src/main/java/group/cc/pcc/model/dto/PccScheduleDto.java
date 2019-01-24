@@ -10,6 +10,17 @@ public class PccScheduleDto {
 
     private Integer[] remindServices;
 
+    public Integer[] getAdditionalInfoTypes() {
+        return additionalInfoTypes;
+    }
+
+    public void setAdditionalInfoTypes(Integer[] additionalInfoTypes) {
+        this.additionalInfoTypes = additionalInfoTypes;
+    }
+
+    private Integer[] additionalInfoTypes;
+
+
     public PccSchedule getPccSchedule() {
         return pccSchedule;
     }

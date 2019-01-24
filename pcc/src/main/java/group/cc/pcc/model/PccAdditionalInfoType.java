@@ -2,15 +2,16 @@ package group.cc.pcc.model;
 
 import javax.persistence.*;
 
-@Table(name = "additional_info_type")
-public class AdditionalInfoType {
+@Table(name = "pcc_additional_info_type")
+public class PccAdditionalInfoType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
 
-    private String table;
+    @Column(name = "table_name")
+    private String tableName;
 
     private String filters;
 
@@ -43,17 +44,17 @@ public class AdditionalInfoType {
     }
 
     /**
-     * @return table
+     * @return table_name
      */
-    public String getTable() {
-        return table;
+    public String getTableName() {
+        return tableName;
     }
 
     /**
-     * @param table
+     * @param tableName
      */
-    public void setTable(String table) {
-        this.table = table;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     /**

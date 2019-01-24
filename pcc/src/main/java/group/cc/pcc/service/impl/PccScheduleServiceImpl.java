@@ -1,19 +1,16 @@
 package group.cc.pcc.service.impl;
 
-import group.cc.pcc.dao.PccScheduleMapper;
-import group.cc.pcc.dao.PccScheduleRemindMapper;
-import group.cc.pcc.dao.PccScheduleUserMapper;
+import com.yl.common.util.StringUtil;
+import group.cc.pcc.dao.*;
 import group.cc.pcc.model.PccSchedule;
-import group.cc.pcc.model.PccScheduleRemind;
-import group.cc.pcc.model.builder.PccScheduleRemindBuilder;
-import group.cc.pcc.model.builder.PccScheduleUserBuilder;
+import group.cc.pcc.model.PccText;
+import group.cc.pcc.model.builder.*;
+import group.cc.pcc.model.dto.PccScheduleComplete;
 import group.cc.pcc.model.dto.PccScheduleDto;
 import group.cc.pcc.service.PccScheduleService;
 import group.cc.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Condition;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -34,10 +31,22 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
     private PccScheduleRemindMapper pccScheduleRemindMapper;
 
     @Resource
+    private PccTextMapper pccTextMapper;
+
+    @Resource
+    private PccScheduleTextMapper pccScheduleTextMapper;
+
+    @Resource
+    private PccScheduleFileMapper pccScheduleFileMapper;
+
+    @Resource
     private PccScheduleUserMapper pccScheduleUserMapper;
 
     @Resource
     private PccScheduleMapper pccScheduleMapper;
+
+    @Resource
+    private PccScheduleAdditionalTypeMapper pccScheduleAdditionalTypeMapper;
 
     @Override
     public List<Map<String, Object>> dayCount(Date startDate, Date endDate, Integer pccUserId) {
@@ -69,10 +78,15 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
         // 批量插入中间表 pcc_schedule_user
         pccScheduleUserMapper.insertList(PccScheduleUserBuilder
                 .build(pccScheduleDto.getScheduleReceivers(), insertPccScheduleId));
+
+        // 批量插入中间表 pcc_schedule_additional_type
+        pccScheduleAdditionalTypeMapper.insertList(PccScheduleAdditionalTypeBuilder
+                .build(pccScheduleDto.getAdditionalInfoTypes(), insertPccScheduleId));
+
     }
 
     @Override
-    public List<Map<String,Object>> relationList(Integer pccUserId) {
+    public List<Map<String, Object>> relationList(Integer pccUserId) {
         return pccScheduleMapper.relationList(pccUserId);
     }
 
@@ -89,5 +103,38 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
     @Override
     public List<Map<String, Object>> treated(Integer pccUserId) {
         return pccScheduleMapper.treatedList(pccUserId);
+    }
+
+    @Override
+    @Transactional
+    public void complete(PccScheduleComplete pccScheduleComplete) {
+        Integer[] pccFileIds = pccScheduleComplete.getFileIds();
+
+        if (pccFileIds != null && pccFileIds.length != 0) {
+            // 批量存储 pccScheduleFile
+            pccScheduleFileMapper.insertList(PccScheduleFileBuilder
+                    .build(pccScheduleComplete.getFileIds(),
+                            pccScheduleComplete.getPccScheduleId(),
+                            pccScheduleComplete.getPccUserId()));
+        }
+
+        String text = pccScheduleComplete.getText();
+
+        if(text != null && !text.equals(StringUtil.EMPTY)) {
+            // 存储 pccText
+            PccText pccText = PccTextBuilder.build(pccScheduleComplete.getText());
+            pccTextMapper.insert(pccText);
+            // 存储 pccScheduleText
+            pccScheduleTextMapper.insert(PccScheduleTextBuilder.build(pccScheduleComplete.getPccScheduleId(),
+                    pccScheduleComplete.getPccUserId(), pccText.getId()));
+        }
+        // 更新 pcc_schedule_user 表为完成任务
+        pccScheduleUserMapper.complete(pccScheduleComplete.getPccUserId(),
+                pccScheduleComplete.getPccScheduleId(), new Date());
+    }
+
+    @Override
+    public List<Map<String, Object>> additionalInfoList(Integer pccScheduleId) {
+        return pccScheduleMapper.additionalInfoList(pccScheduleId);
     }
 }

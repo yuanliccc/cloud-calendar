@@ -3,6 +3,7 @@ package group.cc.pcc.controller;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.pcc.model.PccSchedule;
+import group.cc.pcc.model.dto.PccScheduleComplete;
 import group.cc.pcc.model.dto.PccScheduleDto;
 import group.cc.pcc.service.PccScheduleService;
 import com.github.pagehelper.PageHelper;
@@ -108,7 +109,7 @@ public class PccScheduleController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
-    @ApiOperation(value="分页查询 PccSchedule 列表")
+    @ApiOperation("分页查询 PccSchedule 列表")
     @GetMapping("untreated")
     public Result untreatedList(@RequestParam(defaultValue = "0") Integer page,
                              @RequestParam(defaultValue = "0") Integer size,
@@ -120,7 +121,7 @@ public class PccScheduleController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
-    @ApiOperation(value="分页查询 PccSchedule 列表")
+    @ApiOperation("分页查询 PccSchedule 列表")
     @GetMapping("treated")
     public Result treatedList(@RequestParam(defaultValue = "0") Integer page,
                                 @RequestParam(defaultValue = "0") Integer size,
@@ -128,6 +129,31 @@ public class PccScheduleController {
 
         PageHelper.startPage(page, size);
         List<Map<String,Object>> list = pccScheduleService.treated(pccUserId);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("完成任务")
+    @PostMapping("complete")
+    public Result complete(@RequestBody PccScheduleComplete pccScheduleComplete) {
+
+        if(pccScheduleComplete == null) {
+            return ResultGenerator.genFailResult("所需数据为空");
+        }
+
+        pccScheduleService.complete(pccScheduleComplete);
+
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("分页查询 PccSchedule 列表")
+    @GetMapping("additional")
+    public Result additionalInfoList(@RequestParam(defaultValue = "0") Integer page,
+                                @RequestParam(defaultValue = "0") Integer size,
+                               @RequestParam Integer pccScheduleId) {
+
+        PageHelper.startPage(page, size);
+        List<Map<String,Object>> list = pccScheduleService.additionalInfoList(pccScheduleId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

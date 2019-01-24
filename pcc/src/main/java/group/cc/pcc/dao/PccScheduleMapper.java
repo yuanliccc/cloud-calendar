@@ -76,4 +76,24 @@ public interface PccScheduleMapper extends Mapper<PccSchedule> {
             "1 " +
             ") = '是'")
     List<Map<String, Object>> treatedList(@Param("pccUserId") Integer pccUserId);
+
+    @Select("SELECT " +
+            "psft.*, pu.name AS username, " +
+            "pu.email AS email, " +
+            "pu.phone AS phone, " +
+            "pu.sex AS sex, " +
+            "psu.complete_date AS completeDate " +
+            "FROM " +
+            "pcc_schedule_file_text_view AS psft " +
+            "LEFT JOIN " +
+            "pcc_user AS pu " +
+            "ON " +
+            "pu.id = psft.userId " +
+            "LEFT JOIN " +
+            "pcc_schedule_user AS psu " +
+            "ON " +
+            "psu.pcc_user_id=psft.userId AND psu.pcc_schedule_id=psft.scheduleId " +
+            "WHERE " +
+            "psft.scheduleId = #{pccScheduleId}")
+    List<Map<String,Object>> additionalInfoList(@Param("pccScheduleId") Integer pccScheduleId);
 }
