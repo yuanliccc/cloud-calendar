@@ -10,13 +10,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -114,6 +118,25 @@ public class PccFileController {
         }
 
         return ResultGenerator.genSuccessResult("删除文件成功");
+    }
+
+    @ApiOperation("获取图片")
+    @GetMapping(value = "/image")
+    @ResponseBody
+    public byte[] image(@RequestParam String localPath) throws IOException {
+        FileInputStream inputStream = new FileInputStream(new File(localPath));
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
+    }
+
+    @ApiOperation("获取图片")
+    @GetMapping(value = "/imgId")
+    @ResponseBody
+    public byte[] imageById(@RequestParam Integer pccFileId) throws IOException {
+        PccFile pccFile = pccFileService.findById(pccFileId);
+
+        return image(pccFile.getUrl());
     }
 
 }

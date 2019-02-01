@@ -69,9 +69,7 @@ public class PccScheduleController {
     @ApiOperation(value="从起始日期到截止日期内（包含起始日期及截止日期），每日发布的任务数量")
     @GetMapping("day/count")
     public Result dayCount(@RequestParam Date startDate, @RequestParam Date endDate, @RequestParam Integer pccUserId) {
-
         List<Map<String, Object>> list = pccScheduleService.dayCount(startDate, endDate, pccUserId);
-
         return ResultGenerator.genSuccessResult(list);
     }
 
@@ -156,6 +154,33 @@ public class PccScheduleController {
         List<Map<String,Object>> list = pccScheduleService.additionalInfoList(pccScheduleId);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("历史任务统计，包含相关数量，已完成数量等")
+    @GetMapping("history/count")
+    public Result historyCount(@RequestParam Integer pccUserId) {
+        Map<String, Object> counts = pccScheduleService.historyCount(pccUserId);
+        return ResultGenerator.genSuccessResult(counts);
+    }
+
+    @ApiOperation("指派数量，以人分组")
+    @GetMapping("history/assign/count")
+    public Result historyAssignCount(@RequestParam Integer pccUserId) {
+        List<Map<String, Object>> counts = pccScheduleService.historyAssignCount(pccUserId);
+        return ResultGenerator.genSuccessResult(counts);
+    }
+
+    @ApiOperation("被指派数量，以人分组")
+    @GetMapping("history/assigned/count")
+    public Result historyAssignedCount(@RequestParam Integer pccUserId) {
+        List<Map<String, Object>> counts = pccScheduleService.historyAssignedCount(pccUserId);
+        return ResultGenerator.genSuccessResult(counts);
+    }
+
+    @ApiOperation(value="从起始日期到截止日期内（包含起始日期及截止日期），每日发布的任务数量，完成数量，接受数量")
+    @GetMapping("day/counts")
+    public Result counts(@RequestParam Integer pccUserId, @RequestParam Date startDate, @RequestParam Date endDate) {
+        return ResultGenerator.genSuccessResult(pccScheduleService.counts(pccUserId, startDate, endDate));
     }
 
 }

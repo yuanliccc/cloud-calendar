@@ -16,4 +16,10 @@ public interface PccUserService extends Service<PccUser> {
     List<PccUser> friends(Integer pccUserId);
 
     List<Map<String,Object>> friendsDetail(Integer pccUserId);
+
+    Map<String,Object> detail(Integer id);
+
+    void updateImg(Integer pccUserId, Integer pccFileId);
+
+    void updatePassword(Integer pccUserId, String password);
 }

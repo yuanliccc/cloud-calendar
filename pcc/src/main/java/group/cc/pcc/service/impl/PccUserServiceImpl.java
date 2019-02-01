@@ -35,4 +35,19 @@ public class PccUserServiceImpl extends AbstractService<PccUser> implements PccU
     public List<Map<String, Object>> friendsDetail(Integer pccUserId) {
         return pccUserMapper.friendsDetail(pccUserId);
     }
+
+    @Override
+    public Map<String, Object> detail(Integer id) {
+        return pccUserMapper.detail(id);
+    }
+
+    @Override
+    public void updateImg(Integer pccUserId, Integer pccFileId) {
+        pccUserMapper.updateImg(pccUserId, pccFileId);
+    }
+
+    @Override
+    public void updatePassword(Integer pccUserId, String password) {
+        pccUserMapper.updatePassword(pccUserId, password);
+    }
 }

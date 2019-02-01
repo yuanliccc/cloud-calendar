@@ -30,4 +30,12 @@ public interface PccScheduleService extends Service<PccSchedule> {
     void complete(PccScheduleComplete pccScheduleComplete);
 
     List<Map<String,Object>> additionalInfoList(Integer pccScheduleId);
+
+    Map<String,Object> historyCount(Integer pccUserId);
+
+    List<Map<String,Object>> historyAssignCount(Integer pccUserId);
+
+    List<Map<String,Object>> historyAssignedCount(Integer pccUserId);
+
+    List<Map<String, Object>> counts(Integer pccUserId, Date startDate, Date endDate);
 }

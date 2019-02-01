@@ -36,6 +36,9 @@ public class PccUser {
      */
     private String password;
 
+    @Column(name = "pcc_file_id")
+    private Integer pccFileId;
+
     /**
      * 获取主键
      *
@@ -142,5 +145,19 @@ public class PccUser {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return pcc_file_id
+     */
+    public Integer getPccFileId() {
+        return pccFileId;
+    }
+
+    /**
+     * @param pccFileId
+     */
+    public void setPccFileId(Integer pccFileId) {
+        this.pccFileId = pccFileId;
     }
 }
