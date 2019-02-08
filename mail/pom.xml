@@ -17,9 +17,10 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>group.calendar</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>rabbitmq</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

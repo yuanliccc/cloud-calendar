@@ -35,6 +35,30 @@ public class CodeGenerator {
     }
 
     /**
+     * @see #generateModelAndMapper()
+     */
+    public static void generateModelAndMapper() {
+        Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
+        genModelAndMapper(params.get(TABLES_KEY), params);
+    }
+
+    /**
+     * @see #genControllers(String, Map)
+     */
+    public static void generateController() {
+        Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
+        genControllers(params.get(TABLES_KEY), params);
+    }
+
+    /**
+     * @see #genServices(String, Map)
+     */
+    public static void generateServiceAndImpl() {
+        Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
+        genServices(params.get(TABLES_KEY), params);
+    }
+
+    /**
      * 通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。
      * 如输入表名称 "t_user_detail" 将生成 TUserDetail、TUserDetailMapper、TUserDetailService ...
      *
@@ -50,7 +74,7 @@ public class CodeGenerator {
      *
      * @param tableNames 数据表名称
      */
-    public static void genCodeByCustomModelName(String tableNames, Map<String, String> params) {
+    private static void genCodeByCustomModelName(String tableNames, Map<String, String> params) {
         genModelAndMapper(tableNames, params);
         genServices(tableNames, params);
         genControllers(tableNames, params);
@@ -77,7 +101,7 @@ public class CodeGenerator {
      * @param tableNames 表名，逗号隔开
      * @param params 生成所需参数集合
      */
-    public static void genModelAndMapper(String tableNames, Map<String, String> params) {
+    private static void genModelAndMapper(String tableNames, Map<String, String> params) {
         Context context = new Context(ModelType.FLAT);
         context.setId("Potato");
         context.setTargetRuntime("MyBatis3Simple");
@@ -143,7 +167,7 @@ public class CodeGenerator {
      * @param params
      * @see #genService(String, Map)
      */
-    public static void genServices(String tableNames, Map<String, String> params) {
+    private static void genServices(String tableNames, Map<String, String> params) {
 
         for(String tableName : tableNames.split(",")) {
             genService(tableName, params);
@@ -155,7 +179,7 @@ public class CodeGenerator {
      * @param tableName
      * @param params
      */
-    public static void genService(String tableName, Map<String, String> params) {
+    private static void genService(String tableName, Map<String, String> params) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 
@@ -192,14 +216,14 @@ public class CodeGenerator {
         }
     }
 
-    public static void genControllers(String tableNames, Map<String, String> params) {
+    private static void genControllers(String tableNames, Map<String, String> params) {
 
         for(String tableName : tableNames.split(",")) {
             genController(tableName, params);
         }
     }
 
-    public static void genController(String tableName, Map<String, String> params) {
+    private static void genController(String tableName, Map<String, String> params) {
         try {
             freemarker.template.Configuration cfg = getConfiguration();
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="group.cc.df.dao.DfFormFieldMapper">
+  <resultMap id="BaseResultMap" type="group.cc.df.model.DfFormField">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="form_id" jdbcType="INTEGER" property="formId" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="display_index" jdbcType="INTEGER" property="displayIndex" />
+  </resultMap>
+
+  <insert id="saveFormField" keyProperty="id" useGeneratedKeys="true" parameterType="group.cc.df.model.DfFormField">
+    INSERT INTO df_form_field(form_id, label, name, type, value, parent_id, display_index) VALUES
+    (#{formId}, #{label}, #{name}, #{type}, #{value}, #{parentId}, #{displayIndex})
+    <selectKey resultType="int" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+</mapper>

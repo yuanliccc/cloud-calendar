@@ -16,41 +16,42 @@ import java.util.List;
  * @author ${author}
  * @date ${date}
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("${baseRequestMapping}")
 public class ${modelNameUpperCamel}Controller {
     @Resource
     private ${modelNameUpperCamel}Service ${modelNameLowerCamel}Service;
 
-    @ApiOperation(value="添加 ${modelNameUpperCamel}")
+    @ApiOperation("添加 ${modelNameUpperCamel}")
     @PostMapping
     public Result add(@RequestBody ${modelNameUpperCamel} ${modelNameLowerCamel}) {
         ${modelNameLowerCamel}Service.save(${modelNameLowerCamel});
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="删除 ${modelNameUpperCamel}")
+    @ApiOperation("删除 ${modelNameUpperCamel}")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         ${modelNameLowerCamel}Service.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="更新 ${modelNameUpperCamel}")
+    @ApiOperation("更新 ${modelNameUpperCamel}")
     @PutMapping
     public Result update(@RequestBody ${modelNameUpperCamel} ${modelNameLowerCamel}) {
         ${modelNameLowerCamel}Service.update(${modelNameLowerCamel});
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="通过 Id 查询 ${modelNameUpperCamel} 详情")
+    @ApiOperation("通过 Id 查询 ${modelNameUpperCamel} 详情")
     @GetMapping("/{id}")
     public Result detail(@PathVariable Integer id) {
         ${modelNameUpperCamel} ${modelNameLowerCamel} = ${modelNameLowerCamel}Service.findById(id);
         return ResultGenerator.genSuccessResult(${modelNameLowerCamel});
     }
 
-    @ApiOperation(value="分页查询 ${modelNameUpperCamel} 列表")
+    @ApiOperation("分页查询 ${modelNameUpperCamel} 列表")
     @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
