@@ -25,6 +25,10 @@ public class DfFormField {
     @Column(name = "display_index")
     private Integer displayIndex;
 
+    private String key;
+
+    private String model;
+
     /**
      * @return id
      */
@@ -135,5 +139,37 @@ public class DfFormField {
      */
     public void setDisplayIndex(Integer displayIndex) {
         this.displayIndex = displayIndex;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    @Override
+    public String toString() {
+        return "DfFormField{" +
+                "id=" + id +
+                ", formId=" + formId +
+                ", label='" + label + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", value='" + value + '\'' +
+                ", parentId=" + parentId +
+                ", displayIndex=" + displayIndex +
+                ", key='" + key + '\'' +
+                ", model='" + model + '\'' +
+                '}';
     }
 }

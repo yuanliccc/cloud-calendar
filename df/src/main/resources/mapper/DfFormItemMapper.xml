@@ -11,4 +11,17 @@
     <result column="label" jdbcType="VARCHAR" property="label" />
     <result column="item_index" jdbcType="VARCHAR" property="itemIndex" />
   </resultMap>
+
+  <select id="findDfFormItemsByFieldId" parameterType="Integer" resultType="group.cc.df.model.DfFormItem">
+    SELECT
+      id,
+      form_field_id,
+      value,
+      label,
+      item_index
+    FROM
+      df_form_item
+    WHERE
+      form_field_id = #{fieldId}
+  </select>
 </mapper>

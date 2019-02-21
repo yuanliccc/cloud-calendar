@@ -2,7 +2,7 @@ package group.cc.df.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
-import group.cc.df.dto.LoginUserInfoDTO;
+import group.cc.df.dto.DfLoginUserInfoDTO;
 import group.cc.df.model.DfUser;
 import group.cc.df.service.DfUserService;
 import com.github.pagehelper.PageHelper;
@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author gxd
@@ -64,9 +63,9 @@ public class DfUserController {
 
     @ApiOperation("登录")
     @PostMapping("/login")
-    public Result login(@RequestBody LoginUserInfoDTO loginUserInfoDTO) {
-        String identityCode = loginUserInfoDTO.getIdentityCode();
-        String verifyPassword = loginUserInfoDTO.getVerifyPassword();
+    public Result login(@RequestBody DfLoginUserInfoDTO dfLoginUserInfoDTO) {
+        String identityCode = dfLoginUserInfoDTO.getIdentityCode();
+        String verifyPassword = dfLoginUserInfoDTO.getVerifyPassword();
 
         DfUser user = dfUserService.verifyUser(identityCode, verifyPassword);
 

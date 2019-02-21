@@ -2,6 +2,7 @@ package group.cc.df.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.df.dto.DfFieldComponentDTO;
 import group.cc.df.model.DfFormField;
 import group.cc.df.service.DfFormFieldService;
 import com.github.pagehelper.PageHelper;
@@ -58,5 +59,12 @@ public class DfFormFieldController {
         List<DfFormField> list = dfFormFieldService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("按照表单Id查询对应的表单域")
+    @GetMapping("/findDynamicFormFieldsByFormId/{formId}")
+    public Result findDynamicFormFieldsByFormId(@PathVariable Integer formId) {
+        List<DfFieldComponentDTO> list = dfFormFieldService.findDynamicFormFieldsByFormId(formId);
+        return ResultGenerator.genSuccessResult(list);
     }
 }

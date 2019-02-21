@@ -4,7 +4,7 @@ package group.cc.df.dto;
  * @author gxd
  * @date 2019/02/16
  */
-public class LoginUserInfoDTO {
+public class DfLoginUserInfoDTO {
     /**
      * 用户用于登录的字符串
      * 也可以邮箱和手机号

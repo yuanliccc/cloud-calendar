@@ -186,11 +186,15 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         if (fieldMap != null) {
             String type = (String) fieldMap.get("type");
             String name = (String) fieldMap.get("name");
+            String key = (String) fieldMap.get("key");
+            String model = (String) fieldMap.get("model");
 
             dfField = new DfFormField();
 
             dfField.setType(type);
             dfField.setLabel(name);
+            dfField.setKey(key);
+            dfField.setModel(model);
         }
 
         return dfField;
