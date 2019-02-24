@@ -10,5 +10,7 @@ import java.util.Map;
  * @date 2019/01/10
  */
 public interface DfDynamicFormService extends Service<DfDynamicForm> {
-    public void saveDynamicForm(Map<String, Object> dfMap);
+    void saveDynamicForm(Map<String, Object> dfMap);
+
+    void updateDynamicForm(Map<String, Object> dfMap);
 }

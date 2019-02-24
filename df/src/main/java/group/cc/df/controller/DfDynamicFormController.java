@@ -36,7 +36,14 @@ public class DfDynamicFormController {
     @PostMapping("/addDynamicForm")
     public Result addDynamicForm(@RequestBody Map<String, Object> dfMap) {
         dfDynamicFormService.saveDynamicForm(dfMap);
-        return null;
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("通过JSON字符串修改动态表单")
+    @PutMapping("/updateDynamicForm")
+    public Result updateDynamicForm(@RequestBody Map<String, Object> dfMap) {
+        dfDynamicFormService.updateDynamicForm(dfMap);
+        return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("删除 DfDynamicForm")

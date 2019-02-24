@@ -49,6 +49,13 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         saveFormField(fieldList , null, dfFormId, -1);
     }
 
+    @Override
+    public void updateDynamicForm(Map<String, Object> dfMap) {
+        DfDynamicForm df = handleFormConfig(dfMap);
+
+        dfDynamicFormMapper.updateDynamicForm(df);
+    }
+
     private void saveFormField(List<Map<String, Object>> fieldList, Integer displayIndex, int dfFormId, int parentId) {
         for (Map<String, Object> fieldMap: fieldList) {
             DfFormField dfField = handleGeneralField(fieldMap);
@@ -170,6 +177,22 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
 
             df.setName(name);
             df.setMethod(method);
+
+            if (configMap.get("id") != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                Integer formId = (Integer) configMap.get("id");
+
+                df.setId(formId);
+                try {
+                    df.setCreateTime(sdf.parse((String) configMap.get("createTime")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                df.setEmployeeId((Integer) configMap.get("employeeId"));
+                df.setEnctype((String) configMap.get("enctype"));
+                df.setAction("action");
+            }
         }
 
         return df;
@@ -185,14 +208,14 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
 
         if (fieldMap != null) {
             String type = (String) fieldMap.get("type");
-            String name = (String) fieldMap.get("name");
+            String label = (String) fieldMap.get("label");
             String key = (String) fieldMap.get("key");
             String model = (String) fieldMap.get("model");
 
             dfField = new DfFormField();
 
             dfField.setType(type);
-            dfField.setLabel(name);
+            dfField.setLabel(label);
             dfField.setKey(key);
             dfField.setModel(model);
         }
