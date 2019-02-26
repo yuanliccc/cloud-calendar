@@ -8,5 +8,6 @@ import group.cc.core.Service;
  * @date 2019/01/02
  */
 public interface UserService extends Service<User> {
-    public User login(String account, String password);
+    public User login(String account, String password) throws Exception;
+    public User register(User user)throws Exception;
 }

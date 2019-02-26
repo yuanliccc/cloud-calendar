@@ -16,8 +16,9 @@ import java.util.List;
  * @author wangyuming
  * @date 2019/01/02
  */
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/occ/user")
 public class UserController {
     @Resource
     private UserService userService;
@@ -64,5 +65,19 @@ public class UserController {
     public Result login(String account, String password) {
         userService.login(account, password);
         return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation(value="注册")
+    @PostMapping(value="/register")
+    public Result register(@RequestBody User user) {
+        try {
+            user = userService.register(user);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("账号已存在！");
+        }
+        if(user == null)
+            return ResultGenerator.genFailResult("账号密码不能为空！");
+
+        return ResultGenerator.genSuccessResult(user);
     }
 }
