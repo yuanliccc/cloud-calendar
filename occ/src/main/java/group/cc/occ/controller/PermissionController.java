@@ -14,43 +14,44 @@ import java.util.List;
 
 /**
  * @author wangyuming
- * @date 2019/01/02
+ * @date 2019/03/01
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/permission")
 public class PermissionController {
     @Resource
     private PermissionService permissionService;
 
-    @ApiOperation(value="添加 Permission")
+    @ApiOperation("添加 Permission")
     @PostMapping
     public Result add(@RequestBody Permission permission) {
         permissionService.save(permission);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="删除 Permission")
+    @ApiOperation("删除 Permission")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         permissionService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="更新 Permission")
+    @ApiOperation("更新 Permission")
     @PutMapping
     public Result update(@RequestBody Permission permission) {
         permissionService.update(permission);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="通过 Id 查询 Permission 详情")
+    @ApiOperation("通过 Id 查询 Permission 详情")
     @GetMapping("/{id}")
     public Result detail(@PathVariable Integer id) {
         Permission permission = permissionService.findById(id);
         return ResultGenerator.genSuccessResult(permission);
     }
 
-    @ApiOperation(value="分页查询 Permission 列表")
+    @ApiOperation("分页查询 Permission 列表")
     @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);

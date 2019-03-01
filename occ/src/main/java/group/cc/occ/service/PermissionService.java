@@ -5,7 +5,7 @@ import group.cc.core.Service;
 
 /**
  * @author wangyuming
- * @date 2019/01/02
+ * @date 2019/03/01
  */
 public interface PermissionService extends Service<Permission> {
 

@@ -1,6 +1,7 @@
 package group.cc.occ.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 public class Organization {
     @Id
@@ -9,7 +10,8 @@ public class Organization {
 
     private String name;
 
-    private String key;
+    @Column(name = "orgKey")
+    private String orgkey;
 
     @Column(name = "parentOrgId")
     private Integer parentorgid;
@@ -43,17 +45,17 @@ public class Organization {
     }
 
     /**
-     * @return key
+     * @return orgKey
      */
-    public String getKey() {
-        return key;
+    public String getOrgkey() {
+        return orgkey;
     }
 
     /**
-     * @param key
+     * @param orgkey
      */
-    public void setKey(String key) {
-        this.key = key;
+    public void setOrgkey(String orgkey) {
+        this.orgkey = orgkey;
     }
 
     /**

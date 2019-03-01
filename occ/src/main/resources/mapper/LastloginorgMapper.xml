@@ -8,5 +8,6 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="userId" jdbcType="INTEGER" property="userid" />
     <result column="orgId" jdbcType="INTEGER" property="orgid" />
+    <result column="loginTime" jdbcType="TIMESTAMP" property="logintime" />
   </resultMap>
 </mapper>

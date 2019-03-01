@@ -8,5 +8,6 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="roleKey" jdbcType="VARCHAR" property="rolekey" />
+    <result column="orgId" jdbcType="INTEGER" property="orgid" />
   </resultMap>
 </mapper>

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 /**
  * @author wangyuming
- * @date 2019/01/02
+ * @date 2019/03/01
  */
 @Service
 @Transactional
@@ -20,4 +20,8 @@ public class RoleServiceImpl extends AbstractService<Role> implements RoleServic
     @Resource
     private RoleMapper roleMapper;
 
+    @Override
+    public Role queryBy(String key, String value) {
+        return roleMapper.queryBy(key, value);
+    }
 }

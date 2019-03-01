@@ -12,6 +12,20 @@ public class Role {
     @Column(name = "roleKey")
     private String rolekey;
 
+    @Column(name = "orgId")
+    private Integer orgid;
+
+    /**
+     * @return orgid
+     */
+    public Integer getOrgid() {
+        return orgid;
+    }
+
+    public void setOrgid(Integer orgid) {
+        this.orgid = orgid;
+    }
+
     /**
      * @return id
      */

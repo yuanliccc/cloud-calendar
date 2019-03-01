@@ -14,43 +14,44 @@ import java.util.List;
 
 /**
  * @author wangyuming
- * @date 2019/01/02
+ * @date 2019/03/01
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/lastloginorg")
 public class LastloginorgController {
     @Resource
     private LastloginorgService lastloginorgService;
 
-    @ApiOperation(value="添加 Lastloginorg")
+    @ApiOperation("添加 Lastloginorg")
     @PostMapping
     public Result add(@RequestBody Lastloginorg lastloginorg) {
         lastloginorgService.save(lastloginorg);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="删除 Lastloginorg")
+    @ApiOperation("删除 Lastloginorg")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         lastloginorgService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="更新 Lastloginorg")
+    @ApiOperation("更新 Lastloginorg")
     @PutMapping
     public Result update(@RequestBody Lastloginorg lastloginorg) {
         lastloginorgService.update(lastloginorg);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="通过 Id 查询 Lastloginorg 详情")
+    @ApiOperation("通过 Id 查询 Lastloginorg 详情")
     @GetMapping("/{id}")
     public Result detail(@PathVariable Integer id) {
         Lastloginorg lastloginorg = lastloginorgService.findById(id);
         return ResultGenerator.genSuccessResult(lastloginorg);
     }
 
-    @ApiOperation(value="分页查询 Lastloginorg 列表")
+    @ApiOperation("分页查询 Lastloginorg 列表")
     @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);

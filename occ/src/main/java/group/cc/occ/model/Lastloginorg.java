@@ -1,5 +1,6 @@
 package group.cc.occ.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 public class Lastloginorg {
@@ -12,6 +13,9 @@ public class Lastloginorg {
 
     @Column(name = "orgId")
     private Integer orgid;
+
+    @Column(name = "loginTime")
+    private Date logintime;
 
     /**
      * @return id
@@ -53,5 +57,19 @@ public class Lastloginorg {
      */
     public void setOrgid(Integer orgid) {
         this.orgid = orgid;
+    }
+
+    /**
+     * @return loginTime
+     */
+    public Date getLogintime() {
+        return logintime;
+    }
+
+    /**
+     * @param logintime
+     */
+    public void setLogintime(Date logintime) {
+        this.logintime = logintime;
     }
 }

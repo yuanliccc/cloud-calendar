@@ -7,7 +7,7 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="orgKey" jdbcType="VARCHAR" property="orgkey" />
     <result column="parentOrgId" jdbcType="INTEGER" property="parentorgid" />
   </resultMap>
 </mapper>

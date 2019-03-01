@@ -14,43 +14,44 @@ import java.util.List;
 
 /**
  * @author wangyuming
- * @date 2019/01/02
+ * @date 2019/03/01
  */
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController {
     @Resource
     private OrganizationService organizationService;
 
-    @ApiOperation(value="添加 Organization")
+    @ApiOperation("添加 Organization")
     @PostMapping
     public Result add(@RequestBody Organization organization) {
         organizationService.save(organization);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="删除 Organization")
+    @ApiOperation("删除 Organization")
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         organizationService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="更新 Organization")
+    @ApiOperation("更新 Organization")
     @PutMapping
     public Result update(@RequestBody Organization organization) {
         organizationService.update(organization);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation(value="通过 Id 查询 Organization 详情")
+    @ApiOperation("通过 Id 查询 Organization 详情")
     @GetMapping("/{id}")
     public Result detail(@PathVariable Integer id) {
         Organization organization = organizationService.findById(id);
         return ResultGenerator.genSuccessResult(organization);
     }
 
-    @ApiOperation(value="分页查询 Organization 列表")
+    @ApiOperation("分页查询 Organization 列表")
     @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);

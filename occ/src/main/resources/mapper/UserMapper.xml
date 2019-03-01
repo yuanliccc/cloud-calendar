@@ -13,7 +13,4 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
   </resultMap>
-  <select id="getUserByAccount" resultType="group.cc.occ.model.User" parameterType="java.lang.String">
-      select * from user where account = #{account}
-  </select>
 </mapper>

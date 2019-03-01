@@ -11,7 +11,11 @@ public class Permission {
 
     private String identify;
 
-    private String explain;
+    @Column(name = "perExplain")
+    private String perexplain;
+
+    @Column(name = "moduleId")
+    private Integer moduleid;
 
     /**
      * @return id
@@ -56,16 +60,30 @@ public class Permission {
     }
 
     /**
-     * @return explain
+     * @return perExplain
      */
-    public String getExplain() {
-        return explain;
+    public String getPerexplain() {
+        return perexplain;
     }
 
     /**
-     * @param explain
+     * @param perexplain
      */
-    public void setExplain(String explain) {
-        this.explain = explain;
+    public void setPerexplain(String perexplain) {
+        this.perexplain = perexplain;
+    }
+
+    /**
+     * @return moduleId
+     */
+    public Integer getModuleid() {
+        return moduleid;
+    }
+
+    /**
+     * @param moduleid
+     */
+    public void setModuleid(Integer moduleid) {
+        this.moduleid = moduleid;
     }
 }
