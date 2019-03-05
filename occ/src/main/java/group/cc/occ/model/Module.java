@@ -1,8 +1,9 @@
 package group.cc.occ.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-public class Module {
+public class Module implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

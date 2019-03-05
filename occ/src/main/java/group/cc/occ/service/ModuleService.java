@@ -12,4 +12,14 @@ import java.util.List;
  */
 public interface ModuleService extends Service<Module> {
     public List<ModuleDto> getModules(Integer roleId);
+
+    public List<Module> listByKey(String key, String value);
+
+    public List<Module> getAllParent();
+
+    public void saveModule(Module module)throws Exception;
+
+    public void deleteByModuleId(Integer moduleId);
+
+    public void deleteBatch(List<Module> modules);
 }

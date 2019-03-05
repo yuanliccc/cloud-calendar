@@ -1,9 +1,10 @@
 package group.cc.occ.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
-public class Lastloginorg {
+public class Lastloginorg implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

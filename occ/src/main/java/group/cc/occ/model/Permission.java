@@ -1,8 +1,9 @@
 package group.cc.occ.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-public class Permission {
+public class Permission implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -16,6 +17,16 @@ public class Permission {
 
     @Column(name = "moduleId")
     private Integer moduleid;
+
+    public Permission(){}
+
+    public Permission(Integer id, String name, String identify, String perexplain, Integer moduleId){
+        this.setId(id);
+        this.setIdentify(identify);
+        this.setModuleid(moduleId);
+        this.setName(name);
+        this.setPerexplain(perexplain);
+    }
 
     /**
      * @return id

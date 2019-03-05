@@ -1,9 +1,10 @@
 package group.cc.occ.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
-public class Organization {
+public class Organization implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,15 +1,9 @@
 package group.cc.occ.service.impl;
 
 import group.cc.occ.dao.UserMapper;
-import group.cc.occ.model.Lastloginorg;
-import group.cc.occ.model.Organization;
-import group.cc.occ.model.Role;
-import group.cc.occ.model.User;
+import group.cc.occ.model.*;
 import group.cc.occ.model.dto.LoginUserDto;
-import group.cc.occ.service.LastloginorgService;
-import group.cc.occ.service.OrganizationService;
-import group.cc.occ.service.RoleService;
-import group.cc.occ.service.UserService;
+import group.cc.occ.service.*;
 import group.cc.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +32,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     @Resource
     private RoleService roleService;
 
+    @Resource
+    private PermissionService permissionService;
+
     @Override
     public LoginUserDto login(String account, String password) throws Exception{
         User user = this.findBy("account", account);
@@ -51,6 +48,8 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         loginUserDto.setUser(user);
 
         updateLastLoginInfo(loginUserDto);
+        List<String> permissions = permissionService.findPerForRoleId(loginUserDto.getRole().getId());
+        loginUserDto.setPermissions(permissions);
 
         return loginUserDto;
     }
@@ -73,6 +72,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
 
         updateLastLoginInfo(loginUserDto);
 
+        List<String> permissions = permissionService.findPerForRoleId(loginUserDto.getRole().getId());
+        loginUserDto.setPermissions(permissions);
+
         return loginUserDto;
     }
 
@@ -87,25 +89,38 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         Organization org = null;
 
         if(last == null){
-            role = roleService.findBy("rolekey","defaultMember");
-            org = organizationService.findById(role.getOrgid());
-
-            last = new Lastloginorg();
-            last.setLogintime(new Date());
-            last.setUserid(userDto.getUser().getId());
-            last.setOrgid(org.getId());
-            lastloginorgService.save(last);
-
+            defaultLogin(role, org, last, userDto);
+            return;
         }else {
-            role = roleService.findBy("orgid",last.getOrgid());
-            org = organizationService.findById(last.getOrgid());
-            last.setLogintime(new Date());
-            lastloginorgService.update(last);
+            role = roleService.findByUserIdAndOrgId(last.getUserid(), last.getOrgid());
+
+            //如果该角色因为特殊原因消失（删除或者换部门）
+            if(role == null){
+                defaultLogin(role, org, last, userDto);
+                return;
+            }else {
+                org = organizationService.findById(last.getOrgid());
+                last.setLogintime(new Date());
+                lastloginorgService.update(last);
+            }
         }
 
         userDto.setOrganization(org);
         userDto.setRole(role);
 
 
+    }
+
+    private void defaultLogin(Role role, Organization org, Lastloginorg last, LoginUserDto userDto){
+        role = roleService.findBy("rolekey","defaultMember");
+        org = organizationService.findById(role.getOrgid());
+
+        last = new Lastloginorg();
+        last.setLogintime(new Date());
+        last.setUserid(userDto.getUser().getId());
+        last.setOrgid(org.getId());
+        lastloginorgService.save(last);
+        userDto.setOrganization(org);
+        userDto.setRole(role);
     }
 }

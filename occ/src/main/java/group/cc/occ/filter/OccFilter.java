@@ -2,8 +2,13 @@ package group.cc.occ.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import group.cc.core.ResultGenerator;
+import group.cc.occ.model.dto.LoginUserDto;
+import group.cc.occ.util.CusAccessObjectUtil;
 import group.cc.occ.util.InitUtil;
+import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +25,9 @@ import java.util.List;
  */
 @WebFilter(filterName = "OccFilter", urlPatterns = "/*")
 public class OccFilter implements Filter {
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -29,27 +37,16 @@ public class OccFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        HttpSession session = request.getSession(true);
+        LoginUserDto login = (LoginUserDto)redisTemplate.opsForValue().get("userInfo" + CusAccessObjectUtil.getIpAddress(request));
 
         String URL = request.getServletPath();
         List url = InitUtil.getUrl();
 
-        filterChain.doFilter(servletRequest, servletResponse);
-       /* if(url.contains(URL) || session.getAttribute("userInfo") != null){
+        if(url.contains(URL) || login != null){
             filterChain.doFilter(servletRequest, servletResponse);
         }else {
-            JSONObject json = new JSONObject();
-            json.put("code","401");
-            json.put("message", "No Login");
-            json.put("stats","Fail");
-
-            response.getWriter().write(json.toString());
-            response.setHeader("content-type", "text/html;charset=UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().flush();
-            response.getWriter().close();
-            response.setStatus(401);
-        }*/
+            servletRequest.getRequestDispatcher("/occ/user/unLogin").forward(servletRequest, servletResponse);
+        }
     }
 
     @Override

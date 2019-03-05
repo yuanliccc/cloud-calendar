@@ -1,16 +1,29 @@
 package group.cc.occ.model.dto;
 
 import group.cc.occ.model.Organization;
+import group.cc.occ.model.Permission;
 import group.cc.occ.model.Role;
 import group.cc.occ.model.User;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019/2/28.
  */
-public class LoginUserDto {
+public class LoginUserDto implements Serializable{
     private User user;
     private Organization organization;
     private Role role;
+    private List<String> permissions;
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
 
     public User getUser() {
         return user;

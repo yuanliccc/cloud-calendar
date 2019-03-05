@@ -18,45 +18,52 @@ import java.util.List;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/organization")
+@RequestMapping("/occ/organization")
 public class OrganizationController {
     @Resource
     private OrganizationService organizationService;
 
     @ApiOperation("添加 Organization")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@RequestBody Organization organization) {
         organizationService.save(organization);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("删除 Organization")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete")
     public Result delete(@PathVariable Integer id) {
         organizationService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("更新 Organization")
-    @PutMapping
+    @PutMapping("/update")
     public Result update(@RequestBody Organization organization) {
         organizationService.update(organization);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("通过 Id 查询 Organization 详情")
-    @GetMapping("/{id}")
+    @GetMapping("/detail")
     public Result detail(@PathVariable Integer id) {
         Organization organization = organizationService.findById(id);
         return ResultGenerator.genSuccessResult(organization);
     }
 
     @ApiOperation("分页查询 Organization 列表")
-    @GetMapping
+    @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<Organization> list = organizationService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("获取所有organization")
+    @GetMapping("/getAllOrganization")
+    public Result getAllOrganization() {
+        List<Organization> list = organizationService.findAll();
+        return ResultGenerator.genSuccessResult(list);
     }
 }

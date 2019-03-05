@@ -3,12 +3,13 @@ package group.cc.occ.model.dto;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import group.cc.occ.model.Module;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2019/2/28.
  */
-public class ModuleDto {
+public class ModuleDto implements Serializable{
     private Module module;
 
     private List<Module> children;

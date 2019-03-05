@@ -1,6 +1,7 @@
 package group.cc.occ.controller;
 
 import group.cc.core.Result;
+import group.cc.core.ResultCode;
 import group.cc.core.ResultGenerator;
 import group.cc.occ.model.User;
 import group.cc.occ.model.dto.LoginUserDto;
@@ -12,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.ApiOperation;
+import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wangyuming
@@ -30,8 +33,10 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private HttpServletRequest request;
+    private HttpServletRequest request; //自动注入request
 
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @ApiOperation("添加 User")
     @PostMapping
@@ -66,7 +71,7 @@ public class UserController {
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<User> list = userService.findAll();
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<User> pageInfo = new PageInfo<>(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
@@ -76,7 +81,7 @@ public class UserController {
         LoginUserDto loginUserDto = null;
         try {
             loginUserDto = userService.login(account, password);
-            //redisTemplate.opsForValue().set("userInfo" + CusAccessObjectUtil.getIpAddress(request), loginUserDto);
+            redisTemplate.opsForValue().set("userInfo" + CusAccessObjectUtil.getIpAddress(request), loginUserDto, 1800, TimeUnit.SECONDS);
         }catch (Exception e){
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
@@ -89,10 +94,10 @@ public class UserController {
     @PostMapping(value="/register")
     public Result register(@RequestBody User user) {
         LoginUserDto loginUserDto = null;
-        HttpSession session = request.getSession(true);
+       ;
         try {
             loginUserDto = userService.register(user);
-            session.setAttribute("userInfo", loginUserDto);
+            redisTemplate.opsForValue().set("userInfo" + CusAccessObjectUtil.getIpAddress(request), loginUserDto, 1800, TimeUnit.SECONDS);
         }catch (Exception e){
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
@@ -101,10 +106,25 @@ public class UserController {
     }
 
     @ApiOperation(value="注销登录")
-    @PostMapping(value="/loginUp")
-    public Result loginUp() {
-        HttpSession session = request.getSession(true);
-        session.removeAttribute("userInfo");
+    @GetMapping(value="/singUp")
+    public Result singUp() {
+        redisTemplate.opsForValue().getOperations().delete("userInfo" + CusAccessObjectUtil.getIpAddress(request));
         return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation(value="获取用户信息")
+    @GetMapping(value="/getUser")
+    public Result getUser() {
+        LoginUserDto login = (LoginUserDto)redisTemplate.opsForValue().get("userInfo" + CusAccessObjectUtil.getIpAddress(request));
+        //需要重新判断该用户是否拥有此角色（未完成）
+        if(login == null)
+            return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户未登录！");
+        return ResultGenerator.genSuccessResult(login);
+    }
+
+    @ApiOperation(value="返回未登录提示")
+    @GetMapping(value="/unLogin")
+    public Result unLogin() {
+        return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户尚未登录！");
     }
 }

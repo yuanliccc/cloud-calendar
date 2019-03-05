@@ -1,8 +1,9 @@
 package group.cc.occ.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-public class Role {
+public class Role implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -14,6 +15,17 @@ public class Role {
 
     @Column(name = "orgId")
     private Integer orgid;
+
+    @Column(name = "roleLevel")
+    private Integer rolelevel;
+
+    public Integer getRolelevel() {
+        return rolelevel;
+    }
+
+    public void setRolelevel(Integer rolelevel) {
+        this.rolelevel = rolelevel;
+    }
 
     /**
      * @return orgid

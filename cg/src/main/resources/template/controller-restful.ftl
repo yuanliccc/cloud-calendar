@@ -24,35 +24,35 @@ public class ${modelNameUpperCamel}Controller {
     private ${modelNameUpperCamel}Service ${modelNameLowerCamel}Service;
 
     @ApiOperation("添加 ${modelNameUpperCamel}")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@RequestBody ${modelNameUpperCamel} ${modelNameLowerCamel}) {
         ${modelNameLowerCamel}Service.save(${modelNameLowerCamel});
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("删除 ${modelNameUpperCamel}")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete")
     public Result delete(@PathVariable Integer id) {
         ${modelNameLowerCamel}Service.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("更新 ${modelNameUpperCamel}")
-    @PutMapping
+    @PutMapping("/update")
     public Result update(@RequestBody ${modelNameUpperCamel} ${modelNameLowerCamel}) {
         ${modelNameLowerCamel}Service.update(${modelNameLowerCamel});
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("通过 Id 查询 ${modelNameUpperCamel} 详情")
-    @GetMapping("/{id}")
+    @GetMapping("/detail")
     public Result detail(@PathVariable Integer id) {
         ${modelNameUpperCamel} ${modelNameLowerCamel} = ${modelNameLowerCamel}Service.findById(id);
         return ResultGenerator.genSuccessResult(${modelNameLowerCamel});
     }
 
     @ApiOperation("分页查询 ${modelNameUpperCamel} 列表")
-    @GetMapping
+    @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Service.findAll();
