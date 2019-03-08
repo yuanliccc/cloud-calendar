@@ -60,8 +60,8 @@ public class UserController {
     }
 
     @ApiOperation("通过 Id 查询 User 详情")
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable Integer id) {
+    @GetMapping("/detail")
+    public Result detail(@RequestParam Integer id) {
         User user = userService.findById(id);
         return ResultGenerator.genSuccessResult(user);
     }
