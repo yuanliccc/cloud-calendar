@@ -40,4 +40,19 @@
     WHERE
       form_id = #{formId}
   </select>
+
+  <update id="updateFormField" parameterType="group.cc.df.model.DfFormField">
+    UPDATE df_form_field SET form_id = #{formId}, label = #{label}, name = #{name}, type = #{type},
+    value = #{value}, parent_id = #{parentId}, display_index = #{displayIndex}, key = #{key},
+    model = #{model} WHERE id = #{id}
+  </update>
+
+  <select id="findUselessFormFields" resultType="group.cc.df.model.DfFormField">
+    SELECT id, form_id, label, name, type, value, parent_id, display_index, key, model from df_form_field
+    WHERE id NOT IN
+    <foreach collection="fieldIdList" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    AND form_id = #{formId}
+  </select>
 </mapper>

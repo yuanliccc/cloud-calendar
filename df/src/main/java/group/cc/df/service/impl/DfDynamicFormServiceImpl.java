@@ -49,13 +49,6 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         saveFormField(fieldList , null, dfFormId, -1);
     }
 
-    @Override
-    public void updateDynamicForm(Map<String, Object> dfMap) {
-        DfDynamicForm df = handleFormConfig(dfMap);
-
-        dfDynamicFormMapper.updateDynamicForm(df);
-    }
-
     private void saveFormField(List<Map<String, Object>> fieldList, Integer displayIndex, int dfFormId, int parentId) {
         for (Map<String, Object> fieldMap: fieldList) {
             DfFormField dfField = handleGeneralField(fieldMap);
@@ -267,4 +260,95 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         }
     }
 
+    @Override
+    public void updateDynamicForm(Map<String, Object> dfMap) {
+        // 首先更新表单信息
+        DfDynamicForm df = handleFormConfig(dfMap);
+        dfDynamicFormMapper.updateDynamicForm(df);
+
+        // 获取表单域列表
+        List<Map<String, Object>> fieldList = (List<Map<String, Object>>) dfMap.get("list");
+
+        // 列表,用于存储表单域Id
+        List<Integer> fieldIdList = new ArrayList<>();
+        // 更新表单域信息
+        this.updateFormField(fieldList, fieldIdList);
+
+        // 删除已经弃用的表单域信息
+        List<DfFormField> uselessFormFieldList = this.dfFormFieldMapper.findUselessFormFields(fieldIdList, df.getId());
+        for (DfFormField dfFormField: uselessFormFieldList) {
+            this.dfFormFieldMapper.delete(dfFormField);
+        }
+    }
+
+    private void updateFormField(List<Map<String, Object>> fieldList, List<Integer> fieldIdList) {
+        for (Map<String, Object> fieldMap: fieldList) {
+            DfFormField formField = new DfFormField();
+            formField.setId(Integer.parseInt((String) fieldMap.get("id")));
+            formField.setFormId(Integer.parseInt((String) fieldMap.get("formId")));
+            formField.setLabel((String) fieldMap.get("label"));
+            formField.setName(null);
+            formField.setType((String) fieldMap.get("type"));
+            formField.setValue((String) fieldMap.get("value"));
+            formField.setParentId(fieldMap.get("parentId") == null ?
+                    null : Integer.parseInt((String) fieldMap.get("parentId")));
+            formField.setDisplayIndex((Integer) fieldMap.get("displayIndex"));
+            formField.setKey((String) fieldMap.get("key"));
+            formField.setModel((String) fieldMap.get("model"));
+
+            fieldIdList.add(formField.getId());
+
+            // 更新表单域信息
+            this.dfFormFieldMapper.updateFormField(formField);
+
+            // 处理表单条目信息
+            if ("checkbox".equals(formField.getType()) || "radio".equals(formField.getType()) ||
+                    "select".equals(formField.getType())) {
+                List<Map<String, Object>> formItemList = (List<Map<String, Object>>) ((Map<String, Object>)
+                        fieldMap.get("options")).get("options");
+
+                List<Integer> formItemIdList = new ArrayList<>();
+
+                this.updateFormItem(formItemList, formItemIdList);
+
+                // 删除已经弃用的表单条目信息
+                List<DfFormItem> uselessFormItemList = this.dfFormItemMapper.findUselessFormItems(formItemIdList, formField.getId());
+                for (DfFormItem dfFormItem: uselessFormItemList) {
+                    this.dfFormItemMapper.delete(dfFormItem);
+                }
+
+            }
+
+            // 处理grid
+            List<Map<String, Object>> columnList = (List<Map<String, Object>>) fieldMap.get("columns");
+            this.updateColumns(columnList, fieldIdList);
+
+        }
+    }
+
+    private void updateColumns(List<Map<String, Object>> columnList, List<Integer> fieldIdList) {
+        if (columnList.size() > 0) {
+            int count = 0;
+
+            for (Map<String, Object> columnMap: columnList) {
+                List<Map<String, Object>> list = (List<Map<String, Object>>) columnMap.get("list");
+                this.updateFormField(list, fieldIdList);
+            }
+        }
+    }
+
+    private void updateFormItem(List<Map<String, Object>> formItemList, List<Integer> formItemIdList) {
+        for (Map<String, Object> formItemMap: formItemList) {
+            DfFormItem formItem = new DfFormItem();
+            formItem.setId(Integer.parseInt((String) formItemMap.get("id")));
+            formItem.setFormFieldId(Integer.parseInt((String) formItemMap.get("formFieldId")));
+            formItem.setValue((String) formItemMap.get("value"));
+            formItem.setLabel((String) formItemMap.get("label"));
+            formItem.setItemIndex((String) formItemMap.get("itemIndex"));
+
+            formItemIdList.add(formItem.getId());
+
+            this.dfFormItemMapper.updateFormItem(formItem);
+        }
+    }
 }
