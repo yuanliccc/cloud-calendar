@@ -284,14 +284,28 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     private void updateFormField(List<Map<String, Object>> fieldList, List<Integer> fieldIdList) {
         for (Map<String, Object> fieldMap: fieldList) {
             DfFormField formField = new DfFormField();
-            formField.setId(Integer.parseInt((String) fieldMap.get("id")));
-            formField.setFormId(Integer.parseInt((String) fieldMap.get("formId")));
+            formField.setId((Integer) fieldMap.get("id"));
+            formField.setFormId((Integer) fieldMap.get("formId"));
             formField.setLabel((String) fieldMap.get("label"));
             formField.setName(null);
             formField.setType((String) fieldMap.get("type"));
-            formField.setValue((String) fieldMap.get("value"));
+            String defaultValue = "";
+            if ("checkbox".equals(formField.getType())) {
+                List<String> checkboxList = (List<String>)((Map<String, Object>) fieldMap.get("options")).get("defaultValue");
+
+                for (String str: checkboxList) {
+                    defaultValue += str + ",";
+                }
+
+                if (!defaultValue.equals("")) {
+                    defaultValue = defaultValue.substring(0, defaultValue.length() - 1);
+                }
+            } else {
+                defaultValue = (String) ((Map<String, Object>) fieldMap.get("options")).get("defaultValue");
+            }
+            formField.setValue(defaultValue);
             formField.setParentId(fieldMap.get("parentId") == null ?
-                    null : Integer.parseInt((String) fieldMap.get("parentId")));
+                    null : (Integer) fieldMap.get("parentId"));
             formField.setDisplayIndex((Integer) fieldMap.get("displayIndex"));
             formField.setKey((String) fieldMap.get("key"));
             formField.setModel((String) fieldMap.get("model"));
@@ -327,7 +341,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     }
 
     private void updateColumns(List<Map<String, Object>> columnList, List<Integer> fieldIdList) {
-        if (columnList.size() > 0) {
+        if (columnList != null && columnList.size() > 0) {
             int count = 0;
 
             for (Map<String, Object> columnMap: columnList) {
@@ -340,8 +354,8 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     private void updateFormItem(List<Map<String, Object>> formItemList, List<Integer> formItemIdList) {
         for (Map<String, Object> formItemMap: formItemList) {
             DfFormItem formItem = new DfFormItem();
-            formItem.setId(Integer.parseInt((String) formItemMap.get("id")));
-            formItem.setFormFieldId(Integer.parseInt((String) formItemMap.get("formFieldId")));
+            formItem.setId((Integer) formItemMap.get("id"));
+            formItem.setFormFieldId((Integer) formItemMap.get("formFieldId"));
             formItem.setValue((String) formItemMap.get("value"));
             formItem.setLabel((String) formItemMap.get("label"));
             formItem.setItemIndex((String) formItemMap.get("itemIndex"));
