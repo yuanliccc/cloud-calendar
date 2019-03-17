@@ -1,9 +1,10 @@
 package group.cc.df.model;
 
 import javax.persistence.*;
+import java.util.Iterator;
 
 @Table(name = "df_form_item")
-public class DfFormItem {
+public class DfFormItem implements Comparable<DfFormItem> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -86,5 +87,26 @@ public class DfFormItem {
      */
     public void setItemIndex(String itemIndex) {
         this.itemIndex = itemIndex;
+    }
+
+    @Override
+    public String toString() {
+        return "DfFormItem{" +
+                "id=" + id +
+                ", formFieldId=" + formFieldId +
+                ", value='" + value + '\'' +
+                ", label='" + label + '\'' +
+                ", itemIndex='" + itemIndex + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(DfFormItem o) {
+        if (Integer.parseInt(this.getItemIndex()) > Integer.parseInt(o.getItemIndex())) {
+            return 1;
+        } else if (Integer.parseInt(this.getItemIndex()) > Integer.parseInt(o.getItemIndex())) {
+            return 0;
+        }
+        return -1;
     }
 }

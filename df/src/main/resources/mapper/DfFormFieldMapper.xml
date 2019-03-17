@@ -16,10 +16,43 @@
   </resultMap>
 
   <insert id="saveFormField" keyProperty="id" useGeneratedKeys="true" parameterType="group.cc.df.model.DfFormField">
-    INSERT INTO df_form_field(form_id, label, name, type, value, parent_id, display_index) VALUES
-    (#{formId}, #{label}, #{name}, #{type}, #{value}, #{parentId}, #{displayIndex})
+    INSERT INTO df_form_field(form_id, label, name, type, value, parent_id, display_index, `key`, model) VALUES
+    (#{formId}, #{label}, #{name}, #{type}, #{value}, #{parentId}, #{displayIndex}, #{key}, #{model})
     <selectKey resultType="int" keyProperty="id" order="AFTER">
       SELECT LAST_INSERT_ID()
     </selectKey>
   </insert>
+
+  <select id="findDynamicFormFieldsByFormId" parameterType="Integer" resultType="group.cc.df.model.DfFormField">
+    SELECT
+      id,
+      form_id,
+      label,
+      name,
+      type,
+      value,
+      parent_id,
+      display_index,
+      `key`,
+      model
+    FROM
+      df_form_field
+    WHERE
+      form_id = #{formId}
+  </select>
+
+  <update id="updateFormField" parameterType="group.cc.df.model.DfFormField">
+    UPDATE df_form_field SET form_id = #{formId}, label = #{label}, `name` = #{name}, `type` = #{type},
+    `value` = #{value}, parent_id = #{parentId}, display_index = #{displayIndex}, `key` = #{key},
+    model = #{model} WHERE id = #{id}
+  </update>
+
+  <select id="findUselessFormFields" resultType="group.cc.df.model.DfFormField">
+    SELECT id, form_id, label, name, type, value, parent_id, display_index, `key`, model FROM df_form_field
+    WHERE (id NOT IN
+    <foreach collection="fieldIdList" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>)
+    AND form_id = #{formId}
+  </select>
 </mapper>

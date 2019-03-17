@@ -11,4 +11,31 @@
     <result column="label" jdbcType="VARCHAR" property="label" />
     <result column="item_index" jdbcType="VARCHAR" property="itemIndex" />
   </resultMap>
+
+  <select id="findDfFormItemsByFieldId" parameterType="Integer" resultType="group.cc.df.model.DfFormItem">
+    SELECT
+      id,
+      form_field_id,
+      value,
+      label,
+      item_index
+    FROM
+      df_form_item
+    WHERE
+      form_field_id = #{fieldId}
+  </select>
+
+  <update id="updateFormItem" parameterType="group.cc.df.model.DfFormItem">
+    UPDATE df_form_item SET form_field_id = #{formFieldId}, value = #{value}, label = #{label},
+    item_index = #{itemIndex} WHERE id = #{id}
+  </update>
+
+  <select id="findUselessFormItems" resultType="group.cc.df.model.DfFormItem">
+    SELECT id, form_field_id, value, label, item_index FROM df_form_item
+    WHERE (id NOT IN
+    <foreach collection="formItemIdList" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>)
+    AND form_field_id = #{formFieldId}
+  </select>
 </mapper>

@@ -21,4 +21,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
   </insert>
+
+  <update id="updateDynamicForm" parameterType="group.cc.df.model.DfDynamicForm">
+    UPDATE df_dynamic_form SET name = #{name}, method = #{method}, action = #{action}, enctype = #{enctype},
+    employee_id = #{employeeId}, create_time = #{createTime} WHERE id = #{id}
+  </update>
 </mapper>
