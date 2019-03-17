@@ -19,6 +19,15 @@ public class Role implements Serializable{
     @Column(name = "roleLevel")
     private Integer rolelevel;
 
+    public Role(){}
+
+    public Role(String name, String rolekey, Integer orgid, Integer rolelevel){
+        this.setName(name);
+        this.setOrgid(orgid);
+        this.setRolekey(rolekey);
+        this.setRolelevel(rolelevel);
+    }
+
     public Integer getRolelevel() {
         return rolelevel;
     }

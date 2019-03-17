@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface ModuleMapper extends Mapper<Module> {
-    @Select("SELECT * FROM MODULE WHERE ID IN(SELECT P.MODULEID FROM  ROLE R LEFT JOIN ROLE_PERMISSION RP ON R.ID = RP.ROLEID " +
-            "LEFT JOIN PERMISSION P ON P.ID = RP.PERID WHERE R.ID = #{roleId})" )
+    @Select("SELECT * FROM MODULE WHERE ID IN(SELECT P.MODULEID FROM PERMISSION P LEFT JOIN ROLE_PERMISSION RP ON RP.PERID = P.ID " +
+            " WHERE P.IDENTIFY LIKE '%_left' AND RP.ROLEID = #{roleId})" )
     public List<Module> getModulesByRoleId(@Param("roleId") Integer roleId);
 
     @Select("SELECT * FROM MODULE WHERE ISSYSTEM = '是'")

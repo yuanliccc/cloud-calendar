@@ -13,9 +13,9 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author ${author}
- * @date ${date}
- */
+* @author ${author}
+* @date ${date}
+*/
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/occ/${baseRequestMapping}")
@@ -46,7 +46,7 @@ public class ${modelNameUpperCamel}Controller {
 
     @ApiOperation("通过 Id 查询 ${modelNameUpperCamel} 详情")
     @GetMapping("/detail")
-    public Result detail(@PathVariable Integer id) {
+    public Result detail(@RequestParam Integer id) {
         ${modelNameUpperCamel} ${modelNameLowerCamel} = ${modelNameLowerCamel}Service.findById(id);
         return ResultGenerator.genSuccessResult(${modelNameLowerCamel});
     }
@@ -58,5 +58,26 @@ public class ${modelNameUpperCamel}Controller {
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Service.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("分页查询 ${modelNameUpperCamel} 列表带模糊查询")
+    @GetMapping("/listByKey")
+    public Result listByKey(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
+                            @RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "") String value) {
+        PageHelper.startPage(page, size);
+        List<${modelNameUpperCamel}> list = null;
+        if("".equals(key))
+            list = ${modelNameLowerCamel}Service.findAll();
+        else
+            list = ${modelNameLowerCamel}Service.listByKey(key, value);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("批量删除 ${modelNameUpperCamel}")
+    @PostMapping("/deleteBatch")
+    public Result deleteBatch(@RequestBody List<${modelNameUpperCamel}> ${modelNameLowerCamel}s) {
+        ${modelNameLowerCamel}Service.deleteBatch(${modelNameLowerCamel}s);
+        return ResultGenerator.genSuccessResult();
     }
 }

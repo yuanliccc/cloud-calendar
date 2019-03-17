@@ -10,6 +10,7 @@ import group.cc.occ.service.ModuleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import group.cc.occ.util.CusAccessObjectUtil;
+import group.cc.occ.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -104,7 +105,7 @@ public class ModuleController {
     @ApiOperation("获取登录用户的模块")
     @GetMapping("/getLoginModule")
     public Result getLoginModule(){
-        LoginUserDto login = (LoginUserDto)redisTemplate.opsForValue().get("userInfo" + CusAccessObjectUtil.getIpAddress(request));
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
         //需要重新判断该用户是否拥有此角色（未完成）
         if(login == null)
             return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户未登录！");
@@ -117,6 +118,13 @@ public class ModuleController {
     @GetMapping("/getAllParent")
     public Result getAllParent(){
         List<Module> list = this.moduleService.getAllParent();
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    @ApiOperation("获取所有模块")
+    @GetMapping("/getAllModule")
+    public Result getAllModule() {
+        List<Module> list = moduleService.findAllExceptSystemModule();
         return ResultGenerator.genSuccessResult(list);
     }
 }

@@ -22,4 +22,6 @@ public interface ModuleService extends Service<Module> {
     public void deleteByModuleId(Integer moduleId);
 
     public void deleteBatch(List<Module> modules);
+
+    public List<Module> findAllExceptSystemModule();
 }

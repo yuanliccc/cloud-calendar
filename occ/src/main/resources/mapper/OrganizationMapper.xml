@@ -9,5 +9,6 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="orgKey" jdbcType="VARCHAR" property="orgkey" />
     <result column="parentOrgId" jdbcType="INTEGER" property="parentorgid" />
+    <result column="rootOrgId" jdbcType="INTEGER" property="rootorgid" />
   </resultMap>
 </mapper>

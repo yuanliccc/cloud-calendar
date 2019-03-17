@@ -9,6 +9,7 @@ import group.cc.occ.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import group.cc.occ.util.CusAccessObjectUtil;
+import group.cc.occ.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import redis.clients.jedis.JedisPool;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,21 +41,21 @@ public class UserController {
     private RedisTemplate<String, Object> redisTemplate;
 
     @ApiOperation("添加 User")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@RequestBody User user) {
         userService.save(user);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("删除 User")
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Integer id) {
+    @DeleteMapping("/delete")
+    public Result delete(@RequestParam Integer id) {
         userService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("更新 User")
-    @PutMapping
+    @PutMapping("/update")
     public Result update(@RequestBody User user) {
         userService.update(user);
         return ResultGenerator.genSuccessResult();
@@ -67,7 +69,7 @@ public class UserController {
     }
 
     @ApiOperation("分页查询 User 列表")
-    @GetMapping
+    @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<User> list = userService.findAll();
@@ -81,7 +83,7 @@ public class UserController {
         LoginUserDto loginUserDto = null;
         try {
             loginUserDto = userService.login(account, password);
-            redisTemplate.opsForValue().set("userInfo" + CusAccessObjectUtil.getIpAddress(request), loginUserDto, 1800, TimeUnit.SECONDS);
+            RedisUtil.login(redisTemplate, request, loginUserDto);
         }catch (Exception e){
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
@@ -97,7 +99,7 @@ public class UserController {
        ;
         try {
             loginUserDto = userService.register(user);
-            redisTemplate.opsForValue().set("userInfo" + CusAccessObjectUtil.getIpAddress(request), loginUserDto, 1800, TimeUnit.SECONDS);
+            RedisUtil.login(redisTemplate, request, loginUserDto);
         }catch (Exception e){
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
@@ -108,15 +110,14 @@ public class UserController {
     @ApiOperation(value="注销登录")
     @GetMapping(value="/singUp")
     public Result singUp() {
-        redisTemplate.opsForValue().getOperations().delete("userInfo" + CusAccessObjectUtil.getIpAddress(request));
+        RedisUtil.singUp(redisTemplate, request);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation(value="获取用户信息")
     @GetMapping(value="/getUser")
     public Result getUser() {
-        LoginUserDto login = (LoginUserDto)redisTemplate.opsForValue().get("userInfo" + CusAccessObjectUtil.getIpAddress(request));
-        //需要重新判断该用户是否拥有此角色（未完成）
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
         if(login == null)
             return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户未登录！");
         return ResultGenerator.genSuccessResult(login);
@@ -126,5 +127,44 @@ public class UserController {
     @GetMapping(value="/unLogin")
     public Result unLogin() {
         return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户尚未登录！");
+    }
+
+    @ApiOperation("分页查询 User 列表带模糊查询")
+    @GetMapping("/listByKey")
+    public Result listByKey(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size,
+                            @RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "") String value) {
+        PageHelper.startPage(page, size);
+        List<User> list = null;
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        if(login == null)
+            return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户未登录！");
+
+        if("".equals(key))
+            list = userService.findAllByLoginOrg(login);
+        else
+            list = userService.listByKey(key, value, login);
+        PageInfo<User> pageInfo = new PageInfo<>(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("分页查询 User 列表带模糊查询")
+    @GetMapping("/findUserByAccountOrName")
+    public Result findUserByAccountOrName(@RequestParam(defaultValue = "") String value) {
+        List<User> list = userService.findUserByIdOrName(value);
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    @ApiOperation("切换部门")
+    @GetMapping("/switchOrg")
+    public Result switchOrg(@RequestParam() Integer orgId) {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        try {
+            login = userService.switchOrg(orgId, login);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult(e.getMessage()).setCode(ResultCode.FAIL).setData(new Date());
+        }
+        RedisUtil.login(redisTemplate, request, login);
+        return ResultGenerator.genSuccessResult(login);
     }
 }

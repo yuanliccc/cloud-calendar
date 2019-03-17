@@ -35,6 +35,10 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     @Resource
     private PermissionService permissionService;
 
+
+    /**
+     * 登录
+     * */
     @Override
     public LoginUserDto login(String account, String password) throws Exception{
         User user = this.findBy("account", account);
@@ -54,6 +58,9 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         return loginUserDto;
     }
 
+    /***
+     * 注册
+     * */
     @Override
     public LoginUserDto register(User user) throws Exception{
         if(user.getAccount() == null || user.getPassword() == null)
@@ -83,6 +90,10 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         userMapper.saveRole(userId, role.getId());
     }
 
+    public void saveRole(Integer userId, Integer roleId){
+        userMapper.saveRole(userId, roleId);
+    }
+
     private void updateLastLoginInfo(LoginUserDto userDto){
         Lastloginorg last = lastloginorgService.findBy("userid", userDto.getUser().getId());
         Role role = null;
@@ -110,17 +121,82 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
 
 
     }
-
+    /**
+     * 默认登录
+     * */
     private void defaultLogin(Role role, Organization org, Lastloginorg last, LoginUserDto userDto){
         role = roleService.findBy("rolekey","defaultMember");
         org = organizationService.findById(role.getOrgid());
+        boolean save = false;
 
-        last = new Lastloginorg();
+        if(last == null) {
+            last = new Lastloginorg();
+            save = true;
+        }
+
         last.setLogintime(new Date());
         last.setUserid(userDto.getUser().getId());
         last.setOrgid(org.getId());
-        lastloginorgService.save(last);
+        if(save)
+            lastloginorgService.save(last);
+        else
+            lastloginorgService.update(last);
         userDto.setOrganization(org);
         userDto.setRole(role);
+    }
+
+    @Override
+    public List<User> listByKey(String key, String value, LoginUserDto login) {
+        value = "%" + value + "%";
+        List<User> list = this.userMapper.listByKey(key, value, login.getOrganization().getId());
+        return list;
+    }
+
+
+    /***
+     * 通过账号或者姓名查找用户
+     * */
+    @Override
+    public List<User> findUserByIdOrName(String value) {
+        value = "%" + value + "%";
+        List<User> list =  this.userMapper.findUserByIdOrName(value);
+        return list;
+    }
+
+    /***
+     * 获取当前机构所有用户
+     * */
+    @Override
+    public List<User> findAllByLoginOrg(LoginUserDto login) {
+        return userMapper.listByKey("NAME", "%%", login.getOrganization().getId());
+    }
+
+    /***
+     * 切换部门
+     * */
+    @Override
+    public LoginUserDto switchOrg(Integer orgId, LoginUserDto login) throws Exception{
+        Organization o = this.organizationService.findById(orgId);
+
+
+        if(o == null){
+            throw new Exception("没有找到该部门，请刷新重试！");
+        }else {
+            login.setOrganization(o);
+            Role r = roleService.findByUserIdAndOrgId(login.getUser().getId(), o.getId());
+
+            if(r == null)
+                throw new Exception("没有找到该部门的该角色，请刷新重试！");
+
+            login.setRole(r);
+            List<String> p = permissionService.findPerForRoleId(r.getId());
+            login.setPermissions(p);
+
+            Lastloginorg last = lastloginorgService.findBy("userid", login.getUser().getId());
+            last.setOrgid(o.getId());
+            last.setLogintime(new Date());
+            lastloginorgService.update(last);
+        }
+        return login;
     }
 }

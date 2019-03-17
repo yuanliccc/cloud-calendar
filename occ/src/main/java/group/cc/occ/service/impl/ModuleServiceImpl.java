@@ -133,4 +133,10 @@ public class ModuleServiceImpl extends AbstractService<Module> implements Module
         List<Module> list = this.moduleMapper.listByKey(key, value);
         return list;
     }
+
+    @Override
+    public List<Module> findAllExceptSystemModule() {
+        List<Module> list = this.moduleMapper.listByKey("ISSYSTEM", "否");
+        return list;
+    }
 }

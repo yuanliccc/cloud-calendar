@@ -4,9 +4,9 @@
     <div class="publicListTable">
       <div class="publicList_Head">
         <div class="publicList_Head_Bt">
-          <el-button @click="jumpTo('/manager/${vueModuleNameLowerCamel}Form/add')" style="background-color: lightblue">新增</el-button>
+          <el-button @click="jumpTo('/manager/${vueModuleNameLowerCamel}Form/add')" style="background-color: lightblue" v-if="hasPermission('${vueModuleNameLowerCamel}_add')">新增</el-button>
             <el-button @click="displayInfo" style="background-color: #ccc">刷新</el-button>
-          <el-button @click="deleteAll" style="background-color: #ff000096">批量删除</el-button>
+          <el-button @click="deleteAll" style="background-color: #ff000096" v-if="hasPermission('${vueModuleNameLowerCamel}_delete')">批量删除</el-button>
         </div>
         <div class="publicList_Head_Find">
           <el-input v-model="findVal" class="findInput"></el-input>
@@ -26,9 +26,9 @@
           label="操作"
           width="150">
           <template slot-scope="scope">
-            <el-button @click="dis(scope.row.id)" type="text" size="mid">查看</el-button>
-            <el-button type="text" size="mid" @click="edit(scope.row.id)">编辑</el-button>
-            <el-button @click="del(scope.row.id)" type="text" size="mid">删除</el-button>
+            <el-button @click="dis(scope.row.id)" type="text" size="mid" v-if="hasPermission('${vueModuleNameLowerCamel}_display')">查看</el-button>
+            <el-button type="text" size="mid" @click="edit(scope.row.id)" v-if="hasPermission('${vueModuleNameLowerCamel}_edit')">编辑</el-button>
+            <el-button @click="del(scope.row.id)" type="text" size="mid" v-if="hasPermission('${vueModuleNameLowerCamel}_delete')">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -92,6 +92,11 @@
     },
     mounted : function(){
       this.displayInfo();
+    },
+    computed:{
+      rolePers: function () {
+        return this.$store.getters.userInfo.permissions;
+      },
     },
     created: function(){
       this.findKey = this.findList[0].tip;
@@ -172,11 +177,11 @@
       },
       deleteAll: function(){
         if(this.$refs.table.store.states.selection.length == 0){
-            this.$message({
-                type: 'info',
-                message: '请选择删除的内容！'
-            });
-            return;
+          this.$message({
+            type: 'info',
+            message: '请选择删除的内容！'
+          });
+          return;
         }
 
         this.$confirm('此操作将永久删除所选数据, 是否继续?', '提示', {
@@ -213,11 +218,14 @@
         });
       },
       edit: function(id){
-            this.$router.push('/manager/${vueModuleNameLowerCamel}Form/edit/' + id);
-        },
+        this.$router.push('/manager/${vueModuleNameLowerCamel}Form/edit/' + id);
+      },
       dis: function(id){
-            this.$router.push('/manager/${vueModuleNameLowerCamel}Display/' + id);
-        }
+        this.$router.push('/manager/${vueModuleNameLowerCamel}Display/' + id);
+      },
+      hasPermission(permission){
+        return this.rolePers.indexOf(permission) > -1;
+      }
     }
 }
 </script>

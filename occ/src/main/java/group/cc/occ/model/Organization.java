@@ -17,7 +17,19 @@ public class Organization implements Serializable{
     @Column(name = "parentOrgId")
     private Integer parentorgid;
 
+    @Column(name = "rootOrgId")
+    private Integer rootorgid;
+
+    public Integer getRootorgid() {
+        return rootorgid;
+    }
+
+    public void setRootorgid(Integer rootorgid) {
+        this.rootorgid = rootorgid;
+    }
+
     /**
+
      * @return id
      */
     public Integer getId() {

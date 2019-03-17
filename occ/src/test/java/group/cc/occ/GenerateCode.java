@@ -8,7 +8,7 @@ public class GenerateCode {
 
     public static void main(String[] args) {
 
-        //CodeGenerator.generate();
+        CodeGenerator.generate();
        // System.out.print(InitUtil.getUrl());
         VueGenerator.generate();
     }
