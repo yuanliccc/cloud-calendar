@@ -12,6 +12,6 @@ public interface NoticeMapper extends Mapper<Notice> {
     @Select("SELECT * FROM NOTICE WHERE ${key} like #{value} AND USERID = #{userId}")
     public List<Notice> listByKey(@Param("key")String key, @Param("value")String value, @Param("userId")Integer userId);
 
-    @Delete("DELETE FROM MODULE WHERE ID in(${noticesId})")
+    @Delete("DELETE FROM NOTICE WHERE ID in(${noticesId})")
     public void deleteBatch(@Param("noticesId")String noticesId);
 }

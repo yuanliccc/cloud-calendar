@@ -37,12 +37,13 @@ public class NoticeController {
     @ApiOperation("添加 Notice")
     @PostMapping("/add")
     public Result add(@RequestBody Notice notice) {
-        noticeService.save(notice);
+        LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
+        noticeService.addNotice(notice, loginUserDto);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("删除 Notice")
-    @DeleteMapping("/delete")
+    @GetMapping("/delete")
     public Result delete(@RequestParam Integer id) {
         noticeService.deleteById(id);
         return ResultGenerator.genSuccessResult();

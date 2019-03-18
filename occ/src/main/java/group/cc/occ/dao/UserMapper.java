@@ -23,4 +23,8 @@ public interface UserMapper extends Mapper<User> {
 
     @Select("SELECT * FROM USER WHERE name like #{value} or account like #{value}")
     public List<User> findUserByIdOrName(@Param("value")String value);
+
+    @Select("SELECT U.* FROM USER U LEFT JOIN USER_ROLE UR ON UR.USERID = U.ID LEFT JOIN ROLE R ON R.ID = UR.ROLEID WHERE " +
+            " R.ORGID IN(SELECT ID FROM ORGANIZATION WHERE ID = #{orgId} OR ROOTORGID = #{orgId} OR PARENTORGID = #{orgId})")
+    public List<User> getUserByLoginOrgId(@Param("orgId")Integer orgId);
 }

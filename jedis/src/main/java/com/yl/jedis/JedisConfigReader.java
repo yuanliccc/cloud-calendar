@@ -102,6 +102,22 @@ public class JedisConfigReader implements Reader<JedisConfig> {
      */
     private <T> T nullToDefault(Object aim, T defaultValue) {
 
-        return aim == null ? defaultValue : (T)aim;
+        return aim == null ? typeConversion(defaultValue, defaultValue) : typeConversion(aim, defaultValue);
+    }
+
+    private <T> T typeConversion(Object value, T type){
+        if(type instanceof  Boolean){
+            Boolean t = Boolean.parseBoolean(value + "");
+            return (T)t;
+        }else if(type instanceof  Integer){
+            Integer t = Integer.parseInt(value + "");
+            return (T)t;
+        }else if(type instanceof  Long){
+            Long t = Long.parseLong(value + "");
+            return (T)t;
+        }
+
+        String t = value + "";
+        return (T)t;
     }
 }

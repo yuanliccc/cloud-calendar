@@ -1,5 +1,6 @@
 package group.cc.occ.controller;
 
+import com.yl.jedis.JedisPoolManager;
 import group.cc.core.Result;
 import group.cc.core.ResultCode;
 import group.cc.core.ResultGenerator;
@@ -166,5 +167,13 @@ public class UserController {
         }
         RedisUtil.login(redisTemplate, request, login);
         return ResultGenerator.genSuccessResult(login);
+    }
+
+    @ApiOperation("查找该机构以及下级机构的用户")
+    @GetMapping("/getUserByLoginOrgId")
+    public Result getUserByLoginOrgId() {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<User> list = userService.getUserByLoginOrgId(login);
+        return ResultGenerator.genSuccessResult(list);
     }
 }

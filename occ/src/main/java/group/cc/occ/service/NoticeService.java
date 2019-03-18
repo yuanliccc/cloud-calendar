@@ -12,4 +12,6 @@ import group.cc.occ.model.dto.LoginUserDto;
 public interface NoticeService extends Service<Notice> {
     public List<Notice> listByKey(String key, String value, LoginUserDto loginUserDto);
     public void deleteBatch(List<Notice> notices);
+
+    public void addNotice(Notice notice, LoginUserDto loginUserDto);
 }

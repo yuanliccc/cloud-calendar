@@ -21,4 +21,6 @@ public interface UserService extends Service<User> {
     public void saveRole(Integer userId, Integer roleId);
 
     public LoginUserDto switchOrg(Integer orgId, LoginUserDto login) throws Exception;
+
+    public List<User> getUserByLoginOrgId(LoginUserDto loginUserDto);
 }

@@ -199,4 +199,10 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         }
         return login;
     }
+
+    @Override
+    public List<User> getUserByLoginOrgId(LoginUserDto loginUserDto) {
+        List<User> list = this.userMapper.getUserByLoginOrgId(loginUserDto.getOrganization().getId());
+        return list;
+    }
 }
