@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>group.calendar</groupId>
-            <artifactId>jedis</artifactId>
+            <artifactId>bms</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

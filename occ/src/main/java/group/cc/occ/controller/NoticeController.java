@@ -1,5 +1,6 @@
 package group.cc.occ.controller;
 
+import group.cc.bms.webscoket.WebNoticeSocketService;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.occ.model.Notice;
@@ -91,6 +92,23 @@ public class NoticeController {
     @PostMapping("/deleteBatch")
     public Result deleteBatch(@RequestBody List<Notice> notices) {
         noticeService.deleteBatch(notices);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("通知")
+    @GetMapping("/occ")
+    public Result occ(@RequestParam() Integer userId, @RequestParam() String message) {
+        WebNoticeSocketService.sendMessage(message, userId);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("消息通知")
+    @GetMapping("/sendObj")
+    public Result sendObj(@RequestParam() Integer userId) {
+        Notice notice = new Notice();
+        notice.setTitle("测试");
+        notice.setContent("1111111111111111111111111111111111111111111111111111111111111111111111111111111");
+        WebNoticeSocketService.sengObject(notice, userId);
         return ResultGenerator.genSuccessResult();
     }
 }

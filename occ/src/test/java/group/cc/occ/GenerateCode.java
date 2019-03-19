@@ -1,6 +1,5 @@
 package group.cc.occ;
 
-import com.yl.jedis.JedisPoolManager;
 import group.cc.cg.CodeGenerator;
 import group.cc.cg.VueGenerator;
 import group.cc.occ.model.Role;
@@ -11,9 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class GenerateCode {
 
     public static void main(String[] args) {
-        JedisPoolManager jedisPoolManager = JedisPoolManager.getInstance();
         //CodeGenerator.generate();
-        System.out.print(jedisPoolManager.getResource().get("userInfo127.0.0.1"));
         //VueGenerator.generate();
     }
 

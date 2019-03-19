@@ -3,7 +3,7 @@ package group.cc.bms.controller;
 /**
  * Created by wangyuming on 2019/3/18.
  */
-import group.cc.bms.config.WebSocketServer;
+import group.cc.bms.webscoket.WebSocketServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

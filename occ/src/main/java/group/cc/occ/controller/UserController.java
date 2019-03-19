@@ -1,6 +1,5 @@
 package group.cc.occ.controller;
 
-import com.yl.jedis.JedisPoolManager;
 import group.cc.core.Result;
 import group.cc.core.ResultCode;
 import group.cc.core.ResultGenerator;
