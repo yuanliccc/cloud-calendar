@@ -392,4 +392,16 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
 
         }
     }
+
+    @Override
+    public List<DfDynamicForm> findDynamicFormByLimit(Integer pageSize, Integer pageNum) {
+        Integer offset = (pageNum - 1) * pageSize;
+        List<DfDynamicForm> dfDynamicFormList = this.dfDynamicFormMapper.findDynamicFormByLimit(pageSize, offset);
+        return dfDynamicFormList;
+    }
+
+    @Override
+    public int findDynamicFormCount() {
+        return this.dfDynamicFormMapper.findDynamicFormCount();
+    }
 }

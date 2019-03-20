@@ -26,4 +26,12 @@
     UPDATE df_dynamic_form SET name = #{name}, method = #{method}, action = #{action}, enctype = #{enctype},
     employee_id = #{employeeId}, create_time = #{createTime} WHERE id = #{id}
   </update>
+
+  <select id="findDynamicFormByLimit" resultType="group.cc.df.model.DfDynamicForm">
+    SELECT id, name, method, action, enctype, employee_id, create_time FROM df_dynamic_form LIMIT #{offset}, #{pageSize}
+  </select>
+
+  <select id="findDynamicFormCount" resultType="java.lang.Integer">
+    SELECT COUNT(id) FROM df_dynamic_form
+  </select>
 </mapper>
