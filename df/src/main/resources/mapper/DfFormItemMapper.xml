@@ -38,4 +38,13 @@
     </foreach>)
     AND form_field_id = #{formFieldId}
   </select>
+
+  <delete id="deleteFormItemById" parameterType="java.lang.Integer">
+    DELETE FROM df_form_item WHERE id = #{formItemId}
+  </delete>
+
+  <insert id="saveFormItem" useGeneratedKeys="true" keyProperty="id" parameterType="group.cc.df.model.DfFormItem">
+    INSERT INTO df_form_item(id, form_field_id, value, label, item_index)
+    VALUES(#{id}, #{formFieldId}, #{value}, #{label}, #{itemIndex})
+  </insert>
 </mapper>

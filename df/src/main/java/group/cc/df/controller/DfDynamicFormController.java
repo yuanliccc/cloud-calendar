@@ -75,4 +75,18 @@ public class DfDynamicFormController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    @ApiOperation("自定义的根据页码和数据量分页查询表单数据")
+    @GetMapping("/findDynamicFormByLimit")
+    public Result findDynamicFormByLimit(Integer pageNum, Integer pageSize) {
+        List<DfDynamicForm> dfDynamicFormList = this.dfDynamicFormService.findDynamicFormByLimit(pageSize, pageNum);
+        return ResultGenerator.genSuccessResult(dfDynamicFormList);
+    }
+
+    @ApiOperation("获取存储数据的总量")
+    @GetMapping("/findDynamicFormCount")
+    public Result findDynamicFormCount() {
+        int dynamicFormCount = this.dfDynamicFormService.findDynamicFormCount();
+        return ResultGenerator.genSuccessResult(dynamicFormCount);
+    }
 }
