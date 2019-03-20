@@ -1,9 +1,12 @@
 package group.cc.occ.controller;
 
+import group.cc.bms.model.Chat;
+import group.cc.bms.model.Message;
 import group.cc.bms.webscoket.WebNoticeSocketService;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.occ.model.Notice;
+import group.cc.occ.model.dto.ChatUser;
 import group.cc.occ.model.dto.LoginUserDto;
 import group.cc.occ.service.NoticeService;
 import com.github.pagehelper.PageHelper;
@@ -88,10 +91,25 @@ public class NoticeController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    @ApiOperation("获取所有未读消息")
+    @GetMapping("/getAllUnread")
+    public Result getAllUnread() {
+        LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<Notice> list = noticeService.getAllUnreadNotice(loginUserDto);
+        return ResultGenerator.genSuccessResult(list);
+    }
+
     @ApiOperation("批量删除 Notice")
     @PostMapping("/deleteBatch")
     public Result deleteBatch(@RequestBody List<Notice> notices) {
         noticeService.deleteBatch(notices);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("标记已读")
+    @PostMapping("/seeBatch")
+    public Result seeBatch(@RequestBody List<Notice> notices) {
+        noticeService.seeBatch(notices);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -111,4 +129,40 @@ public class NoticeController {
         WebNoticeSocketService.sengObject(notice, userId);
         return ResultGenerator.genSuccessResult();
     }
+
+    /*@ApiOperation("获取当前用户私信消息")
+    @GetMapping("/getAllChatMessage")
+    public Result getAllChatMessage() {
+        LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<Chat> list = noticeService.getAllChatMessage(loginUserDto);
+        return ResultGenerator.genSuccessResult();
+    }*/
+
+    @ApiOperation("获取当前用户私信消息总数")
+    @GetMapping("/getUnreadMessage")
+    public Result getUnreadMessage() {
+        LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
+        Integer num = noticeService.getUnreadMessage(loginUserDto);
+        return ResultGenerator.genSuccessResult(num);
+    }
+
+    @ApiOperation("获取可私信的用户")
+    @GetMapping("/getChatUser")
+    public Result getChatUser() {
+        LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<ChatUser> list = noticeService.getChatUser(loginUserDto);
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    @ApiOperation("获取和单个用户聊天的私信记录")
+    @GetMapping("/getChatUserMessage")
+    public Result getChatUserMessage(@RequestParam() Integer chatUserId, @RequestParam(defaultValue = "0") Integer page) {
+        PageHelper.startPage(page, 15);
+        LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<Chat> list = noticeService.getChatUserMessage(chatUserId, loginUserDto);
+
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
 }

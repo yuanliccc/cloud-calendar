@@ -168,7 +168,7 @@ public class UserController {
         return ResultGenerator.genSuccessResult(login);
     }
 
-    @ApiOperation("查找该机构以及下级机构的用户")
+    @ApiOperation("查找该机构的用户")
     @GetMapping("/getUserByLoginOrgId")
     public Result getUserByLoginOrgId() {
         LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
