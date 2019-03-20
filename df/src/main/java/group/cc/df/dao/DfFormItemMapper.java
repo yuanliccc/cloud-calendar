@@ -12,4 +12,8 @@ public interface DfFormItemMapper extends Mapper<DfFormItem> {
     int updateFormItem(DfFormItem dfFormItem);
 
     List<DfFormItem> findUselessFormItems(@Param("formItemIdList") List<Integer> formItemIdList, @Param("formFieldId") Integer formFieldId);
+
+    int deleteFormItemById(Integer formItemId);
+
+    int saveFormItem(DfFormItem dfFormItem);
 }

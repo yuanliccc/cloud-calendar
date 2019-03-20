@@ -55,4 +55,8 @@
     </foreach>)
     AND form_id = #{formId}
   </select>
+
+  <delete id="deleteFormFieldById" parameterType="java.lang.Integer">
+    DELETE FROM df_form_field WHERE id = #{formFieldId}
+  </delete>
 </mapper>
