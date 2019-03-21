@@ -23,4 +23,6 @@ public interface NoticeService extends Service<Notice> {
     public Integer getUnreadMessage(LoginUserDto loginUserDto);
 
     public List<ChatUser> getChatUser(LoginUserDto loginUserDto);
+
+    public void seeAllMessage(Integer sendUserId, Integer receiveUserId);
 }

@@ -21,8 +21,21 @@ public class Chat {
 
     private String type;
 
+    @Column(name = "hadSeen")
+    private String hadseen;
+
+    public String getHadseen() {
+        return hadseen;
+    }
+
+    public void setHadseen(String hadseen) {
+        this.hadseen = hadseen;
+    }
+
     /**
      * @return id
+     *
+
      */
     public Integer getId() {
         return id;
@@ -103,5 +116,10 @@ public class Chat {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString(){
+        return this.id + " | "  +this.sendtime + "";
     }
 }

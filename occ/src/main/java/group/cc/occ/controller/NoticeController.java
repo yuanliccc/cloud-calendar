@@ -120,16 +120,6 @@ public class NoticeController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation("消息通知")
-    @GetMapping("/sendObj")
-    public Result sendObj(@RequestParam() Integer userId) {
-        Notice notice = new Notice();
-        notice.setTitle("测试");
-        notice.setContent("1111111111111111111111111111111111111111111111111111111111111111111111111111111");
-        WebNoticeSocketService.sengObject(notice, userId);
-        return ResultGenerator.genSuccessResult();
-    }
-
     /*@ApiOperation("获取当前用户私信消息")
     @GetMapping("/getAllChatMessage")
     public Result getAllChatMessage() {
@@ -156,13 +146,17 @@ public class NoticeController {
 
     @ApiOperation("获取和单个用户聊天的私信记录")
     @GetMapping("/getChatUserMessage")
-    public Result getChatUserMessage(@RequestParam() Integer chatUserId, @RequestParam(defaultValue = "0") Integer page) {
-        PageHelper.startPage(page, 15);
+    public Result getChatUserMessage(@RequestParam() Integer chatUserId) {
         LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
         List<Chat> list = noticeService.getChatUserMessage(chatUserId, loginUserDto);
-
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
+        return ResultGenerator.genSuccessResult(list);
     }
 
+    @ApiOperation("把未读信息更新为已读")
+    @GetMapping("/seeAllMessage")
+    public Result seeAllMessage(@RequestParam()Integer sendUserId) {
+        LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
+        noticeService.seeAllMessage(sendUserId, loginUserDto.getUser().getId());
+        return ResultGenerator.genSuccessResult();
+    }
 }

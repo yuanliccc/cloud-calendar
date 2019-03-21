@@ -13,9 +13,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 import group.cc.core.AbstractService;
 import group.cc.occ.service.UserService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,8 @@ import javax.annotation.Resource;
 @Service
 @Transactional
 public class NoticeServiceImpl extends AbstractService<Notice> implements NoticeService {
+    private Log log = LogFactory.getLog(NoticeServiceImpl.class);
+
     @Resource
     private NoticeMapper noticeMapper;
 
@@ -112,11 +117,23 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
      * */
     @Override
     public List<Chat> getChatUserMessage(Integer chatUserId, LoginUserDto loginUserDto) {
-        String sql = "SELECT * FROM CHAT WHERE (SENDUSERID = " + loginUserDto.getUser().getId() + " AND RECEIVEUSERID = " + chatUserId +
-                ")  OR (RECEIVEUSERID = "+ loginUserDto.getUser().getId() + "AND SENDUSERID = " + chatUserId + ") ORDER BY SENDTIME ASC)";
+        Integer messageNum = this.noticeMapper.getUnreadMessageByUserId(loginUserDto.getUser().getId(), chatUserId);
+        String receiveSql = "SELECT * FROM CHAT WHERE SENDUSERID = " + chatUserId + " AND RECEIVEUSERID = " + loginUserDto.getUser().getId() +
+                " ORDER BY SENDTIME DESC LIMIT 0," + (messageNum > 10 ? messageNum : 10);
 
-        List<Chat> list = chatService.findBySql(sql);
-        return list;
+        String sendSql = "SELECT * FROM CHAT WHERE SENDUSERID = " + loginUserDto.getUser().getId() + " AND RECEIVEUSERID = " + chatUserId +
+                " ORDER BY SENDTIME DESC LIMIT 0,10";;
+
+        List<Chat> receive = chatService.findBySql(receiveSql);
+        List<Chat> send = chatService.findBySql(sendSql);
+
+        receive.addAll(send);
+
+        receive =  receive.stream().sorted((Chat a, Chat b) ->{
+            return a.getSendtime().compareTo(b.getSendtime());
+        }).collect(Collectors.toList());
+
+        return receive;
     }
 
     /**
@@ -137,7 +154,7 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
         List<ChatUser> chatUsers = new ArrayList<>();
 
         for (User u: users){
-            if(u.getId() == loginUserDto.getUser().getId()) continue;
+            if(u.getId().equals(loginUserDto.getUser().getId())) continue;
 
             u.setPassword(null);
             ChatUser chatUser = new ChatUser(u);
@@ -147,10 +164,16 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
             chatUsers.add(chatUser);
         }
 
-        chatUsers.stream().sorted((ChatUser a,ChatUser b) ->{
+        chatUsers = chatUsers.stream().sorted((ChatUser a,ChatUser b) ->{
             return b.getUnreadnum().compareTo(a.getUnreadnum());
-        });
+        }).collect(Collectors.toList());
 
         return chatUsers;
+    }
+
+    //消息已读
+    @Override
+    public void seeAllMessage(Integer sendUserId, Integer receiveUserId) {
+        this.noticeMapper.seeAllChat(sendUserId, receiveUserId);
     }
 }

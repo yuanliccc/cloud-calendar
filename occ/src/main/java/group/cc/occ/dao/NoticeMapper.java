@@ -1,11 +1,9 @@
 package group.cc.occ.dao;
 
+import group.cc.bms.model.Chat;
 import group.cc.core.Mapper;
 import group.cc.occ.model.Notice;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -29,4 +27,7 @@ public interface NoticeMapper extends Mapper<Notice> {
 
     @Select("SELECT COUNT(*) FROM CHAT WHERE RECEIVEUSERID = #{reveiceUserId} AND SENDUSERID = #{sendUserId} AND HADSEEN = '否'")
     public Integer getUnreadMessageByUserId(@Param("reveiceUserId")Integer reveiceUserId, @Param("sendUserId")Integer sendUserId);
+
+    @Update("UPDATE CHAT SET HADSEEN = '是' WHERE SENDUSERID = #{sendUserId} AND RECEIVEUSERID = #{reveiceUserId}")
+    public void seeAllChat(@Param("sendUserId")Integer sendUserId, @Param("reveiceUserId")Integer reveiceUserId);
 }

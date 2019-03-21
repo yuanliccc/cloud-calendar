@@ -50,6 +50,7 @@ public class WebNoticeSocketService {
     @OnClose
     public void onClose(){
         webNoticeSocketServices.remove(this);
+        log.info(userId + " 连接关闭！");
     }
 
     @OnError
@@ -64,11 +65,12 @@ public class WebNoticeSocketService {
         try {
             c = JSONObject.parseObject(message, Chat.class);
             chatService = applicationContext.getBean(ChatService.class);
-            this.chatService.save(c);
+            chatService.save(c);
+            sengObject(new Message(1, c), c.getReceiveuserid());
         }catch (Exception e){
             log.error(e.getMessage());
         }
-        sengObject(new Message(1, c), c.getReceiveuserid());
+
     }
 
     public static void sendMessage(String message, Integer userId){

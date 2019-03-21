@@ -11,5 +11,6 @@
     <result column="sendTime" jdbcType="TIMESTAMP" property="sendtime" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="hadSeen" jdbcType="VARCHAR" property="hadseen" />
   </resultMap>
 </mapper>

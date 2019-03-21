@@ -1,17 +1,24 @@
 package group.cc.occ;
 
-import group.cc.cg.CodeGenerator;
-import group.cc.cg.VueGenerator;
-import group.cc.occ.model.Role;
-import group.cc.occ.util.InitUtil;
-import io.swagger.models.auth.In;
-import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GenerateCode {
 
     public static void main(String[] args) {
         //CodeGenerator.generate();
         //VueGenerator.generate();
+        List<String> list = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++){
+            list.add(i + "aaaa");
+        }
+
+        list = list.stream().sorted((String b,String a) -> a.compareTo(b)).collect(Collectors.toList());
+        System.out.println(list);
+
     }
 
     private static  <T> T nullToDefault(Object aim, T defaultValue) {
