@@ -1,6 +1,5 @@
 package group.cc.occ.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import group.cc.core.Result;
 import group.cc.core.ResultCode;
 import group.cc.core.ResultGenerator;
@@ -9,7 +8,6 @@ import group.cc.occ.model.dto.LoginUserDto;
 import group.cc.occ.service.ModuleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import group.cc.occ.util.CusAccessObjectUtil;
 import group.cc.occ.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

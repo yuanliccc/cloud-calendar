@@ -1,5 +1,5 @@
 package group.cc.occ.service;
-import group.cc.bms.model.Chat;
+import group.cc.occ.model.Chat;
 import group.cc.occ.model.Notice;
 import java.util.List;
 import group.cc.core.Service;
@@ -24,5 +24,5 @@ public interface NoticeService extends Service<Notice> {
 
     public List<ChatUser> getChatUser(LoginUserDto loginUserDto);
 
-    public void seeAllMessage(Integer sendUserId, Integer receiveUserId);
+    public void seeAllMessage(Integer sendUserId, LoginUserDto loginUserDto);
 }

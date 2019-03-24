@@ -1,12 +1,13 @@
 package group.cc.occ.service.impl;
 
-import group.cc.bms.model.Chat;
-import group.cc.bms.service.ChatService;
+
 import group.cc.occ.dao.NoticeMapper;
+import group.cc.occ.model.Chat;
 import group.cc.occ.model.Notice;
 import group.cc.occ.model.User;
 import group.cc.occ.model.dto.ChatUser;
 import group.cc.occ.model.dto.LoginUserDto;
+import group.cc.occ.service.ChatService;
 import group.cc.occ.service.NoticeService;
 
 import java.util.ArrayList;
@@ -117,12 +118,12 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
      * */
     @Override
     public List<Chat> getChatUserMessage(Integer chatUserId, LoginUserDto loginUserDto) {
-        Integer messageNum = this.noticeMapper.getUnreadMessageByUserId(loginUserDto.getUser().getId(), chatUserId);
+        Integer messageNum = this.noticeMapper.getUnreadMessageByUserId(loginUserDto.getUser().getId(), chatUserId, loginUserDto.getOrganization().getId());
         String receiveSql = "SELECT * FROM CHAT WHERE SENDUSERID = " + chatUserId + " AND RECEIVEUSERID = " + loginUserDto.getUser().getId() +
-                " ORDER BY SENDTIME DESC LIMIT 0," + (messageNum > 10 ? messageNum : 10);
+                " WHERE ORGIN = " + loginUserDto.getOrganization().getId() + " ORDER BY SENDTIME DESC LIMIT 0," + (messageNum > 10 ? messageNum : 10);
 
         String sendSql = "SELECT * FROM CHAT WHERE SENDUSERID = " + loginUserDto.getUser().getId() + " AND RECEIVEUSERID = " + chatUserId +
-                " ORDER BY SENDTIME DESC LIMIT 0,10";;
+                " WHERE ORGIN = " + loginUserDto.getOrganization().getId() + " ORDER BY SENDTIME DESC LIMIT 0,10";;
 
         List<Chat> receive = chatService.findBySql(receiveSql);
         List<Chat> send = chatService.findBySql(sendSql);
@@ -158,7 +159,7 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
 
             u.setPassword(null);
             ChatUser chatUser = new ChatUser(u);
-            Integer messageNum = this.noticeMapper.getUnreadMessageByUserId(loginUserDto.getUser().getId(), u.getId());
+            Integer messageNum = this.noticeMapper.getUnreadMessageByUserId(loginUserDto.getUser().getId(), u.getId(), loginUserDto.getOrganization().getId());
             chatUser.setUnreadnum(messageNum);
             chatUser.setDisplay(true);
             chatUsers.add(chatUser);
@@ -173,7 +174,7 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
 
     //消息已读
     @Override
-    public void seeAllMessage(Integer sendUserId, Integer receiveUserId) {
-        this.noticeMapper.seeAllChat(sendUserId, receiveUserId);
+    public void seeAllMessage(Integer sendUserId, LoginUserDto loginUserDto) {
+        this.noticeMapper.seeAllChat(sendUserId, loginUserDto.getUser().getId(), loginUserDto.getOrganization().getId());
     }
 }

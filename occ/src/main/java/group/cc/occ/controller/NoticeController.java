@@ -1,10 +1,8 @@
 package group.cc.occ.controller;
 
-import group.cc.bms.model.Chat;
-import group.cc.bms.model.Message;
-import group.cc.bms.webscoket.WebNoticeSocketService;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.occ.model.Chat;
 import group.cc.occ.model.Notice;
 import group.cc.occ.model.dto.ChatUser;
 import group.cc.occ.model.dto.LoginUserDto;
@@ -12,6 +10,7 @@ import group.cc.occ.service.NoticeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import group.cc.occ.util.RedisUtil;
+import group.cc.occ.webscoket.WebNoticeSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -156,7 +155,7 @@ public class NoticeController {
     @GetMapping("/seeAllMessage")
     public Result seeAllMessage(@RequestParam()Integer sendUserId) {
         LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
-        noticeService.seeAllMessage(sendUserId, loginUserDto.getUser().getId());
+        noticeService.seeAllMessage(sendUserId, loginUserDto);
         return ResultGenerator.genSuccessResult();
     }
 }

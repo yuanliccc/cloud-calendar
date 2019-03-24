@@ -1,9 +1,10 @@
-package group.cc.bms.model;
+package group.cc.occ.model;
 
-import io.swagger.models.auth.In;
-
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
-import javax.persistence.*;
 
 public class Chat {
     @Id
