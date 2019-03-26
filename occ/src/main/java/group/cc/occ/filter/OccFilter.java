@@ -48,7 +48,7 @@ public class OccFilter implements Filter {
         List url = InitUtil.getUrl();
 
         log.info("Visit IP[OccFilter]: " + CusAccessObjectUtil.getIpAddress(request));
-
+        log.info("LoginUser[OccFilter]: " + login);
         if(url.contains(URL) || login != null){
             log.info("申请访问：" + URL);
             filterChain.doFilter(servletRequest, servletResponse);
