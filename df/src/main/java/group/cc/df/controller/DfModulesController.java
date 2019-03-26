@@ -2,8 +2,8 @@ package group.cc.df.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
-import group.cc.df.model.DfUser;
-import group.cc.df.service.DfUserService;
+import group.cc.df.model.DfModules;
+import group.cc.df.service.DfModulesService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -18,44 +18,44 @@ import java.util.List;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/df/user")
-public class DfUserController {
+@RequestMapping("/df/modules")
+public class DfModulesController {
     @Resource
-    private DfUserService dfUserService;
+    private DfModulesService dfModulesService;
 
-    @ApiOperation("添加 DfUser")
+    @ApiOperation("添加 DfModules")
     @PostMapping("/add")
-    public Result add(@RequestBody DfUser dfUser) {
-        dfUserService.save(dfUser);
+    public Result add(DfModules dfModules) {
+        dfModulesService.save(dfModules);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation("删除 DfUser")
+    @ApiOperation("删除 DfModules")
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
-        dfUserService.deleteById(id);
+        dfModulesService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation("更新 DfUser")
+    @ApiOperation("更新 DfModules")
     @PostMapping("/update")
-    public Result update(DfUser dfUser) {
-        dfUserService.update(dfUser);
+    public Result update(DfModules dfModules) {
+        dfModulesService.update(dfModules);
         return ResultGenerator.genSuccessResult();
     }
 
-    @ApiOperation("通过 Id 查询 DfUser 详情")
+    @ApiOperation("通过 Id 查询 DfModules 详情")
     @PostMapping("/detail")
     public Result detail(@RequestParam Integer id) {
-        DfUser dfUser = dfUserService.findById(id);
-        return ResultGenerator.genSuccessResult(dfUser);
+        DfModules dfModules = dfModulesService.findById(id);
+        return ResultGenerator.genSuccessResult(dfModules);
     }
 
-    @ApiOperation("分页查询 DfUser 列表")
+    @ApiOperation("分页查询 DfModules 列表")
     @PostMapping("/list")
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
-        List<DfUser> list = dfUserService.findAll();
+        List<DfModules> list = dfModulesService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
