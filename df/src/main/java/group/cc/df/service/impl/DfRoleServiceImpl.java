@@ -1,8 +1,8 @@
 package group.cc.df.service.impl;
 
-import group.cc.df.dao.DfUserMapper;
-import group.cc.df.model.DfUser;
-import group.cc.df.service.DfUserService;
+import group.cc.df.dao.DfRoleMapper;
+import group.cc.df.model.DfRole;
+import group.cc.df.service.DfRoleService;
 import group.cc.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +16,8 @@ import javax.annotation.Resource;
  */
 @Service
 @Transactional
-public class DfUserServiceImpl extends AbstractService<DfUser> implements DfUserService {
+public class DfRoleServiceImpl extends AbstractService<DfRole> implements DfRoleService {
     @Resource
-    private DfUserMapper dfUserMapper;
+    private DfRoleMapper dfRoleMapper;
 
 }

@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/df/dynamic/form")
+@RequestMapping("/api/df/dynamic/form")
 public class DfDynamicFormController {
     @Resource
     private DfDynamicFormService dfDynamicFormService;

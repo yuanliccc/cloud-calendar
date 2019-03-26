@@ -11,5 +11,11 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
   </resultMap>
+
+  <select id="getUserByUserName" resultType="group.cc.df.model.DfUser">
+    SELECT id AS id, name AS name, sex AS sex, email AS email, phone AS phone, password AS password,
+    user_name AS userName FROM df_user WHERE user_name = #{userName}
+  </select>
 </mapper>

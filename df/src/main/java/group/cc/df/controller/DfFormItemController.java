@@ -18,7 +18,7 @@ import java.util.List;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/df/form/item")
+@RequestMapping("/api/df/form/item")
 public class DfFormItemController {
     @Resource
     private DfFormItemService dfFormItemService;
