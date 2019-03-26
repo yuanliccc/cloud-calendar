@@ -10,6 +10,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import group.cc.occ.util.CusAccessObjectUtil;
 import group.cc.occ.util.RedisUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,8 @@ public class UserController {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    private Log log = LogFactory.getLog(UserController.class);
 
     @ApiOperation("添加 User")
     @PostMapping("/add")
@@ -84,6 +88,7 @@ public class UserController {
         try {
             loginUserDto = userService.login(account, password);
             RedisUtil.login(redisTemplate, request, loginUserDto);
+            loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
         }catch (Exception e){
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());

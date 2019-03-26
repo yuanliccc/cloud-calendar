@@ -7,6 +7,8 @@ import group.cc.occ.model.dto.LoginUserDto;
 import group.cc.occ.util.CusAccessObjectUtil;
 import group.cc.occ.util.InitUtil;
 import group.cc.occ.util.RedisUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
@@ -29,6 +31,8 @@ public class OccFilter implements Filter {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    private Log log = LogFactory.getLog(OccFilter.class);
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -43,11 +47,13 @@ public class OccFilter implements Filter {
         String URL = request.getServletPath();
         List url = InitUtil.getUrl();
 
+        log.info("Visit IP[OccFilter]: " + CusAccessObjectUtil.getIpAddress(request));
+
         if(url.contains(URL) || login != null){
-            System.out.println("申请访问：" + URL);
+            log.info("申请访问：" + URL);
             filterChain.doFilter(servletRequest, servletResponse);
         }else {
-            System.out.println("没有登录：" + URL);
+            log.info("没有登录：" + URL);
             servletRequest.getRequestDispatcher("/occ/user/unLogin").forward(servletRequest, servletResponse);
         }
     }

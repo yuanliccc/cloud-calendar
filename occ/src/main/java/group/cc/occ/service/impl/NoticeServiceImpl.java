@@ -120,10 +120,10 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
     public List<Chat> getChatUserMessage(Integer chatUserId, LoginUserDto loginUserDto) {
         Integer messageNum = this.noticeMapper.getUnreadMessageByUserId(loginUserDto.getUser().getId(), chatUserId, loginUserDto.getOrganization().getId());
         String receiveSql = "SELECT * FROM CHAT WHERE SENDUSERID = " + chatUserId + " AND RECEIVEUSERID = " + loginUserDto.getUser().getId() +
-                " WHERE ORGIN = " + loginUserDto.getOrganization().getId() + " ORDER BY SENDTIME DESC LIMIT 0," + (messageNum > 10 ? messageNum : 10);
+                " AND ORGIN = " + loginUserDto.getOrganization().getId() + " ORDER BY SENDTIME DESC LIMIT 0," + (messageNum > 10 ? messageNum : 10);
 
         String sendSql = "SELECT * FROM CHAT WHERE SENDUSERID = " + loginUserDto.getUser().getId() + " AND RECEIVEUSERID = " + chatUserId +
-                " WHERE ORGIN = " + loginUserDto.getOrganization().getId() + " ORDER BY SENDTIME DESC LIMIT 0,10";;
+                " AND ORGIN = " + loginUserDto.getOrganization().getId() + " ORDER BY SENDTIME DESC LIMIT 0,10";;
 
         List<Chat> receive = chatService.findBySql(receiveSql);
         List<Chat> send = chatService.findBySql(sendSql);

@@ -48,4 +48,9 @@ public class LoginUserDto implements Serializable{
     public void setRole(Role role) {
         this.role = role;
     }
+
+    @Override
+    public String toString(){
+        return "userId: " + this.getUser().getId()  + "  orgId: " + this.getOrganization().getId();
+    }
 }
