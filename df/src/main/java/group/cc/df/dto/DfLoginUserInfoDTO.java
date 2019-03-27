@@ -6,29 +6,36 @@ package group.cc.df.dto;
  */
 public class DfLoginUserInfoDTO {
     /**
-     * 用户用于登录的字符串
-     * 也可以邮箱和手机号
+     * 用户用于登录的字符串(用户名)
      */
-    private String identityCode;
+    private String userName;
 
     /**
      * 用户用以登录的密码
      */
-    private String verifyPassword;
+    private String password;
 
-    public String getIdentityCode() {
-        return identityCode;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setIdentityCode(String identityCode) {
-        this.identityCode = identityCode;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getVerifyPassword() {
-        return verifyPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setVerifyPassword(String verifyPassword) {
-        this.verifyPassword = verifyPassword;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "DfLoginUserInfoDTO{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

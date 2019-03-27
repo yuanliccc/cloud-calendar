@@ -2,22 +2,31 @@ package group.cc.df.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.df.dto.DfLoginUserInfoDTO;
+import group.cc.df.dto.DfSimpleUserInfo;
 import group.cc.df.model.DfUser;
 import group.cc.df.service.DfUserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.InvalidSessionException;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  * @author gxd
  * @date 2019/03/25
  */
-@CrossOrigin("*")
-@RestController
+@CrossOrigin
+/*@RestController*/
 @RequestMapping("/api/df/user")
 public class DfUserController {
     @Resource
@@ -58,5 +67,56 @@ public class DfUserController {
         List<DfUser> list = dfUserService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+
+    /**
+     * 将登录的用户,密码传入UsernamePasswordToken,当调用subject.login时,
+     * 将调用Relam的doGetAuthenticationInfo方法,开始密码验证
+     * 此时执行我们自己编写的密码匹配器
+     */
+    @ApiOperation("用户登录")
+    @PostMapping("/login")
+    @ResponseBody
+    public Result login(@RequestBody DfLoginUserInfoDTO loginUserInfo) {
+        UsernamePasswordToken token = new UsernamePasswordToken(loginUserInfo.getUserName(),
+                loginUserInfo.getPassword());
+        Session session = SecurityUtils.getSubject().getSession();
+        Subject subject = SecurityUtils.getSubject();
+
+        DfUser user = null;
+        DfSimpleUserInfo userInfo = new DfSimpleUserInfo();
+        try {
+            subject.login(token);
+            user = (DfUser) subject.getPrincipal();
+            session.setAttribute("user", user);
+            userInfo.setName(user.getName());
+            userInfo.setId(user.getId());
+
+        } catch (AuthenticationException e) {
+            return ResultGenerator.genErrorResult("用户名或密码错误");
+        } catch (InvalidSessionException e) {
+            return ResultGenerator.genErrorResult("用户名或密码错误");
+        }
+
+        return user == null ? ResultGenerator.genFailResult("用户名或密码错误") : ResultGenerator.genSuccessResult(userInfo);
+    }
+
+    @ApiOperation("判断用户是否登录")
+    @GetMapping("/isLogin")
+    @ResponseBody
+    public Result isLogin() {
+        Session session = SecurityUtils.getSubject().getSession();
+        DfUser user = (DfUser) session.getAttribute("user");
+
+        if (user == null) {
+            return ResultGenerator.genFailResult("未登录");
+        }
+
+        DfSimpleUserInfo userInfo = new DfSimpleUserInfo();
+        userInfo.setId(user.getId());
+        userInfo.setName(user.getName());
+
+        return ResultGenerator.genSuccessResult(userInfo);
     }
 }

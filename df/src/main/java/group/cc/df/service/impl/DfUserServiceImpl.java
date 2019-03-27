@@ -1,6 +1,7 @@
 package group.cc.df.service.impl;
 
 import group.cc.df.dao.DfUserMapper;
+import group.cc.df.dto.DfLoginUserInfoDTO;
 import group.cc.df.model.DfUser;
 import group.cc.df.service.DfUserService;
 import group.cc.core.AbstractService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +22,8 @@ public class DfUserServiceImpl extends AbstractService<DfUser> implements DfUser
     @Resource
     private DfUserMapper dfUserMapper;
 
+    @Override
+    public List<DfUser> getUserByUserName(String userName) {
+        return this.dfUserMapper.getUserByUserName(userName);
+    }
 }
