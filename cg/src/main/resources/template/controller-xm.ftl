@@ -31,8 +31,8 @@ public class ${modelNameUpperCamel}Controller {
     }
 
     @ApiOperation("删除 ${modelNameUpperCamel}")
-    @DeleteMapping("/delete")
-    public Result delete(@PathVariable Integer id) {
+    @GetMapping("/delete")
+    public Result delete(@RequestParam Integer id) {
         ${modelNameLowerCamel}Service.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }

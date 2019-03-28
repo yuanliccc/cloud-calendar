@@ -1,19 +1,13 @@
 package group.cc.occ;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import group.cc.cg.VueGenerator;
+import group.cc.cg.XMCodeGenerator;
 
 public class GenerateCode {
 
     public static void main(String[] args) {
-        //CodeGenerator.generate();
-        //VueGenerator.generate();
-        String filePath = "D:\\occ-1.0-SNAPSHOT.war\\WEB-INF\\classes\\allowUrl.properties";
-        File file = new File(filePath);
-        System.out.println(file.exists());
-
+       // XMCodeGenerator.generate();
+        VueGenerator.generate();
     }
 
     private static  <T> T nullToDefault(Object aim, T defaultValue) {
