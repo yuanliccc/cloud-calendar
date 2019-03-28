@@ -1,9 +1,21 @@
 package group.cc.df.config;
 
+import group.cc.df.utils.CredentialMatcher;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.Cookie;
+import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +39,50 @@ public class ShiroConfiguration {
     private String unauthorizedUrl;
 
     @Bean
-    public SelfRealm realm() {
-        return new SelfRealm();
+    public SelfRealm realm(@Qualifier("credentialMatcher") CredentialMatcher matcher) {
+        SelfRealm selfRealm = new SelfRealm();
+        // 将认证信息缓存到内存中
+        selfRealm.setCacheManager(new MemoryConstrainedCacheManager());
+        selfRealm.setCredentialsMatcher(matcher);
+        return selfRealm;
+    }
+
+    @Bean
+    public SimpleCookie sessionIdCookie() {
+        SimpleCookie cookie = new SimpleCookie("sid");
+        cookie.setMaxAge(-1);
+        cookie.setPath("/");
+        cookie.setHttpOnly(false);
+        return cookie;
+    }
+
+    @Bean
+    public SessionDAO sessionDAO() {
+        MemorySessionDAO sessionDAO = new MemorySessionDAO();
+        return sessionDAO;
+    }
+
+
+    @Bean
+    public SessionManager sessionManager(SessionDAO sessionDAO, SimpleCookie sessionIdCookie) {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setGlobalSessionTimeout(21600000);
+        sessionManager.setSessionDAO(sessionDAO);
+        sessionManager.setSessionIdCookie(sessionIdCookie);
+        sessionManager.setSessionIdCookieEnabled(true);
+        sessionManager.setDeleteInvalidSessions(true);
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        return sessionManager;
+    }
+
+    /**
+     * Realm在验证用户身份的时候要进行密码匹配
+     * 最简单的情况就是明文直接匹配,这里的匹配工作就是交给CredentialsMatcher来完成
+     * @return
+     */
+    @Bean("credentialMatcher")
+    public CredentialMatcher credentialMatcher() {
+        return new CredentialMatcher();
     }
 
     /**
@@ -38,9 +92,10 @@ public class ShiroConfiguration {
      * @return
      */
     @Bean
-    public DefaultWebSecurityManager securityManager(SelfRealm realm) {
+    public DefaultWebSecurityManager securityManager(SelfRealm realm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(realm);
+        securityManager.setSessionManager(sessionManager);
 
         return securityManager;
     }

@@ -23,8 +23,9 @@ public class SelfRealm extends AuthorizingRealm {
     // 认证用户
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        UsernamePasswordToken  userpasswordToken = (UsernamePasswordToken) authenticationToken;//这边是界面的登陆数据，将数据封装成token
         // 获取当前用户的用户名
-        String userName = (String) authenticationToken.getPrincipal();
+        String userName = userpasswordToken.getUsername();
 
         // 从数据库中根据用户名查询用户
         DfUser user = null;
@@ -32,11 +33,12 @@ public class SelfRealm extends AuthorizingRealm {
         if (userList != null && !userList.isEmpty()) {
             user = userList.get(0);
         }
+
         if (user == null) {
             throw new UnknownAccountException("没有在本系统中找到对应的用户信息");
         }
 
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getUserName(), user.getPassword(), getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user,user.getPassword(),this.getClass().getName());
         return info;
     }
 
