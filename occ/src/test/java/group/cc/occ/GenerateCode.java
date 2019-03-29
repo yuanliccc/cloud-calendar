@@ -6,7 +6,7 @@ import group.cc.cg.XMCodeGenerator;
 public class GenerateCode {
 
     public static void main(String[] args) {
-       // XMCodeGenerator.generate();
+        XMCodeGenerator.generate();
         VueGenerator.generate();
     }
 

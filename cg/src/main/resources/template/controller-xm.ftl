@@ -18,7 +18,7 @@ import java.util.List;
 */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/occ/${baseRequestMapping}")
+@RequestMapping("/occ${baseRequestMapping}")
 public class ${modelNameUpperCamel}Controller {
     @Resource
     private ${modelNameUpperCamel}Service ${modelNameLowerCamel}Service;
