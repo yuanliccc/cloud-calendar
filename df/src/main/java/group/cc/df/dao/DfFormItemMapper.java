@@ -16,4 +16,6 @@ public interface DfFormItemMapper extends Mapper<DfFormItem> {
     int deleteFormItemById(Integer formItemId);
 
     int saveFormItem(DfFormItem dfFormItem);
+
+    int deleteFormItemByFieldId(Integer formFieldId);
 }

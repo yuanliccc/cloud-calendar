@@ -26,7 +26,7 @@ import java.util.List;
  * @date 2019/03/25
  */
 @CrossOrigin
-/*@RestController*/
+@RestController
 @RequestMapping("/api/df/user")
 public class DfUserController {
     @Resource

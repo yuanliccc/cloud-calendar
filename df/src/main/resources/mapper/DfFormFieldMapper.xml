@@ -39,6 +39,7 @@
       df_form_field
     WHERE
       form_id = #{formId}
+    ORDER BY display_index
   </select>
 
   <update id="updateFormField" parameterType="group.cc.df.model.DfFormField">
