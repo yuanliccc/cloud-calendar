@@ -48,7 +48,7 @@ public class DfUserController {
 
     @ApiOperation("更新 DfUser")
     @PostMapping("/update")
-    public Result update(DfUser dfUser) {
+    public Result update(@RequestBody DfUser dfUser) {
         dfUserService.update(dfUser);
         return ResultGenerator.genSuccessResult();
     }
@@ -67,6 +67,13 @@ public class DfUserController {
         List<DfUser> list = dfUserService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("根据Id查询用户信息")
+    @GetMapping("/findUserById/{id}")
+    public Result findUserById(@PathVariable("id") Integer id) {
+        DfUser user = this.dfUserService.findById(id);
+        return ResultGenerator.genSuccessResult(user);
     }
 
 

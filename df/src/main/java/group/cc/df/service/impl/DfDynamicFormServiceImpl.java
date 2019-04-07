@@ -3,11 +3,16 @@ package group.cc.df.service.impl;
 import group.cc.df.dao.DfDynamicFormMapper;
 import group.cc.df.dao.DfFormFieldMapper;
 import group.cc.df.dao.DfFormItemMapper;
+import group.cc.df.dao.DfUserMapper;
+import group.cc.df.dto.DfDynamicFormDTO;
 import group.cc.df.model.DfDynamicForm;
 import group.cc.df.model.DfFormField;
 import group.cc.df.model.DfFormItem;
+import group.cc.df.model.DfUser;
 import group.cc.df.service.DfDynamicFormService;
 import group.cc.core.AbstractService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
@@ -32,21 +37,46 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     @Resource
     private DfFormItemMapper dfFormItemMapper;
 
+    @Resource
+    private DfUserMapper dfUserMapper;
+
     @Override
     public void saveDynamicForm(Map<String, Object> dfMap) {
         DfDynamicForm df = handleFormConfig(dfMap);
 
         df.setCreateTime(new Date());
-        df.setEmployeeId(0);
+
+        Session session = SecurityUtils.getSubject().getSession();
+        DfUser user = (DfUser) session.getAttribute("user");
+        df.setEmployeeId(user.getId());
 
         // 在这里存储动态表单
         dfDynamicFormMapper.saveDynamicForm(df);
         int dfFormId = df.getId();
-        System.out.println("动态表单存储后: " + dfFormId);
 
         List<Map<String, Object>> fieldList = (List<Map<String, Object>>) dfMap.get("list");
 
         this.saveFormField(fieldList , 0, dfFormId, -1);
+    }
+
+    @Override
+    public void deleteDynamicForm(Integer id) {
+        // 首先根据Id删除表单信息
+        this.dfDynamicFormMapper.deleteByPrimaryKey(id);
+        // 然后查询出该表单下的表单域
+        List<DfFormField> dfFormFieldList = this.dfFormFieldMapper.findDynamicFormFieldsByFormId(id);
+
+        for (DfFormField formField: dfFormFieldList) {
+            List<DfFormItem> dfFormItemList = this.dfFormItemMapper.findDfFormItemsByFieldId(formField.getId());
+
+            // 删除条目信息
+            for (DfFormItem formItem: dfFormItemList) {
+                this.dfFormItemMapper.deleteFormItemById(formItem.getId());
+            }
+
+            // 删除表单域信息
+            this.dfFormFieldMapper.deleteFormFieldById(formField.getId());
+        }
     }
 
     private void saveFormField(List<Map<String, Object>> fieldList, Integer displayIndex, int dfFormId, int parentId) {
@@ -94,7 +124,6 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
                 // 存储表单域
                 dfFormFieldMapper.saveFormField(dfField);
                int formFieldId = dfField.getId();
-               System.out.println(dfField.getLabel() + "表单域存储后: " + formFieldId);
 
                 if (fieldType.equals("checkbox") || fieldType.equals("radio") || fieldType.equals("select")) {
                     List<DfFormItem> itemList = handleFieldItem(optionsMap);
@@ -439,10 +468,31 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
 
 
     @Override
-    public List<DfDynamicForm> findDynamicFormByLimit(Integer pageSize, Integer pageNum) {
+    public List<DfDynamicFormDTO> findDynamicFormByLimit(Integer pageSize, Integer pageNum) {
         Integer offset = (pageNum - 1) * pageSize;
         List<DfDynamicForm> dfDynamicFormList = this.dfDynamicFormMapper.findDynamicFormByLimit(pageSize, offset);
-        return dfDynamicFormList;
+        List<DfDynamicFormDTO> dfDynamicFormDTOList = this.dynamicFormList2DynamicFormDTOList(dfDynamicFormList);
+        return dfDynamicFormDTOList;
+    }
+
+    /**
+     * 将DynamicFormList转化为DynamicFormDTOList
+     * @param dfDynamicFormList
+     * @return
+     */
+    private List<DfDynamicFormDTO> dynamicFormList2DynamicFormDTOList(List<DfDynamicForm> dfDynamicFormList) {
+        List<DfDynamicFormDTO> dfDynamicFormDTOList = new ArrayList<>(dfDynamicFormList.size());
+
+        for (DfDynamicForm dynamicForm: dfDynamicFormList) {
+            DfDynamicFormDTO dto = new DfDynamicFormDTO();
+            dto.setDfDynamicForm(dynamicForm);
+            DfUser holder = this.dfUserMapper.selectByPrimaryKey(dynamicForm.getEmployeeId());
+            dto.setHolder(holder);
+
+            dfDynamicFormDTOList.add(dto);
+        }
+
+        return dfDynamicFormDTOList;
     }
 
     @Override

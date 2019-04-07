@@ -3,6 +3,7 @@ package group.cc.df.controller;
 import com.alibaba.fastjson.JSONObject;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.df.dto.DfDynamicFormDTO;
 import group.cc.df.model.DfDynamicForm;
 import group.cc.df.service.DfDynamicFormService;
 import com.github.pagehelper.PageHelper;
@@ -53,6 +54,13 @@ public class DfDynamicFormController {
         return ResultGenerator.genSuccessResult();
     }
 
+    @ApiOperation("删除动态表单及其条目信息")
+    @DeleteMapping("/deleteDynamicForm/{id}")
+    public Result deleteDynamicForm(@PathVariable("id") Integer id) {
+        this.dfDynamicFormService.deleteDynamicForm(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
     @ApiOperation("更新 DfDynamicForm")
     @PutMapping
     public Result update(@RequestBody DfDynamicForm dfDynamicForm) {
@@ -79,8 +87,8 @@ public class DfDynamicFormController {
     @ApiOperation("自定义的根据页码和数据量分页查询表单数据")
     @GetMapping("/findDynamicFormByLimit")
     public Result findDynamicFormByLimit(Integer pageNum, Integer pageSize) {
-        List<DfDynamicForm> dfDynamicFormList = this.dfDynamicFormService.findDynamicFormByLimit(pageSize, pageNum);
-        return ResultGenerator.genSuccessResult(dfDynamicFormList);
+        List<DfDynamicFormDTO> dfDynamicFormDTOList = this.dfDynamicFormService.findDynamicFormByLimit(pageSize, pageNum);
+        return ResultGenerator.genSuccessResult(dfDynamicFormDTOList);
     }
 
     @ApiOperation("获取存储数据的总量")
