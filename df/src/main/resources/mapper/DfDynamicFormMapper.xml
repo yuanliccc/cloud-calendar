@@ -34,4 +34,23 @@
   <select id="findDynamicFormCount" resultType="java.lang.Integer">
     SELECT COUNT(id) FROM df_dynamic_form
   </select>
+
+  <select id="findDynamicFormByCondition" resultType="group.cc.df.model.DfDynamicForm">
+    SELECT id AS id, name AS name, method AS method, action AS action, enctype AS enctype,
+    employee_id AS employeeId, create_time AS createTime FROM df_dynamic_form WHERE 1 = 1
+    <if test="name != ''">
+      AND name LIKE CONCAT('%', #{name}, '%')
+    </if>
+    AND employee_id = #{employeeId}
+    ORDER BY create_time DESC
+    LIMIT #{offset}, #{pageSize}
+  </select>
+
+  <select id="findDynamicFormCountByCondition" resultType="java.lang.Integer">
+    SELECT COUNT(0) FROM df_dynamic_form WHERE 1 = 1
+    <if test="name != ''">
+      AND name LIKE CONCAT('%', #{name}, '%')
+    </if>
+    AND employee_id = #{employeeId}
+  </select>
 </mapper>

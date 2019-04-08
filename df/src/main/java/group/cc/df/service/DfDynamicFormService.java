@@ -17,12 +17,19 @@ public interface DfDynamicFormService extends Service<DfDynamicForm> {
     void updateDynamicForm(Map<String, Object> dfMap);
 
     /**
-     *
+     * 分页查询动态表单信息
      * @param pageSize
      * @param pageNum
      * @return
      */
     List<DfDynamicFormDTO> findDynamicFormByLimit(Integer pageSize, Integer pageNum);
+
+    /**
+     * 查询符合条件的动态表单信息
+     * @param conditionMap
+     * @return
+     */
+    Map<String, Object> findDynamicFormByCondition(Map<String, Object> conditionMap);
 
     /**
      * 获取存储数据的总量

@@ -91,6 +91,14 @@ public class DfDynamicFormController {
         return ResultGenerator.genSuccessResult(dfDynamicFormDTOList);
     }
 
+    @ApiOperation("根据条件查询动态表单信息")
+    @PostMapping("/findDynamicFormByCondition")
+    @ResponseBody
+    public Result findDynamicFormByCondition(@RequestBody Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = this.dfDynamicFormService.findDynamicFormByCondition(conditionMap);
+        return ResultGenerator.genSuccessResult(resultMap);
+    }
+
     @ApiOperation("获取存储数据的总量")
     @GetMapping("/findDynamicFormCount")
     public Result findDynamicFormCount() {
