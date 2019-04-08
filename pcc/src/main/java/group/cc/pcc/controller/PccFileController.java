@@ -40,6 +40,12 @@ public class PccFileController {
     @Value("${pcc.windows.file.storage.directory}")
     private String windowsStoragePath;
 
+    @Value("${pcc.linux.file.storage.directory}")
+    private String linuxStoragePath;
+
+    @Value("${pcc.mac.file.storage.directory}")
+    private String macStoragePath;
+
     @ApiOperation("添加 PccFile")
     @PostMapping
     public Result add(@RequestBody PccFile pccFile) {
@@ -87,7 +93,7 @@ public class PccFileController {
             File dest = null;
             try {
                 // 创建目标文件，防止直接声明路径作为file时，文件上级目录不存在的情况，该过程会创建目录及文件
-                dest = FileOperatorUtil.createEmptyFile(windowsStoragePath, file.getOriginalFilename());
+                dest = FileOperatorUtil.createEmptyFile(getDirectory(), file.getOriginalFilename());
                 // 将上传的缓存文件转储到目标文件中
                 file.transferTo(dest);
                 // 创建 PccFile 对象
@@ -104,6 +110,27 @@ public class PccFileController {
         // 将 PccFile 列表插入到数据中
         pccFileService.save(pccFiles);
         return ResultGenerator.genSuccessResult(pccFiles);
+    }
+
+    /**
+     * 获取文件存储的基础文件夹路径（根据System.getProperties().getProperty("os.name")） 进行判断
+     * @return 路径
+     */
+    private String getDirectory() {
+        String OsName = System.getProperties().getProperty("os.name");
+
+        if(OsName.startsWith("Linux")) {
+            return linuxStoragePath;
+        }
+        else if(OsName.startsWith("Windows")) {
+            return windowsStoragePath;
+        }
+        else if(OsName.startsWith("Mac")) {
+            return macStoragePath;
+        }
+        else {
+            return "~";
+        }
     }
 
     @ApiOperation("上传文件")

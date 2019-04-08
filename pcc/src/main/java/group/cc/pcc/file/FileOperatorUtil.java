@@ -2,10 +2,7 @@ package group.cc.pcc.file;
 
 import com.yl.common.util.PropertiesReaderUtil;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -69,7 +66,7 @@ public class FileOperatorUtil {
 			}
 			String filePath = createFilePathByRuleOfTime((String)resultMap.get(fileTypeMapKey),storagePath);
 			resultMap.put(filePathMapKey, filePath);
-			createFilebyFilePath(filePath);
+			createFileByFilePath(filePath);
 			resultMap.put(fileSizeMapKey, storageFile(file, filePath));
 			return resultMap;
 		}
@@ -81,7 +78,7 @@ public class FileOperatorUtil {
 
 	public static File createEmptyFile(String storagePath, String fileName) throws Exception {
 	    String fileType = getFileTypeByName(fileName);
-	    return createFilebyFilePath(createFilePathByRuleOfTime(fileType, storagePath));
+	    return createFileByFilePath(createFilePathByRuleOfTime(fileType, storagePath));
     }
 
     public static boolean deleteFile(String absoluteFilePath) {
@@ -122,7 +119,7 @@ public class FileOperatorUtil {
             }
             String filePath = createFilePathByRuleOfTime((String)resultMap.get(fileTypeMapKey), storagePath);
             resultMap.put(filePathMapKey, filePath);
-            createFilebyFilePath(filePath);
+            createFileByFilePath(filePath);
             resultMap.put(fileSizeMapKey, storageFile(file, filePath));
             return resultMap;
         }
@@ -310,13 +307,15 @@ public class FileOperatorUtil {
 	 * 创建文件
 	 * @param filePath 文件路径
 	 */
-	public static File createFilebyFilePath(String filePath) throws Exception {
+	public static File createFileByFilePath(String filePath) throws Exception {
 		try {
 			File file = new File(filePath);
 			if (file.exists() && file.isFile()) {
 			} else {
 				String directoryPath = getDirectory(filePath);
-				createDirectoryByDirectoryPath(directoryPath);
+				if(!createDirectoryByDirectoryPath(directoryPath)) {
+					throw new IOException("Generate directory: '" + directoryPath + "' failed!");
+				}
 				file.createNewFile();
 				return file;
 			}
@@ -346,26 +345,19 @@ public class FileOperatorUtil {
 	/**
 	 * 判断目录是否存在并创建目录
 	 * @param directoryPath 文件路径
-	 * @return 存在或成功创建返回true
 	 */
-	public static void createDirectoryByDirectoryPath(String directoryPath) {
+	public static boolean createDirectoryByDirectoryPath(String directoryPath) {
+		boolean isCreate = false;
 		try {
 			File file = new File(directoryPath);
 			if (file.exists() && file.isDirectory()) {
+				return true;
 			} else {
-				file.mkdirs();
+				return file.mkdirs();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		}
-	}
-
-	public static void main(String[] args) {
-		try {
-			createFilebyFilePath("d:/file/.js");
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
