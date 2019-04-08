@@ -1,6 +1,7 @@
 package group.cc.cg;
 
 import com.google.common.base.CaseFormat;
+import com.yl.common.util.PrintUtil;
 import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -29,6 +30,7 @@ public class CodeGenerator {
     private static final String DEFAULT_FILE = "code-generator.properties";
 
     public static void generate() {
+        PrintUtil.println("Code generating ...");
         Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
 
         genCode(params.get(TABLES_KEY), params);
@@ -75,6 +77,7 @@ public class CodeGenerator {
      * @param tableNames 数据表名称
      */
     private static void genCodeByCustomModelName(String tableNames, Map<String, String> params) {
+        PrintUtil.println("Starting generate model and mapper: ");
         genModelAndMapper(tableNames, params);
         genServices(tableNames, params);
         genControllers(tableNames, params);

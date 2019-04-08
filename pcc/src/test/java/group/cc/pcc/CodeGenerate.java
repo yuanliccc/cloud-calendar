@@ -6,7 +6,7 @@ public class CodeGenerate {
 
     public static void main(String[] args) {
 
-        CodeGenerator.generateModelAndMapper();
+        CodeGenerator.generate();
     }
 
 }

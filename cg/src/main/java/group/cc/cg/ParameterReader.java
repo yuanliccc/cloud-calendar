@@ -2,6 +2,7 @@ package group.cc.cg;
 
 import com.yl.common.util.PropertiesReaderUtil;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -110,7 +111,7 @@ class ParameterReader {
 
         // 对 module_name 进行处理
         if(module_name != null && !module_name.trim().equals("")) {
-            base_path.append("\\" + module_name.trim());
+            base_path.append(File.separator + module_name.trim());
         }
 
         map.put(MAPPER_IMPLEMENTS_INTERFACE_KEY,
@@ -239,11 +240,11 @@ class ParameterReader {
         if(add.equals("")) {
             return path;
         }
-        else if(add.startsWith("\\")){
+        else if(add.startsWith(File.separator)){
             return path + add;
         }
         else {
-            return path + "\\" + add;
+            return path + File.separator + add;
         }
     }
 
