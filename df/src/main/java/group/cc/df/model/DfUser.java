@@ -18,6 +18,9 @@ public class DfUser {
 
     private String password;
 
+    @Column(name = "user_name")
+    private String userName;
+
     /**
      * @return id
      */
@@ -102,15 +105,17 @@ public class DfUser {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "DfUser{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", sex='" + sex + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    /**
+     * @return user_name
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

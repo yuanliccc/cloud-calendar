@@ -19,7 +19,7 @@ import java.util.List;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/df/form/field")
+@RequestMapping("/api/df/form/field")
 public class DfFormFieldController {
     @Resource
     private DfFormFieldService dfFormFieldService;

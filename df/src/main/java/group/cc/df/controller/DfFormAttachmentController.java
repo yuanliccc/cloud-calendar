@@ -18,7 +18,7 @@ import java.util.List;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/df/form/attachment")
+@RequestMapping("/api/df/form/attachment")
 public class DfFormAttachmentController {
     @Resource
     private DfFormAttachmentService dfFormAttachmentService;

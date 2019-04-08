@@ -23,5 +23,33 @@
       df_form_item
     WHERE
       form_field_id = #{fieldId}
+    ORDER BY item_index
   </select>
+
+  <update id="updateFormItem" parameterType="group.cc.df.model.DfFormItem">
+    UPDATE df_form_item SET form_field_id = #{formFieldId}, value = #{value}, label = #{label},
+    item_index = #{itemIndex} WHERE id = #{id}
+  </update>
+
+  <select id="findUselessFormItems" resultType="group.cc.df.model.DfFormItem">
+    SELECT id, form_field_id, value, label, item_index FROM df_form_item
+    WHERE (id NOT IN
+    <foreach collection="formItemIdList" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>)
+    AND form_field_id = #{formFieldId}
+  </select>
+
+  <delete id="deleteFormItemById" parameterType="java.lang.Integer">
+    DELETE FROM df_form_item WHERE id = #{formItemId}
+  </delete>
+
+  <insert id="saveFormItem" useGeneratedKeys="true" keyProperty="id" parameterType="group.cc.df.model.DfFormItem">
+    INSERT INTO df_form_item(id, form_field_id, value, label, item_index)
+    VALUES(#{id}, #{formFieldId}, #{value}, #{label}, #{itemIndex})
+  </insert>
+
+  <delete id="deleteFormItemByFieldId" parameterType="java.lang.Integer">
+    DELETE FROM df_form_item WHERE form_field_id = #{formFieldId}
+  </delete>
 </mapper>

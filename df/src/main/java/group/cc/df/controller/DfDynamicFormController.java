@@ -3,6 +3,7 @@ package group.cc.df.controller;
 import com.alibaba.fastjson.JSONObject;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.df.dto.DfDynamicFormDTO;
 import group.cc.df.model.DfDynamicForm;
 import group.cc.df.service.DfDynamicFormService;
 import com.github.pagehelper.PageHelper;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/df/dynamic/form")
+@RequestMapping("/api/df/dynamic/form")
 public class DfDynamicFormController {
     @Resource
     private DfDynamicFormService dfDynamicFormService;
@@ -53,6 +54,13 @@ public class DfDynamicFormController {
         return ResultGenerator.genSuccessResult();
     }
 
+    @ApiOperation("删除动态表单及其条目信息")
+    @DeleteMapping("/deleteDynamicForm/{id}")
+    public Result deleteDynamicForm(@PathVariable("id") Integer id) {
+        this.dfDynamicFormService.deleteDynamicForm(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
     @ApiOperation("更新 DfDynamicForm")
     @PutMapping
     public Result update(@RequestBody DfDynamicForm dfDynamicForm) {
@@ -74,5 +82,19 @@ public class DfDynamicFormController {
         List<DfDynamicForm> list = dfDynamicFormService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("自定义的根据页码和数据量分页查询表单数据")
+    @GetMapping("/findDynamicFormByLimit")
+    public Result findDynamicFormByLimit(Integer pageNum, Integer pageSize) {
+        List<DfDynamicFormDTO> dfDynamicFormDTOList = this.dfDynamicFormService.findDynamicFormByLimit(pageSize, pageNum);
+        return ResultGenerator.genSuccessResult(dfDynamicFormDTOList);
+    }
+
+    @ApiOperation("获取存储数据的总量")
+    @GetMapping("/findDynamicFormCount")
+    public Result findDynamicFormCount() {
+        int dynamicFormCount = this.dfDynamicFormService.findDynamicFormCount();
+        return ResultGenerator.genSuccessResult(dynamicFormCount);
     }
 }
