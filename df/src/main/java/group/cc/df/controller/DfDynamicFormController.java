@@ -105,4 +105,11 @@ public class DfDynamicFormController {
         int dynamicFormCount = this.dfDynamicFormService.findDynamicFormCount();
         return ResultGenerator.genSuccessResult(dynamicFormCount);
     }
+
+    @ApiOperation("分享表单")
+    @GetMapping("/shareDynamicForm")
+    public Result shareDynamicForm(Integer formId) {
+        // TODO 进行分享表单操作
+        return null;
+    }
 }
