@@ -1,5 +1,6 @@
 package group.cc.cg;
 
+import com.yl.common.util.PrintUtil;
 import com.yl.common.util.PropertiesReaderUtil;
 
 import java.io.File;
@@ -113,7 +114,6 @@ class ParameterReader {
         if(module_name != null && !module_name.trim().equals("")) {
             base_path.append(File.separator + module_name.trim());
         }
-
         map.put(MAPPER_IMPLEMENTS_INTERFACE_KEY,
                 ifNullReturnEmpty((String)properties.get(MAPPER_IMPLEMENTS_INTERFACE_KEY)));
 

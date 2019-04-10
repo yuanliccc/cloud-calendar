@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @author yuanli
- * @date 2019/04/08
+ * @date 2019/04/10
  */
 @CrossOrigin("*")
 @RestController
@@ -24,35 +24,35 @@ public class PccChatController {
     private PccChatService pccChatService;
 
     @ApiOperation("添加 PccChat")
-    @PostMapping("/add")
-    public Result add(PccChat pccChat) {
+    @PostMapping
+    public Result add(@RequestBody PccChat pccChat) {
         pccChatService.save(pccChat);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("删除 PccChat")
-    @PostMapping("/delete")
-    public Result delete(@RequestParam Integer id) {
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Integer id) {
         pccChatService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("更新 PccChat")
-    @PostMapping("/update")
-    public Result update(PccChat pccChat) {
+    @PutMapping
+    public Result update(@RequestBody PccChat pccChat) {
         pccChatService.update(pccChat);
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("通过 Id 查询 PccChat 详情")
-    @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
+    @GetMapping("/{id}")
+    public Result detail(@PathVariable Integer id) {
         PccChat pccChat = pccChatService.findById(id);
         return ResultGenerator.genSuccessResult(pccChat);
     }
 
     @ApiOperation("分页查询 PccChat 列表")
-    @PostMapping("/list")
+    @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
         List<PccChat> list = pccChatService.findAll();

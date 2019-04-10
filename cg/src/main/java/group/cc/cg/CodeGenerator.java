@@ -2,8 +2,11 @@ package group.cc.cg;
 
 import com.google.common.base.CaseFormat;
 import com.yl.common.util.PrintUtil;
+import com.yl.common.util.StringUtil;
 import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.api.GeneratedFile;
+import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -30,8 +33,9 @@ public class CodeGenerator {
     private static final String DEFAULT_FILE = "code-generator.properties";
 
     public static void generate() {
-        PrintUtil.println("Code generating ...");
+        PrintUtil.println("代码生成 ...");
         Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
+        PrintUtil.println(params.toString(), "配置参数：", StringUtil.EMPTY);
 
         genCode(params.get(TABLES_KEY), params);
     }
@@ -41,6 +45,8 @@ public class CodeGenerator {
      */
     public static void generateModelAndMapper() {
         Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
+        PrintUtil.println(params.toString(), "配置参数：", StringUtil.EMPTY);
+
         genModelAndMapper(params.get(TABLES_KEY), params);
     }
 
@@ -49,6 +55,8 @@ public class CodeGenerator {
      */
     public static void generateController() {
         Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
+        PrintUtil.println(params.toString(), "配置参数：", StringUtil.EMPTY);
+
         genControllers(params.get(TABLES_KEY), params);
     }
 
@@ -57,6 +65,8 @@ public class CodeGenerator {
      */
     public static void generateServiceAndImpl() {
         Map<String, String> params = ParameterReader.read(DEFAULT_FILE);
+        PrintUtil.println(params.toString(), "配置参数：", StringUtil.EMPTY);
+
         genServices(params.get(TABLES_KEY), params);
     }
 
@@ -77,7 +87,6 @@ public class CodeGenerator {
      * @param tableNames 数据表名称
      */
     private static void genCodeByCustomModelName(String tableNames, Map<String, String> params) {
-        PrintUtil.println("Starting generate model and mapper: ");
         genModelAndMapper(tableNames, params);
         genServices(tableNames, params);
         genControllers(tableNames, params);
@@ -105,6 +114,10 @@ public class CodeGenerator {
      * @param params 生成所需参数集合
      */
     private static void genModelAndMapper(String tableNames, Map<String, String> params) {
+        PrintUtil.template("开始生成 Model 及 Mapper ...",() -> {
+            PrintUtil.println(tableNames, "涉及库表：", StringUtil.EMPTY);
+        });
+
         Context context = new Context(ModelType.FLAT);
         context.setId("Potato");
         context.setTargetRuntime("MyBatis3Simple");
@@ -162,6 +175,15 @@ public class CodeGenerator {
         if (generator.getGeneratedJavaFiles().isEmpty() || generator.getGeneratedXmlFiles().isEmpty()) {
             throw new RuntimeException("生成Model和Mapper失败：" + warnings);
         }
+        else {
+            List<GeneratedJavaFile> files = generator.getGeneratedJavaFiles();
+            PrintUtil.template("生成文件列表如下：", () -> {
+                files.forEach(file -> {
+                    PrintUtil.println(file.getFileName(), file.getTargetPackage() + ".", StringUtil.EMPTY);
+                });
+            });
+
+        }
     }
 
     /**
@@ -172,9 +194,11 @@ public class CodeGenerator {
      */
     private static void genServices(String tableNames, Map<String, String> params) {
 
-        for(String tableName : tableNames.split(",")) {
-            genService(tableName, params);
-        }
+        PrintUtil.template("开始生成 Service 及 ServiceImpl ...", () -> {
+            for(String tableName : tableNames.split(",")) {
+                genService(tableName, params);
+            }
+        });
     }
 
     /**
@@ -204,7 +228,7 @@ public class CodeGenerator {
             cfg.getTemplate("service.ftl").process(data,
                     new FileWriter(file));
 
-            System.out.println(modelNameUpperCamel + "Service.java 生成成功");
+            PrintUtil.println(modelNameUpperCamel + "Service.java");
 
             File file1 = new File(params.get(SERVICE_IMPL_PATH_KEY) + modelNameUpperCamel + "ServiceImpl.java");
             if (!file1.getParentFile().exists()) {
@@ -212,7 +236,7 @@ public class CodeGenerator {
             }
             cfg.getTemplate("service-impl.ftl").process(data,
                     new FileWriter(file1));
-            System.out.println(modelNameUpperCamel + "ServiceImpl.java 生成成功");
+            PrintUtil.println(modelNameUpperCamel + "ServiceImpl.java");
         }
         catch (Exception e) {
             throw new RuntimeException("生成Service失败", e);
@@ -221,9 +245,11 @@ public class CodeGenerator {
 
     private static void genControllers(String tableNames, Map<String, String> params) {
 
-        for(String tableName : tableNames.split(",")) {
-            genController(tableName, params);
-        }
+        PrintUtil.template("开始生成 Controller ...", () -> {
+            for(String tableName : tableNames.split(",")) {
+                genController(tableName, params);
+            }
+        });
     }
 
     private static void genController(String tableName, Map<String, String> params) {
@@ -244,13 +270,13 @@ public class CodeGenerator {
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
-           // cfg.getTemplate("controller-restful.ftl").process(data, new FileWriter(file));
+            cfg.getTemplate("controller-restful.ftl").process(data, new FileWriter(file));
             //cfg.getTemplate("controller.ftl").process(data, new FileWriter(file));
-            cfg.getTemplate("controller.ftl").process(data, new FileWriter(file));
-            System.out.println(modelNameUpperCamel + "Controller.java 生成成功");
+            //cfg.getTemplate("controller.ftl").process(data, new FileWriter(file));
+            PrintUtil.println(modelNameUpperCamel + "Controller.java");
         }
         catch (Exception e) {
-            throw new RuntimeException("生成Controller失败", e);
+            throw new RuntimeException("生成 Controller 失败", e);
         }
 
     }
