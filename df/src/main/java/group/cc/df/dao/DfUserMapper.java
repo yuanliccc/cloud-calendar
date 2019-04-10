@@ -14,4 +14,11 @@ public interface DfUserMapper extends Mapper<DfUser> {
      */
     List<DfUser> getUserByUserName(String userName);
 
+    /**
+     * 根据用户姓名进行模糊查询
+     * @param name
+     * @return
+     */
+    List<DfUser> findUserLikeName(String name);
+
 }

@@ -43,4 +43,10 @@ public interface DfDynamicFormService extends Service<DfDynamicForm> {
      * @return
      */
     void deleteDynamicForm(Integer id);
+
+    /**
+     * 分享动态表单
+     * @param formId
+     */
+    void shareDynamicForm(Integer formId);
 }

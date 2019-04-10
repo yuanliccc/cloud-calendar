@@ -107,9 +107,9 @@ public class DfDynamicFormController {
     }
 
     @ApiOperation("分享表单")
-    @GetMapping("/shareDynamicForm")
-    public Result shareDynamicForm(Integer formId) {
-        // TODO 进行分享表单操作
-        return null;
+    @GetMapping("/shareDynamicForm/{formId}")
+    public Result shareDynamicForm(@PathVariable("formId") Integer formId) {
+        this.dfDynamicFormService.shareDynamicForm(formId);
+        return ResultGenerator.genSuccessResult();
     }
 }
