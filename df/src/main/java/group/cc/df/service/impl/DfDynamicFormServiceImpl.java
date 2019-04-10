@@ -475,6 +475,32 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         return dfDynamicFormDTOList;
     }
 
+    @Override
+    public Map<String, Object> findDynamicFormByCondition(Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = new HashMap<>();
+        // 获取当前登录的用户信息
+        DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
+        Integer userId = user.getId();
+
+        conditionMap.put("employeeId", userId);
+
+        // 获取分页信息
+        Integer pageSize = (Integer) conditionMap.get("pageSize");
+        Integer pageNum = (Integer) conditionMap.get("pageNum");
+        Integer offset = (pageNum - 1) * pageSize;
+
+        conditionMap.put("offset", offset);
+
+        // 获取动态表单列表
+        List<DfDynamicForm> dfDynamicFormList = this.dfDynamicFormMapper.findDynamicFormByCondition(conditionMap);
+        List<DfDynamicFormDTO> dfDynamicFormDTOList = this.dynamicFormList2DynamicFormDTOList(dfDynamicFormList);
+        int count = this.dfDynamicFormMapper.findDynamicFormCountByCondition(conditionMap);
+
+        resultMap.put("listInfo", dfDynamicFormDTOList);
+        resultMap.put("total", count);
+        return resultMap;
+    }
+
     /**
      * 将DynamicFormList转化为DynamicFormDTOList
      * @param dfDynamicFormList
