@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author yuanli
+ * rabbitMQ 配置
+ */
 @Configuration
 public class RabbitConfigurer {
 
