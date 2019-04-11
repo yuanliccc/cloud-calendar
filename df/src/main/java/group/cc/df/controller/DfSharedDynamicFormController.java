@@ -6,22 +6,20 @@ import group.cc.df.model.DfSharedDynamicForm;
 import group.cc.df.service.DfSharedDynamicFormService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gxd
  * @date 2019/04/09
  */
-@CrossOrigin("*")
+@CrossOrigin()
 @RestController
-@RequestMapping("/df/shared/dynamic/form")
+@RequestMapping("/api/df/shared/dynamic/form")
 public class DfSharedDynamicFormController {
     @Resource
     private DfSharedDynamicFormService dfSharedDynamicFormService;
@@ -61,5 +59,12 @@ public class DfSharedDynamicFormController {
         List<DfSharedDynamicForm> list = dfSharedDynamicFormService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("查询符合条件的正常分享状态下的表单模板")
+    @PostMapping("/findNormalSharedDynamicFormByCondition")
+    public Result findNormalSharedDynamicFormByCondition(@RequestBody Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = this.dfSharedDynamicFormService.findNormalSharedDynamicFormByCondition(conditionMap);
+        return ResultGenerator.genSuccessResult(resultMap);
     }
 }

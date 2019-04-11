@@ -1,16 +1,11 @@
 package group.cc.df.service.impl;
 
-import group.cc.df.dao.DfDynamicFormMapper;
-import group.cc.df.dao.DfFormFieldMapper;
-import group.cc.df.dao.DfFormItemMapper;
-import group.cc.df.dao.DfUserMapper;
+import group.cc.df.dao.*;
 import group.cc.df.dto.DfDynamicFormDTO;
-import group.cc.df.model.DfDynamicForm;
-import group.cc.df.model.DfFormField;
-import group.cc.df.model.DfFormItem;
-import group.cc.df.model.DfUser;
+import group.cc.df.model.*;
 import group.cc.df.service.DfDynamicFormService;
 import group.cc.core.AbstractService;
+import group.cc.df.utils.ShareFormStateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Service;
@@ -39,6 +34,9 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
 
     @Resource
     private DfUserMapper dfUserMapper;
+
+    @Resource
+    private DfSharedDynamicFormMapper dfSharedDynamicFormMapper;
 
     @Override
     public void saveDynamicForm(Map<String, Object> dfMap) {
@@ -524,5 +522,19 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     @Override
     public int findDynamicFormCount() {
         return this.dfDynamicFormMapper.findDynamicFormCount();
+    }
+
+    @Override
+    public void shareDynamicForm(Integer formId) {
+        Integer userId = ((DfUser) SecurityUtils.getSubject().getSession().getAttribute("user")).getId();
+
+        DfSharedDynamicForm sharedDynamicForm = new DfSharedDynamicForm();
+        sharedDynamicForm.setFormId(formId);
+        sharedDynamicForm.setShareTime(new Date());
+        sharedDynamicForm.setHolderId(userId);
+        sharedDynamicForm.setClonedcount(0);
+        sharedDynamicForm.setState(ShareFormStateUtil.NORMAL);
+
+        this.dfSharedDynamicFormMapper.insert(sharedDynamicForm);
     }
 }

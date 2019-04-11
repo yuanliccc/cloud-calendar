@@ -20,7 +20,7 @@ public class DfSharedDynamicForm {
 
     private String state;
 
-    @Column(name = "clonedCount")
+    @Column(name = "cloned_count")
     private Integer clonedcount;
 
     /**

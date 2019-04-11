@@ -12,4 +12,27 @@
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="clonedCount" jdbcType="INTEGER" property="clonedcount" />
   </resultMap>
+
+  <select id="findSharedDynamicFormByCondition" resultType="group.cc.df.model.DfSharedDynamicForm">
+    SELECT id AS id, holder_id AS holderId, form_id AS formId, share_time AS shareTime, state AS state,
+    cloned_count AS clonedCount FROM df_shared_dynamic_form WHERE 1 = 1
+    <if test="holderId != null">
+      AND holder_id = #{holderId}
+    </if>
+    <if test="state != null and state != ''">
+      AND state = #{state}
+    </if>
+    ORDER BY share_time DESC
+    LIMIT #{offset}, #{pageSize}
+  </select>
+
+  <select id="findSharedDynamicFormCountByCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM df_shared_dynamic_form WHERE 1 = 1
+    <if test="holderId != null">
+      AND holder_id = #{holderId}
+    </if>
+    <if test="state != null and state != ''">
+      AND state = #{state}
+    </if>
+  </select>
 </mapper>

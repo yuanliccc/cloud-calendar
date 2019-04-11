@@ -126,4 +126,11 @@ public class DfUserController {
 
         return ResultGenerator.genSuccessResult(userInfo);
     }
+
+    @ApiOperation("根据用户姓名进行模糊查询")
+    @GetMapping("/findUserLikeName/{name}")
+    public Result findUserLikeName(@PathVariable("name") String name) {
+        List<DfUser> dfUserList = this.dfUserService.findUserLikeName(name);
+        return ResultGenerator.genSuccessResult(dfUserList);
+    }
 }

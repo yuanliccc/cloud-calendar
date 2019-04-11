@@ -26,4 +26,9 @@ public class DfUserServiceImpl extends AbstractService<DfUser> implements DfUser
     public List<DfUser> getUserByUserName(String userName) {
         return this.dfUserMapper.getUserByUserName(userName);
     }
+
+    @Override
+    public List<DfUser> findUserLikeName(String name) {
+        return this.dfUserMapper.findUserLikeName(name);
+    }
 }
