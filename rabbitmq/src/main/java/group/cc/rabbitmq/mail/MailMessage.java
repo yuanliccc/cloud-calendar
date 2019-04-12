@@ -1,7 +1,9 @@
 package group.cc.rabbitmq.mail;
 
+import group.cc.core.json.JSONUtil;
 import group.cc.rabbitmq.message.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,4 +90,36 @@ public class MailMessage extends Message {
         this.contentParser = contentParser;
     }
 
+    /**
+     * 从 {@link #fromUser} JSON 字符串中获取指定 key 的 value
+     * @param key 指定 key
+     * @return value
+     */
+    public Object fromUserJSON(Object key) {
+        return JSONUtil.get(fromUser, key);
+    }
+
+    /**
+     * 从 {@link #toUser} JSON 字符串中获取指定 key 的 value
+     * @param key 指定 key
+     * @return value
+     */
+    public Object toUserJSON(Object key) {
+        return JSONUtil.get(toUser, key);
+    }
+
+    /**
+     * 从 {@link #attachments} JSON 字符串列表中获取指定 key 的 value 列表
+     * @param key 指定 key
+     * @return value 列表
+     */
+    public List<Object> attachmentsJSON(Object key) {
+        List<Object> list = new ArrayList<>(attachments.size());
+
+        attachments.forEach((attachment) -> {
+            list.add(JSONUtil.get(attachment, key));
+        });
+
+        return list;
+    }
 }
