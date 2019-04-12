@@ -67,4 +67,11 @@ public class DfSharedDynamicFormController {
         Map<String, Object> resultMap = this.dfSharedDynamicFormService.findNormalSharedDynamicFormByCondition(conditionMap);
         return ResultGenerator.genSuccessResult(resultMap);
     }
+
+    @ApiOperation("克隆指定的表单")
+    @GetMapping("/cloneDynamicForm/{sharedId}/{formId}")
+    public Result cloneDynamicForm(@PathVariable("sharedId") Integer sharedId, @PathVariable("formId") Integer formId) {
+        this.dfSharedDynamicFormService.cloneDynamicForm(sharedId, formId);
+        return ResultGenerator.genSuccessResult();
+    }
 }

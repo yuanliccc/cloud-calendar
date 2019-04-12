@@ -21,7 +21,7 @@ public class DfSharedDynamicForm {
     private String state;
 
     @Column(name = "cloned_count")
-    private Integer clonedcount;
+    private Integer clonedCount;
 
     /**
      * @return id
@@ -93,17 +93,11 @@ public class DfSharedDynamicForm {
         this.state = state;
     }
 
-    /**
-     * @return clonedCount
-     */
-    public Integer getClonedcount() {
-        return clonedcount;
+    public Integer getClonedCount() {
+        return clonedCount;
     }
 
-    /**
-     * @param clonedcount
-     */
-    public void setClonedcount(Integer clonedcount) {
-        this.clonedcount = clonedcount;
+    public void setClonedCount(Integer clonedCount) {
+        this.clonedCount = clonedCount;
     }
 }

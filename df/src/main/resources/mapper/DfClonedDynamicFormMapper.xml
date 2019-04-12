@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="group.cc.df.dao.DfClonedDynamicFormMapper">
+  <resultMap id="BaseResultMap" type="group.cc.df.model.DfClonedDynamicForm">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="clone_time" jdbcType="TIMESTAMP" property="cloneTime" />
+    <result column="employee_id" jdbcType="INTEGER" property="employeeId" />
+    <result column="form_id" jdbcType="INTEGER" property="formId" />
+    <result column="new_form_id" jdbcType="INTEGER" property="newFormId" />
+  </resultMap>
+
+  <insert id="saveClonedDynamicForm" useGeneratedKeys="true" keyProperty="id" parameterType="group.cc.df.model.DfClonedDynamicForm">
+    INSERT INTO df_cloned_dynamic_form(clone_time, employee_id, form_id, new_form_id)
+    VALUES(#{cloneTime}, #{employeeId}, #{formId}, #{newFormId})
+  </insert>
+</mapper>

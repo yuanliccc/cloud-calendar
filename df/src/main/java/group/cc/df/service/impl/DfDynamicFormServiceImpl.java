@@ -532,7 +532,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         sharedDynamicForm.setFormId(formId);
         sharedDynamicForm.setShareTime(new Date());
         sharedDynamicForm.setHolderId(userId);
-        sharedDynamicForm.setClonedcount(0);
+        sharedDynamicForm.setClonedCount(0);
         sharedDynamicForm.setState(ShareFormStateUtil.NORMAL);
 
         this.dfSharedDynamicFormMapper.insert(sharedDynamicForm);

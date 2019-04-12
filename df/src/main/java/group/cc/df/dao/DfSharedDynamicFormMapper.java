@@ -21,4 +21,11 @@ public interface DfSharedDynamicFormMapper extends Mapper<DfSharedDynamicForm> {
      * @return
      */
     int findSharedDynamicFormCountByCondition(Map<String, Object> conditionMap);
+
+    /**
+     * 更新分享的模板表单信息
+     * @param sharedDynamicForm
+     * @return
+     */
+    int updateSharedDynamicForm(DfSharedDynamicForm sharedDynamicForm);
 }
