@@ -5,6 +5,7 @@ import group.cc.df.dto.DfDynamicFormDTO;
 import group.cc.df.model.*;
 import group.cc.df.service.DfDynamicFormService;
 import group.cc.core.AbstractService;
+import group.cc.df.utils.DynamicFormPublishState;
 import group.cc.df.utils.ShareFormStateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -43,6 +44,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         DfDynamicForm df = handleFormConfig(dfMap);
 
         df.setCreateTime(new Date());
+        df.setPublishState(DynamicFormPublishState.NO_PUBLISH);
 
         Session session = SecurityUtils.getSubject().getSession();
         DfUser user = (DfUser) session.getAttribute("user");
@@ -536,5 +538,13 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         sharedDynamicForm.setState(ShareFormStateUtil.NORMAL);
 
         this.dfSharedDynamicFormMapper.insert(sharedDynamicForm);
+    }
+
+    @Override
+    public void publishDynamicForm(Integer formId) {
+        DfDynamicForm dynamicForm = this.dfDynamicFormMapper.selectByPrimaryKey(formId);
+        // 修改设备状态为已发布状态
+        dynamicForm.setPublishState(DynamicFormPublishState.PUBLISH);
+        this.dfDynamicFormMapper.updateDynamicForm(dynamicForm);
     }
 }

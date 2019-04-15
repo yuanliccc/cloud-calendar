@@ -49,4 +49,10 @@ public interface DfDynamicFormService extends Service<DfDynamicForm> {
      * @param formId
      */
     void shareDynamicForm(Integer formId);
+
+    /**
+     * 发布动态表单
+     * @param formId
+     */
+    void publishDynamicForm(Integer formId);
 }

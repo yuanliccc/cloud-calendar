@@ -112,4 +112,11 @@ public class DfDynamicFormController {
         this.dfDynamicFormService.shareDynamicForm(formId);
         return ResultGenerator.genSuccessResult();
     }
+
+    @ApiOperation("发布表单")
+    @GetMapping("/publishDynamicForm/{formId}")
+    public Result publishDynamicForm(@PathVariable("formId") Integer formId) {
+        this.dfDynamicFormService.publishDynamicForm(formId);
+        return ResultGenerator.genSuccessResult();
+    }
 }
