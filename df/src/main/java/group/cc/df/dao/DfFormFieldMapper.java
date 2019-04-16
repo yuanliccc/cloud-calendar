@@ -24,4 +24,6 @@ public interface DfFormFieldMapper extends Mapper<DfFormField> {
      * @return
      */
     List<DfFormField> findDynamicFormFieldListByParentId(Integer parentId);
+
+    int saveCollectFormField(DfFormField dfFormField);
 }

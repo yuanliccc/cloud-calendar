@@ -62,4 +62,9 @@
     SELECT id, form_id, label, name, type, value, parent_id, display_index, `key`, model FROM df_form_field
     WHERE parent_id = #{parentId}
   </select>
+
+  <insert id="saveCollectFormField" keyProperty="id" useGeneratedKeys="true" parameterType="group.cc.df.model.DfFormField">
+    INSERT INTO df_collect_form_field(collect_form_id, label, name, type, value, parent_id, display_index) VALUES
+    (#{formId}, #{label}, #{name}, #{type}, #{value}, #{parentId}, #{displayIndex})
+  </insert>
 </mapper>

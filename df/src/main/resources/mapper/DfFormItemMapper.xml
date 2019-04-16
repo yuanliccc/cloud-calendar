@@ -45,11 +45,16 @@
   </delete>
 
   <insert id="saveFormItem" useGeneratedKeys="true" keyProperty="id" parameterType="group.cc.df.model.DfFormItem">
-    INSERT INTO df_form_item(id, form_field_id, value, label, item_index)
-    VALUES(#{id}, #{formFieldId}, #{value}, #{label}, #{itemIndex})
+    INSERT INTO df_form_item(form_field_id, value, label, item_index)
+    VALUES(#{formFieldId}, #{value}, #{label}, #{itemIndex})
   </insert>
 
   <delete id="deleteFormItemByFieldId" parameterType="java.lang.Integer">
     DELETE FROM df_form_item WHERE form_field_id = #{formFieldId}
   </delete>
+
+  <insert id="saveCollectFormItem" useGeneratedKeys="true" keyProperty="id" parameterType="group.cc.df.model.DfFormItem">
+    INSERT INTO df_collect_form_item(collect_field_id, value, label, item_index)
+    VALUES(#{formFieldId}, #{value}, #{label}, #{itemIndex})
+  </insert>
 </mapper>
