@@ -513,6 +513,9 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
             DfDynamicFormDTO dto = new DfDynamicFormDTO();
             dto.setDfDynamicForm(dynamicForm);
             DfUser holder = this.dfUserMapper.selectByPrimaryKey(dynamicForm.getEmployeeId());
+            List<DfSharedDynamicForm> sharedFormList = this.dfSharedDynamicFormMapper.findSharedDynamicFormByFormId(dynamicForm.getId());
+            DfSharedDynamicForm sharedForm = sharedFormList == null || sharedFormList.isEmpty() ? null : sharedFormList.get(0);
+            dto.setSharedForm(sharedForm);
             dto.setHolder(holder);
 
             dfDynamicFormDTOList.add(dto);
@@ -530,14 +533,24 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     public void shareDynamicForm(Integer formId) {
         Integer userId = ((DfUser) SecurityUtils.getSubject().getSession().getAttribute("user")).getId();
 
-        DfSharedDynamicForm sharedDynamicForm = new DfSharedDynamicForm();
-        sharedDynamicForm.setFormId(formId);
-        sharedDynamicForm.setShareTime(new Date());
-        sharedDynamicForm.setHolderId(userId);
-        sharedDynamicForm.setClonedCount(0);
-        sharedDynamicForm.setState(ShareFormStateUtil.NORMAL);
+        List<DfSharedDynamicForm> dfSharedDynamicFormList = this.dfSharedDynamicFormMapper.findSharedDynamicFormByFormId(formId);
 
-        this.dfSharedDynamicFormMapper.insert(sharedDynamicForm);
+        if (dfSharedDynamicFormList == null || dfSharedDynamicFormList.isEmpty()) {
+            DfSharedDynamicForm sharedDynamicForm = new DfSharedDynamicForm();
+            sharedDynamicForm.setFormId(formId);
+            sharedDynamicForm.setShareTime(new Date());
+            sharedDynamicForm.setHolderId(userId);
+            sharedDynamicForm.setClonedCount(0);
+            sharedDynamicForm.setState(ShareFormStateUtil.NORMAL);
+
+            this.dfSharedDynamicFormMapper.insert(sharedDynamicForm);
+        } else {
+            DfSharedDynamicForm sharedDynamicForm = dfSharedDynamicFormList.get(0);
+            sharedDynamicForm.setState(ShareFormStateUtil.NORMAL);
+
+            this.dfSharedDynamicFormMapper.updateSharedDynamicForm(sharedDynamicForm);
+        }
+
     }
 
     @Override

@@ -28,4 +28,12 @@ public interface DfSharedDynamicFormMapper extends Mapper<DfSharedDynamicForm> {
      * @return
      */
     int updateSharedDynamicForm(DfSharedDynamicForm sharedDynamicForm);
+
+    /**
+     * 根据表单名称获取分享的表单信息
+     * 因为一条表单只会有一条分享信息,所以直接去List中的第一个元素即可
+     * @param formId
+     * @return
+     */
+    List<DfSharedDynamicForm> findSharedDynamicFormByFormId(Integer formId);
 }

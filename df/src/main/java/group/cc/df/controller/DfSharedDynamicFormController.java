@@ -74,4 +74,11 @@ public class DfSharedDynamicFormController {
         this.dfSharedDynamicFormService.cloneDynamicForm(sharedId, formId);
         return ResultGenerator.genSuccessResult();
     }
+
+    @ApiOperation("取消分享表单")
+    @GetMapping("/cancelShareDynamicForm/{formId}")
+    public Result cancelShareDynamicForm(@PathVariable("formId") Integer formId) {
+        this.dfSharedDynamicFormService.cancelShareDynamicForm(formId);
+        return ResultGenerator.genSuccessResult();
+    }
 }

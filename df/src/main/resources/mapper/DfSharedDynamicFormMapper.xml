@@ -40,4 +40,9 @@
     UPDATE df_shared_dynamic_form SET holder_id = #{holderId}, form_id = #{formId}, share_time = #{shareTime},
     state = #{state}, cloned_count = #{clonedCount} WHERE id = #{id}
   </update>
+
+  <select id="findSharedDynamicFormByFormId" resultType="group.cc.df.model.DfSharedDynamicForm">
+    SELECT id AS id, holder_id AS holderId, form_id AS formId, share_time AS shareTime, state AS state,
+    cloned_count AS clonedCount FROM df_shared_dynamic_form WHERE form_id = #{formId}
+  </select>
 </mapper>

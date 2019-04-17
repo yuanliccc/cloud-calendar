@@ -1,6 +1,7 @@
 package group.cc.df.dto;
 
 import group.cc.df.model.DfDynamicForm;
+import group.cc.df.model.DfSharedDynamicForm;
 import group.cc.df.model.DfUser;
 
 /**
@@ -18,6 +19,11 @@ public class DfDynamicFormDTO {
      */
     private DfUser holder;
 
+    /**
+     * 分享表单信息
+     */
+    private DfSharedDynamicForm sharedForm;
+
     public DfDynamicForm getDfDynamicForm() {
         return dfDynamicForm;
     }
@@ -32,5 +38,13 @@ public class DfDynamicFormDTO {
 
     public void setHolder(DfUser holder) {
         this.holder = holder;
+    }
+
+    public DfSharedDynamicForm getSharedForm() {
+        return sharedForm;
+    }
+
+    public void setSharedForm(DfSharedDynamicForm sharedForm) {
+        this.sharedForm = sharedForm;
     }
 }

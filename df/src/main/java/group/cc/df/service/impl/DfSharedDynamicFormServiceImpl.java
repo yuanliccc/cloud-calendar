@@ -182,7 +182,6 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
      * @param newFieldId
      */
     private void cloneFormItem(Integer oldFieldId, Integer newFieldId) {
-        // TODO 根据oldFieldId查询出要克隆的条目
         List<DfFormItem> formItemList = this.dfFormItemMapper.findDfFormItemsByFieldId(oldFieldId);
 
         for (DfFormItem formItem: formItemList) {
@@ -190,5 +189,19 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
             formItem.setFormFieldId(newFieldId);
             this.dfFormItemMapper.saveFormItem(formItem);
         }
+    }
+
+    @Override
+    public void cancelShareDynamicForm(Integer formId) {
+        // 首先获取到要取消的表单的分享记录
+        List<DfSharedDynamicForm> sharedFormList = this.dfSharedDynamicFormMapper.findSharedDynamicFormByFormId(formId);
+        if (sharedFormList == null || sharedFormList.isEmpty()) {
+            return;
+        }
+
+        DfSharedDynamicForm sharedForm = sharedFormList.get(0);
+        // 设置状态为已关闭
+        sharedForm.setState(ShareFormStateUtil.CLOSED);
+        this.dfSharedDynamicFormMapper.updateSharedDynamicForm(sharedForm);
     }
 }

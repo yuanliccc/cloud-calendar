@@ -24,4 +24,10 @@ public interface DfSharedDynamicFormService extends Service<DfSharedDynamicForm>
      * @param formId
      */
     void cloneDynamicForm(Integer sharedId, Integer formId);
+
+    /**
+     * 取消置顶表单的分享状态
+     * @param formId
+     */
+    void cancelShareDynamicForm(Integer formId);
 }
