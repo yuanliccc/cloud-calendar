@@ -23,6 +23,9 @@ public class DfDynamicForm {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "publish_state")
+    private String publishState;
+
     /**
      * @return id
      */
@@ -119,5 +122,13 @@ public class DfDynamicForm {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getPublishState() {
+        return publishState;
+    }
+
+    public void setPublishState(String publishState) {
+        this.publishState = publishState;
     }
 }

@@ -17,4 +17,11 @@ public interface DfSharedDynamicFormService extends Service<DfSharedDynamicForm>
      * @return
      */
     Map<String, Object> findNormalSharedDynamicFormByCondition(Map<String, Object> conditionMap);
+
+    /**
+     * 克隆指定的表单
+     * @param sharedId
+     * @param formId
+     */
+    void cloneDynamicForm(Integer sharedId, Integer formId);
 }

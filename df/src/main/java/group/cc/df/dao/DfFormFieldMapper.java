@@ -17,4 +17,13 @@ public interface DfFormFieldMapper extends Mapper<DfFormField> {
     List<DfFormField> findUselessFormFields(@Param("fieldIdList") List<Integer> fieldIdList, @Param("formId") Integer formId);
 
     int deleteFormFieldById(Integer formFieldId);
+
+    /**
+     * 根据parentId查询表单列表
+     * @param parentId
+     * @return
+     */
+    List<DfFormField> findDynamicFormFieldListByParentId(Integer parentId);
+
+    int saveCollectFormField(DfFormField dfFormField);
 }

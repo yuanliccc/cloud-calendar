@@ -10,7 +10,7 @@
     <result column="form_id" jdbcType="INTEGER" property="formId" />
     <result column="share_time" jdbcType="TIMESTAMP" property="shareTime" />
     <result column="state" jdbcType="VARCHAR" property="state" />
-    <result column="clonedCount" jdbcType="INTEGER" property="clonedcount" />
+    <result column="cloned_count" jdbcType="INTEGER" property="clonedCount" />
   </resultMap>
 
   <select id="findSharedDynamicFormByCondition" resultType="group.cc.df.model.DfSharedDynamicForm">
@@ -35,4 +35,9 @@
       AND state = #{state}
     </if>
   </select>
+
+  <update id="updateSharedDynamicForm" parameterType="group.cc.df.model.DfSharedDynamicForm">
+    UPDATE df_shared_dynamic_form SET holder_id = #{holderId}, form_id = #{formId}, share_time = #{shareTime},
+    state = #{state}, cloned_count = #{clonedCount} WHERE id = #{id}
+  </update>
 </mapper>
