@@ -6,6 +6,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,8 @@ public class RabbitConfigurer {
 
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMandatory(true);
+
+        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
 
         rabbitTemplate.setConfirmCallback((CorrelationData correlationData, boolean ack, String cause) -> {
             log.info("消息发送成功 : correlationData({}),ack({}),cause({})", correlationData, ack, cause);

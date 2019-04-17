@@ -5,6 +5,9 @@ import com.yl.common.validate.Validator;
 import group.cc.mail.Mail;
 import group.cc.mail.MailException;
 import group.cc.mail.config.MailHostsHolder;
+import group.cc.mail.parse.parser.MailToUserValidator;
+import group.cc.mail.validate.MailProtocolValidator;
+import group.cc.mail.validate.MailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,10 +34,10 @@ public class MailConfigurer {
     private String defaultMailProtocol;
 
     @Autowired
-    private Validator<String> mailValidator;
+    private MailValidator mailValidator;
 
     @Autowired
-    private Validator<String> mailProtocolValidator;
+    private MailProtocolValidator mailProtocolValidator;
 
     @Autowired
     private Parser<String, String[]> mailParser;

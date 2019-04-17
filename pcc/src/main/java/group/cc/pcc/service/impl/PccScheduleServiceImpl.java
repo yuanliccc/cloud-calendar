@@ -1,20 +1,30 @@
 package group.cc.pcc.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yl.common.util.StringUtil;
 import group.cc.pcc.dao.*;
 import group.cc.pcc.model.PccSchedule;
 import group.cc.pcc.model.PccText;
+import group.cc.pcc.model.PccUser;
 import group.cc.pcc.model.builder.*;
 import group.cc.pcc.model.dto.PccScheduleComplete;
 import group.cc.pcc.model.dto.PccScheduleDto;
 import group.cc.pcc.service.PccScheduleService;
 import group.cc.core.AbstractService;
+import group.cc.rabbitmq.mail.MailMessage;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,15 +56,18 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
     @Resource
     private PccScheduleAdditionalTypeMapper pccScheduleAdditionalTypeMapper;
 
+    @Resource
+    private PccUserMapper pccUserMapper;
+
+    @Resource
+    private RabbitTemplate rabbitTemplate;
+
     @Override
     public List<Map<String, Object>> dayCount(Date startDate, Date endDate, Integer pccUserId) {
-
-        /*Example example = new Example(PccSchedule.class);
-        Example.Criteria criteria = example.createCriteria();*/
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
 
-        return pccScheduleMapper.dayCount(simpleDateFormat.format(startDate), simpleDateFormat.format(endDate), pccUserId);
+        return pccScheduleMapper
+                .dayCount(simpleDateFormat.format(startDate), simpleDateFormat.format(endDate), pccUserId);
     }
 
     @Override
@@ -81,6 +94,35 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
         pccScheduleAdditionalTypeMapper.insertList(PccScheduleAdditionalTypeBuilder
                 .build(pccScheduleDto.getAdditionalInfoTypes(), insertPccScheduleId));
 
+        String receiversIds = Arrays.asList(pccScheduleDto.getScheduleReceivers())
+                .stream()
+                .map(id -> id + "")
+                .collect(Collectors.joining(","));
+
+        List<PccUser> receivers = pccUserMapper.selectByIds(receiversIds);
+        PccUser sender = pccUserMapper.selectByPrimaryKey(pccScheduleDto.getPccSchedule().getPccUserId());
+        // 邮件通知
+        MailMessage mailMessage = new MailMessage();
+        mailMessage.setFromUser(JSONObject.toJSONString(sender));
+
+        String[] receiversJSON = new String[receivers.size()];
+        for(int i = 0; i < receivers.size(); i++) {
+            receiversJSON[i] = JSONObject.toJSONString(receivers.get(i));
+        }
+        mailMessage.setToUsers(receiversJSON);
+
+        mailMessage.setContent(pccScheduleDto.getPccSchedule().toInfo());
+
+        MessageProperties messageProperties = new MessageProperties();
+        messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
+        Message message = MessageBuilder
+                .withBody(JSONObject.toJSONString(mailMessage).getBytes())
+                .andProperties(messageProperties)
+                .build();
+
+        rabbitTemplate.convertAndSend("calendar.mail.exchange"
+                , "calendar.mail.routing.key"
+                , message);
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * 如： abc@163.com 返回：["abc","@163"]
  * @author YuanLi
  */
-@Component
+@Component("mailParser")
 public class MailParser implements Parser<String, String[]> {
 
     @Override

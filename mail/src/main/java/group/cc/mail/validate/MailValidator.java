@@ -10,11 +10,9 @@ import org.springframework.stereotype.Component;
  * @author YuanLi
  */
 @Component("mailValidator")
-@PropertySource({"classpath:application.properties"})
 public class MailValidator implements Validator<String> {
 
-    @Value("${cc.mail.mail.pattern}")
-    private String mailPattern;
+    private String mailPattern = "^[\\w-]+@[\\w-]+([.][\\w-]+)+$";
 
     @Override
     public boolean validate(String s) {
