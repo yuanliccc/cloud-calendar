@@ -4,6 +4,7 @@ import group.cc.core.json.JSONUtil;
 import group.cc.rabbitmq.message.Message;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +21,12 @@ public class MailMessage extends Message {
     /**
      * json
      */
-    private String toUser;
+    private String[] toUsers;
+
+    /**
+     * 邮箱主题
+     */
+    private String subject;
 
     /**
      * 邮件内容
@@ -28,7 +34,8 @@ public class MailMessage extends Message {
     private String content;
 
     /**
-     * 邮件内容解析器，类名即可（消费端将直接获取 spring 容器内相应名称的 bean 调用 parse 方法进行处理，此过程不做任何判断）
+     * 邮件内容解析器，类名即可（消费端将直接获取 spring 容器内相应名称的 bean
+     * 调用 parse 方法进行处理，此过程不做任何判断）
      */
     private String contentParser;
 
@@ -36,6 +43,8 @@ public class MailMessage extends Message {
      * List<json>
      */
     private List<String> attachments;
+
+    public MailMessage(){}
 
     public MailMessage(String content, List<String> attachments) {
         this.content = content;
@@ -74,12 +83,12 @@ public class MailMessage extends Message {
         this.fromUser = fromUser;
     }
 
-    public String getToUser() {
-        return toUser;
+    public String[] getToUsers() {
+        return toUsers;
     }
 
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
+    public void setToUsers(String[] toUsers) {
+        this.toUsers = toUsers;
     }
 
     public String getContentParser() {
@@ -100,12 +109,18 @@ public class MailMessage extends Message {
     }
 
     /**
-     * 从 {@link #toUser} JSON 字符串中获取指定 key 的 value
+     * 从 {@link #toUsers} JSON 字符串中获取指定 key 的 value 列表
      * @param key 指定 key
-     * @return value
+     * @return value 列表
      */
-    public Object toUserJSON(Object key) {
-        return JSONUtil.get(toUser, key);
+    public String[] toUsersJSON(Object key) {
+        String[] list = new String[toUsers.length];
+
+        for(int i = 0; i < toUsers.length; i++) {
+            list[i] = JSONUtil.get(toUsers[i], key).toString();
+        }
+
+        return list;
     }
 
     /**
@@ -121,5 +136,13 @@ public class MailMessage extends Message {
         });
 
         return list;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

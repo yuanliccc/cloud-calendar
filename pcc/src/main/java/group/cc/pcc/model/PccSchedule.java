@@ -165,4 +165,16 @@ public class PccSchedule {
         this.isDelete = isDelete;
     }
 
+    public String toInfo() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(createTime.toString())
+        .append(" => ")
+        .append(deadline.toString())
+        .append("\n")
+        .append(content);
+
+        return sb.toString();
+    }
+
 }

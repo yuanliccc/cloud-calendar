@@ -39,7 +39,6 @@ public class RabbitMQConfigurer {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 
         factory.setConnectionFactory(connectionFactory);
-        factory.setMessageConverter(new Jackson2JsonMessageConverter());
 
         factory.setConcurrentConsumers(1);
         factory.setMaxConcurrentConsumers(1);
@@ -61,7 +60,6 @@ public class RabbitMQConfigurer {
 
         factoryConfigurer.configure(factory, connectionFactory);
 
-        factory.setMessageConverter(new Jackson2JsonMessageConverter());
         factory.setAcknowledgeMode(AcknowledgeMode.NONE);
 
         factory.setConcurrentConsumers(env.getProperty("spring.rabbitmq.listener.concurrency", int.class));
