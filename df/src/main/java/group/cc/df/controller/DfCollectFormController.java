@@ -6,6 +6,7 @@ import group.cc.df.model.DfCollectForm;
 import group.cc.df.service.DfCollectFormService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.ApiOperation;
 
@@ -66,5 +67,12 @@ public class DfCollectFormController {
     public Result saveCollectForm(@RequestBody Map<String, Object> collectFormMap) {
         this.dfCollectFormService.saveCollectForm(collectFormMap);
         return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("查询当前用户所填写对应Id的收集表单信息")
+    @GetMapping("/findSelfCollectFormByFormId/{formId}")
+    public Result findSelfCollectFormByFormId(@PathVariable("formId") Integer formId) {
+        DfCollectForm collectForm = this.dfCollectFormService.findSelfCollectFormByFormId(formId);
+        return ResultGenerator.genSuccessResult(collectForm);
     }
 }

@@ -5,6 +5,7 @@ import group.cc.df.dto.DfSharedDynamicFormDTO;
 import group.cc.df.model.*;
 import group.cc.df.service.DfSharedDynamicFormService;
 import group.cc.core.AbstractService;
+import group.cc.df.utils.DynamicFormPublishState;
 import group.cc.df.utils.ShareFormStateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
@@ -129,6 +130,7 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
         dynamicForm.setId(null);
         dynamicForm.setEmployeeId(user.getId());
         dynamicForm.setCreateTime(new Date());
+        dynamicForm.setPublishState(DynamicFormPublishState.NO_PUBLISH);
         // 保存一条新的表单记录
         this.dfDynamicFormMapper.saveDynamicForm(dynamicForm);
 

@@ -16,4 +16,11 @@ public interface DfCollectFormService extends Service<DfCollectForm> {
      * @param collectFormMap
      */
     void saveCollectForm(Map<String, Object> collectFormMap);
+
+    /**
+     * 查询当前用户填写的对应表单Id的收集表单信息
+     * @param formId
+     * @return
+     */
+    DfCollectForm findSelfCollectFormByFormId(Integer formId);
 }

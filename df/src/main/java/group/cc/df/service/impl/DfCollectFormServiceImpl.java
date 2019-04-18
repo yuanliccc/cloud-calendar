@@ -51,6 +51,16 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
 
     }
 
+    @Override
+    public DfCollectForm findSelfCollectFormByFormId(Integer formId) {
+        DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
+        Integer userId = user.getId();
+        // 因为每个表单用户只能填写一次,所以查询出来的记录要么为空,要么只有第一条
+        List<DfCollectForm> collectFormList = this.dfCollectFormMapper.findCollectFormByEmployeeIdAndFormId(userId, formId);
+
+        return collectFormList == null || collectFormList.isEmpty() ? null : collectFormList.get(0);
+    }
+
     private void saveCollectFormField(List<Map<String, Object>> collectFieldList, Integer displayIndex,
                                       Integer collectFormId, Integer parentId) {
         for (Map<String, Object> collectFieldMap : collectFieldList) {
