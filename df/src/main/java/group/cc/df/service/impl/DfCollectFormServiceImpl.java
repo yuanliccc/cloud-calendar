@@ -2,11 +2,11 @@ package group.cc.df.service.impl;
 
 import group.cc.core.AbstractService;
 import group.cc.df.dao.DfCollectFormMapper;
+import group.cc.df.dao.DfDynamicFormMapper;
 import group.cc.df.dao.DfFormFieldMapper;
-import group.cc.df.model.DfCollectForm;
-import group.cc.df.model.DfFormField;
-import group.cc.df.model.DfFormItem;
-import group.cc.df.model.DfUser;
+import group.cc.df.dao.DfUserMapper;
+import group.cc.df.dto.DfCollectFormDTO;
+import group.cc.df.model.*;
 import group.cc.df.service.DfCollectFormService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -33,6 +30,12 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
 
     @Resource
     private DfFormFieldMapper dfFormFieldMapper;
+
+    @Resource
+    private DfDynamicFormMapper dfDynamicFormMapper;
+
+    @Resource
+    private DfUserMapper dfUserMapper;
 
     @Override
     public void saveCollectForm(Map<String, Object> collectFormMap) {
@@ -264,5 +267,52 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
         }
 
         return null;
+    }
+
+    @Override
+    public Map<String, Object> findCollectFormByCondition(Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        Integer pageSize = (Integer) conditionMap.get("pageSize");
+        Integer pageNum = (Integer) conditionMap.get("pageNum");
+        Integer offset = (pageNum - 1) * pageSize;
+        conditionMap.put("offset", offset);
+
+        List<DfCollectForm> collectFormList = this.dfCollectFormMapper.findCollectFormByCondition(conditionMap);
+        int total = this.dfCollectFormMapper.findCollectFormCountByCondition(conditionMap);
+
+        List<DfCollectFormDTO> collectFormDTOList = this.handleCollectFormList2CollectFormDTOList(collectFormList);
+
+        resultMap.put("listInfo", collectFormDTOList);
+        resultMap.put("total", total);
+        return resultMap;
+    }
+
+    /**
+     * 将CollectForm列表转化为CollectFormDTO列表
+     * @param collectFormList
+     * @return
+     */
+    private List<DfCollectFormDTO> handleCollectFormList2CollectFormDTOList(List<DfCollectForm> collectFormList) {
+        if (collectFormList == null || collectFormList.isEmpty()) {
+            return null;
+        }
+
+        List<DfCollectFormDTO> dfCollectFormDTOList = new ArrayList<>(collectFormList.size());
+        for (DfCollectForm collectForm : collectFormList) {
+            Integer userId = collectForm.getEmployeeId();
+            DfUser user = this.dfUserMapper.selectByPrimaryKey(userId);
+            Integer formId = collectForm.getFormId();
+            DfDynamicForm form = this.dfDynamicFormMapper.selectByPrimaryKey(formId);
+
+            DfCollectFormDTO dto = new DfCollectFormDTO();
+            dto.setCollectForm(collectForm);
+            dto.setDynamicForm(form);
+            dto.setSubmiter(user);
+
+            dfCollectFormDTOList.add(dto);
+        }
+
+        return dfCollectFormDTOList;
     }
 }

@@ -25,5 +25,17 @@ public interface DfFormFieldMapper extends Mapper<DfFormField> {
      */
     List<DfFormField> findDynamicFormFieldListByParentId(Integer parentId);
 
+    /**
+     * 保存收集信息表的表单域信息
+     * @param dfFormField
+     * @return
+     */
     int saveCollectFormField(DfFormField dfFormField);
+
+    /**
+     * 根据收集表的表单Id查询对应的表单域信息
+     * @param formId
+     * @return
+     */
+    List<DfFormField> findCollectFormFieldByCollectFormId(Integer formId);
 }

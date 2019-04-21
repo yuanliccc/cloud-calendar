@@ -5,6 +5,7 @@ import group.cc.df.model.DfCollectForm;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DfCollectFormMapper extends Mapper<DfCollectForm> {
 
@@ -23,4 +24,18 @@ public interface DfCollectFormMapper extends Mapper<DfCollectForm> {
      */
     List<DfCollectForm> findCollectFormByEmployeeIdAndFormId(@Param("employeeId") Integer employeeId,
                                                              @Param("formId") Integer formId);
+
+    /**
+     * 查询符合条件的收集表单信息
+     * @param conditionMap
+     * @return
+     */
+    List<DfCollectForm> findCollectFormByCondition(Map<String, Object> conditionMap);
+
+    /**
+     * 查询符合条件的收集表单的数量
+     * @param conditionMap
+     * @return
+     */
+    int findCollectFormCountByCondition(Map<String, Object> conditionMap);
 }

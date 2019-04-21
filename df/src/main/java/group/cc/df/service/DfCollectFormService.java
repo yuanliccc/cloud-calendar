@@ -23,4 +23,11 @@ public interface DfCollectFormService extends Service<DfCollectForm> {
      * @return
      */
     DfCollectForm findSelfCollectFormByFormId(Integer formId);
+
+    /**
+     * 根据条件查询符合条件的收集表单信息
+     * @param conditionMap
+     * @return
+     */
+    Map<String, Object> findCollectFormByCondition(Map<String, Object> conditionMap);
 }

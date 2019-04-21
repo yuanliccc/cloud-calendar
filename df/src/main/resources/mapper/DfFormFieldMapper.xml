@@ -67,4 +67,10 @@
     INSERT INTO df_collect_form_field(collect_form_id, label, name, type, value, parent_id, display_index) VALUES
     (#{formId}, #{label}, #{name}, #{type}, #{value}, #{parentId}, #{displayIndex})
   </insert>
+
+  <select id="findCollectFormFieldByCollectFormId" resultType="group.cc.df.model.DfFormField">
+    SELECT id AS id, collect_form_id AS formId, label AS label, name AS name, type AS type, value AS value,
+    parent_id AS parentId, display_index AS displayIndex FROM df_collect_form_field
+    WHERE collect_form_id = #{formId} ORDER BY id
+  </select>
 </mapper>

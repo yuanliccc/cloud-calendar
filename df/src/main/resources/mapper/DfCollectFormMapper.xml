@@ -20,4 +20,27 @@
     SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS submitTime FROM df_collect_form
     WHERE employee_id = #{employeeId} AND form_id = #{formId}
   </select>
+
+  <select id="findCollectFormByCondition" resultType="group.cc.df.model.DfCollectForm">
+    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS  submitTime FROM df_collect_form
+    WHERE 1 = 1
+    <if test="userId != null and userId != ''">
+      AND employee_id = #{userId}
+    </if>
+    <if test="formId != null and formId != ''">
+      AND form_id = #{formId}
+    </if>
+    ORDER BY submit_time DESC
+    LIMIT #{offset}, #{pageSize}
+  </select>
+
+  <select id="findCollectFormCountByCondition" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM df_collect_form WHERE 1 = 1
+    <if test="userId != null and userId != ''">
+      AND employee_id = #{userId}
+    </if>
+    <if test="formId != null and formId != ''">
+      AND form_id = #{formId}
+    </if>
+  </select>
 </mapper>

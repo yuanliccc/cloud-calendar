@@ -73,4 +73,9 @@ public class DfFormFieldServiceImpl extends AbstractService<DfFormField> impleme
         }
         return list;
     }
+
+    @Override
+    public List<DfFormField> findCollectFormFieldByCollectFormId(Integer formId) {
+        return this.dfFormFieldMapper.findCollectFormFieldByCollectFormId(formId);
+    }
 }

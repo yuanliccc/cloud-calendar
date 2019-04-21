@@ -67,4 +67,11 @@ public class DfFormFieldController {
         List<DfFieldComponentDTO> list = dfFormFieldService.findDynamicFormFieldsByFormId(formId);
         return ResultGenerator.genSuccessResult(list);
     }
+
+    @ApiOperation("根据收集表的Id查询收集表的表单域信息")
+    @GetMapping("/findCollectFormFieldByCollectFormId/{formId}")
+    public Result findCollectFormFieldByCollectFormId(@PathVariable("formId") Integer formId) {
+        List<DfFormField> formFieldList = this.dfFormFieldService.findCollectFormFieldByCollectFormId(formId);
+        return ResultGenerator.genSuccessResult(formFieldList);
+    }
 }

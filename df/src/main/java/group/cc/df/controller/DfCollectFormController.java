@@ -75,4 +75,11 @@ public class DfCollectFormController {
         DfCollectForm collectForm = this.dfCollectFormService.findSelfCollectFormByFormId(formId);
         return ResultGenerator.genSuccessResult(collectForm);
     }
+
+    @ApiOperation("根据条件查询符合条件的收集表单信息")
+    @PostMapping("/findCollectFormByCondition")
+    public Result findCollectFormByCondition(@RequestBody Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = this.dfCollectFormService.findCollectFormByCondition(conditionMap);
+        return ResultGenerator.genSuccessResult(resultMap);
+    }
 }
