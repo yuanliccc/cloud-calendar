@@ -90,7 +90,9 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
                     List<String> checkboxList = (List<String>) optionsMap.get("defaultValue");
 
                     for (String str : checkboxList) {
-                        defaultValue += str + ",";
+                        if (!"".equals(str)) {
+                            defaultValue += str + ",";
+                        }
                     }
 
                     if (!defaultValue.equals("")) {

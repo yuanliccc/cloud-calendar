@@ -104,7 +104,9 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
                     List<String> checkboxList = (List<String>) optionsMap.get("defaultValue");
 
                     for (String str: checkboxList) {
-                        defaultValue += str + ",";
+                        if (!"".equals(str)) {
+                            defaultValue += str + ",";
+                        }
                     }
 
                     if (!defaultValue.equals("")) {
@@ -359,7 +361,9 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
                     List<String> checkboxList = (List<String>) optionsMap.get("defaultValue");
 
                     for (String str: checkboxList) {
-                        defaultValue += str + ",";
+                        if (!"".equals(str)) {
+                            defaultValue += str + ",";
+                        }
                     }
 
                     if (!defaultValue.equals("")) {
