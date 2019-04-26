@@ -1,0 +1,552 @@
+.
+├── cg
+│   ├── pom.xml
+│   ├── readme.md
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── cg
+│           │               ├── CodeGenerator.java
+│           │               ├── ParameterReader.java
+│           │               ├── VueGenerator.java
+│           │               ├── VueParameterReader.java
+│           │               └── XMCodeGenerator.java
+│           └── resources
+│               ├── application-dev.properties
+│               ├── application-prod.properties
+│               ├── application-test.properties
+│               ├── application.properties
+│               └── template
+│                   ├── controller-restful.ftl
+│                   ├── controller-xm.ftl
+│                   ├── controller.ftl
+│                   ├── service-impl-xm.ftl
+│                   ├── service-impl.ftl
+│                   ├── service-xm.ftl
+│                   ├── service.ftl
+│                   └── vue
+│                       ├── display.ftl
+│                       ├── form.ftl
+│                       ├── list.ftl
+│                       └── route.ftl
+├── core
+│   ├── pom.xml
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── core
+│           │               ├── AbstractService.java
+│           │               ├── Mapper.java
+│           │               ├── Result.java
+│           │               ├── ResultCode.java
+│           │               ├── ResultGenerator.java
+│           │               ├── Service.java
+│           │               ├── ServiceException.java
+│           │               ├── configurer
+│           │               │   ├── MybatisConfigurer.java
+│           │               │   ├── Swagger2Configurer.java
+│           │               │   └── WebMvcImpConfigurer.java
+│           │               └── json
+│           │                   └── JSONUtil.java
+│           └── resources
+│               ├── banner.txt
+│               └── common-env.properties
+├── docs
+│   ├── file_construct.txt
+│   └── rabbitmq
+│       └── install.sh
+├── mail
+│   ├── pom.xml
+│   └── src
+│       ├── main
+│       │   ├── java
+│       │   │   └── group
+│       │   │       └── cc
+│       │   │           └── mail
+│       │   │               ├── Mail.java
+│       │   │               ├── MailApplication.java
+│       │   │               ├── MailException.java
+│       │   │               ├── config
+│       │   │               │   └── MailHostsHolder.java
+│       │   │               ├── configurer
+│       │   │               │   ├── MailConfigurer.java
+│       │   │               │   ├── MailRabbitConfigurer.java
+│       │   │               │   ├── RabbitMQConfigurer.java
+│       │   │               │   └── VelocityConfigurer.java
+│       │   │               ├── listener
+│       │   │               │   └── MailListener.java
+│       │   │               ├── parse
+│       │   │               │   ├── ContentParser.java
+│       │   │               │   ├── MailParser.java
+│       │   │               │   └── parser
+│       │   │               │       ├── AttachmentContentParser.java
+│       │   │               │       ├── MailToUserValidator.java
+│       │   │               │       └── SimpleContentParser.java
+│       │   │               └── validate
+│       │   │                   ├── MailProtocolValidator.java
+│       │   │                   ├── MailValidator.java
+│       │   │                   └── Validator.java
+│       │   └── resources
+│       │       ├── application-dev.properties
+│       │       ├── application.properties
+│       │       ├── mail-server.properties
+│       │       └── templates
+│       │           └── mail-simple-schedule.vm
+│       └── test
+│           └── java
+│               └── group
+│                   └── cc
+│                       └── mail
+│                           └── validate
+│                               └── MailProtocolValidatorTest.java
+├── pcc
+│   ├── docs
+│   │   └── sql
+│   │       └── cc.sql
+│   ├── pom.xml
+│   └── src
+│       ├── main
+│       │   ├── java
+│       │   │   └── group
+│       │   │       └── cc
+│       │   │           └── pcc
+│       │   │               ├── PccApplication.java
+│       │   │               ├── configurer
+│       │   │               │   └── RabbitConfigurer.java
+│       │   │               ├── controller
+│       │   │               │   ├── PccAdditionalInfoTypeController.java
+│       │   │               │   ├── PccChatController.java
+│       │   │               │   ├── PccFileController.java
+│       │   │               │   ├── PccRemindServiceController.java
+│       │   │               │   ├── PccScheduleAdditionalTypeController.java
+│       │   │               │   ├── PccScheduleController.java
+│       │   │               │   ├── PccScheduleFileController.java
+│       │   │               │   ├── PccScheduleRemindController.java
+│       │   │               │   ├── PccScheduleTextController.java
+│       │   │               │   ├── PccScheduleUserController.java
+│       │   │               │   ├── PccTextController.java
+│       │   │               │   ├── PccUserController.java
+│       │   │               │   └── PccUserFriendController.java
+│       │   │               ├── dao
+│       │   │               │   ├── PccAdditionalInfoTypeMapper.java
+│       │   │               │   ├── PccChatMapper.java
+│       │   │               │   ├── PccFileMapper.java
+│       │   │               │   ├── PccRemindServiceMapper.java
+│       │   │               │   ├── PccScheduleAdditionalTypeMapper.java
+│       │   │               │   ├── PccScheduleFileMapper.java
+│       │   │               │   ├── PccScheduleMapper.java
+│       │   │               │   ├── PccScheduleRemindMapper.java
+│       │   │               │   ├── PccScheduleTextMapper.java
+│       │   │               │   ├── PccScheduleUserMapper.java
+│       │   │               │   ├── PccTextMapper.java
+│       │   │               │   ├── PccUserFriendMapper.java
+│       │   │               │   └── PccUserMapper.java
+│       │   │               ├── file
+│       │   │               │   ├── FileOperatorUtil.java
+│       │   │               │   └── FileReaderUtil.java
+│       │   │               ├── model
+│       │   │               │   ├── PccAdditionalInfoType.java
+│       │   │               │   ├── PccChat.java
+│       │   │               │   ├── PccFile.java
+│       │   │               │   ├── PccRemindService.java
+│       │   │               │   ├── PccSchedule.java
+│       │   │               │   ├── PccScheduleAdditionalType.java
+│       │   │               │   ├── PccScheduleFile.java
+│       │   │               │   ├── PccScheduleRemind.java
+│       │   │               │   ├── PccScheduleText.java
+│       │   │               │   ├── PccScheduleUser.java
+│       │   │               │   ├── PccText.java
+│       │   │               │   ├── PccUser.java
+│       │   │               │   ├── PccUserFriend.java
+│       │   │               │   ├── builder
+│       │   │               │   │   ├── PccScheduleAdditionalTypeBuilder.java
+│       │   │               │   │   ├── PccScheduleFileBuilder.java
+│       │   │               │   │   ├── PccScheduleRemindBuilder.java
+│       │   │               │   │   ├── PccScheduleTextBuilder.java
+│       │   │               │   │   ├── PccScheduleUserBuilder.java
+│       │   │               │   │   └── PccTextBuilder.java
+│       │   │               │   ├── converter
+│       │   │               │   │   └── PccFileConverter.java
+│       │   │               │   └── dto
+│       │   │               │       ├── PccScheduleComplete.java
+│       │   │               │       └── PccScheduleDto.java
+│       │   │               └── service
+│       │   │                   ├── PccAdditionalInfoTypeService.java
+│       │   │                   ├── PccChatService.java
+│       │   │                   ├── PccFileService.java
+│       │   │                   ├── PccRemindServiceService.java
+│       │   │                   ├── PccScheduleAdditionalTypeService.java
+│       │   │                   ├── PccScheduleFileService.java
+│       │   │                   ├── PccScheduleRemindService.java
+│       │   │                   ├── PccScheduleService.java
+│       │   │                   ├── PccScheduleTextService.java
+│       │   │                   ├── PccScheduleUserService.java
+│       │   │                   ├── PccTextService.java
+│       │   │                   ├── PccUserFriendService.java
+│       │   │                   ├── PccUserService.java
+│       │   │                   └── impl
+│       │   │                       ├── PccAdditionalInfoTypeServiceImpl.java
+│       │   │                       ├── PccChatServiceImpl.java
+│       │   │                       ├── PccFileServiceImpl.java
+│       │   │                       ├── PccRemindServiceServiceImpl.java
+│       │   │                       ├── PccScheduleAdditionalTypeServiceImpl.java
+│       │   │                       ├── PccScheduleFileServiceImpl.java
+│       │   │                       ├── PccScheduleRemindServiceImpl.java
+│       │   │                       ├── PccScheduleServiceImpl.java
+│       │   │                       ├── PccScheduleTextServiceImpl.java
+│       │   │                       ├── PccScheduleUserServiceImpl.java
+│       │   │                       ├── PccTextServiceImpl.java
+│       │   │                       ├── PccUserFriendServiceImpl.java
+│       │   │                       └── PccUserServiceImpl.java
+│       │   └── resources
+│       │       ├── application-dev.properties
+│       │       ├── application.properties
+│       │       ├── fileTypeCode.properties
+│       │       ├── mapper
+│       │       │   ├── PccAdditionalInfoTypeMapper.xml
+│       │       │   ├── PccChatMapper.xml
+│       │       │   ├── PccFileMapper.xml
+│       │       │   ├── PccRemindServiceMapper.xml
+│       │       │   ├── PccScheduleAdditionalTypeMapper.xml
+│       │       │   ├── PccScheduleFileMapper.xml
+│       │       │   ├── PccScheduleMapper.xml
+│       │       │   ├── PccScheduleRemindMapper.xml
+│       │       │   ├── PccScheduleTextMapper.xml
+│       │       │   ├── PccScheduleUserMapper.xml
+│       │       │   ├── PccTextMapper.xml
+│       │       │   ├── PccUserFriendMapper.xml
+│       │       │   └── PccUserMapper.xml
+│       │       └── static
+│       │           ├── images
+│       │           │   ├── index
+│       │           │   │   ├── gathercontent.png
+│       │           │   │   ├── jshint.png
+│       │           │   │   ├── kippt.png
+│       │           │   │   └── soundready.png
+│       │           │   ├── index-huge-screen-back.png
+│       │           │   ├── login
+│       │           │   │   └── login.png
+│       │           │   └── signup
+│       │           │       ├── one.jpg
+│       │           │       └── two.jpg
+│       │           ├── index.css
+│       │           ├── index.html
+│       │           ├── lib
+│       │           │   ├── bootstrap
+│       │           │   │   ├── css
+│       │           │   │   │   ├── bootstrap-theme.css
+│       │           │   │   │   ├── bootstrap-theme.css.map
+│       │           │   │   │   ├── bootstrap-theme.min.css
+│       │           │   │   │   ├── bootstrap-theme.min.css.map
+│       │           │   │   │   ├── bootstrap.css
+│       │           │   │   │   ├── bootstrap.css.map
+│       │           │   │   │   ├── bootstrap.min.css
+│       │           │   │   │   └── bootstrap.min.css.map
+│       │           │   │   ├── fonts
+│       │           │   │   │   ├── glyphicons-halflings-regular.eot
+│       │           │   │   │   ├── glyphicons-halflings-regular.svg
+│       │           │   │   │   ├── glyphicons-halflings-regular.ttf
+│       │           │   │   │   ├── glyphicons-halflings-regular.woff
+│       │           │   │   │   └── glyphicons-halflings-regular.woff2
+│       │           │   │   └── js
+│       │           │   │       ├── bootstrap.js
+│       │           │   │       ├── bootstrap.min.js
+│       │           │   │       └── npm.js
+│       │           │   └── jquery
+│       │           │       └── jquery-3.3.1.min.js
+│       │           └── views
+│       │               ├── common.css
+│       │               ├── login
+│       │               │   ├── login.css
+│       │               │   ├── login.html
+│       │               │   └── login.js
+│       │               └── signup
+│       │                   ├── signup.css
+│       │                   ├── signup.html
+│       │                   └── signup.js
+│       └── test
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── pcc
+│           │               └── CodeGenerate.java
+│           └── resoureces
+│               └── code-generator.properties
+├── pom.xml
+├── rabbitmq
+│   ├── pom.xml
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── rabbitmq
+│           │               ├── consumer
+│           │               │   └── Consumer.java
+│           │               ├── mail
+│           │               │   ├── MailMessage.java
+│           │               │   └── MailMessageInfo.java
+│           │               ├── message
+│           │               │   └── Message.java
+│           │               └── producer
+│           │                   └── Producer.java
+│           └── resources
+└── readme.md
+
+96 directories, 201 files
+.
+├── cg
+│   ├── pom.xml
+│   ├── readme.md
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── cg
+│           │               ├── CodeGenerator.java
+│           │               ├── ParameterReader.java
+│           │               ├── VueGenerator.java
+│           │               ├── VueParameterReader.java
+│           │               └── XMCodeGenerator.java
+│           └── resources
+│               ├── application-dev.properties
+│               ├── application-prod.properties
+│               ├── application-test.properties
+│               ├── application.properties
+│               └── template
+│                   ├── controller-restful.ftl
+│                   ├── controller-xm.ftl
+│                   ├── controller.ftl
+│                   ├── service-impl-xm.ftl
+│                   ├── service-impl.ftl
+│                   ├── service-xm.ftl
+│                   ├── service.ftl
+│                   └── vue
+│                       ├── display.ftl
+│                       ├── form.ftl
+│                       ├── list.ftl
+│                       └── route.ftl
+├── core
+│   ├── pom.xml
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── core
+│           │               ├── AbstractService.java
+│           │               ├── Mapper.java
+│           │               ├── Result.java
+│           │               ├── ResultCode.java
+│           │               ├── ResultGenerator.java
+│           │               ├── Service.java
+│           │               ├── ServiceException.java
+│           │               ├── configurer
+│           │               │   ├── MybatisConfigurer.java
+│           │               │   ├── Swagger2Configurer.java
+│           │               │   └── WebMvcImpConfigurer.java
+│           │               └── json
+│           │                   └── JSONUtil.java
+│           └── resources
+│               ├── banner.txt
+│               └── common-env.properties
+├── docs
+│   ├── file_construct.txt
+│   └── rabbitmq
+│       └── install.sh
+├── mail
+│   ├── pom.xml
+│   └── src
+│       ├── main
+│       │   ├── java
+│       │   │   └── group
+│       │   │       └── cc
+│       │   │           └── mail
+│       │   │               ├── Mail.java
+│       │   │               ├── MailApplication.java
+│       │   │               ├── MailException.java
+│       │   │               ├── config
+│       │   │               │   └── MailHostsHolder.java
+│       │   │               ├── configurer
+│       │   │               │   ├── MailConfigurer.java
+│       │   │               │   ├── MailRabbitConfigurer.java
+│       │   │               │   ├── RabbitMQConfigurer.java
+│       │   │               │   └── VelocityConfigurer.java
+│       │   │               ├── listener
+│       │   │               │   └── MailListener.java
+│       │   │               ├── parse
+│       │   │               │   ├── ContentParser.java
+│       │   │               │   ├── MailParser.java
+│       │   │               │   └── parser
+│       │   │               │       ├── AttachmentContentParser.java
+│       │   │               │       ├── MailToUserValidator.java
+│       │   │               │       └── SimpleContentParser.java
+│       │   │               └── validate
+│       │   │                   ├── MailProtocolValidator.java
+│       │   │                   ├── MailValidator.java
+│       │   │                   └── Validator.java
+│       │   └── resources
+│       │       ├── application-dev.properties
+│       │       ├── application.properties
+│       │       ├── mail-server.properties
+│       │       └── templates
+│       │           └── mail-simple-schedule.vm
+│       └── test
+│           └── java
+│               └── group
+│                   └── cc
+│                       └── mail
+│                           └── validate
+│                               └── MailProtocolValidatorTest.java
+├── pcc
+│   ├── docs
+│   │   └── sql
+│   │       └── cc.sql
+│   ├── pom.xml
+│   └── src
+│       ├── main
+│       │   ├── java
+│       │   │   └── group
+│       │   │       └── cc
+│       │   │           └── pcc
+│       │   │               ├── PccApplication.java
+│       │   │               ├── configurer
+│       │   │               │   └── RabbitConfigurer.java
+│       │   │               ├── controller
+│       │   │               │   ├── PccAdditionalInfoTypeController.java
+│       │   │               │   ├── PccChatController.java
+│       │   │               │   ├── PccFileController.java
+│       │   │               │   ├── PccRemindServiceController.java
+│       │   │               │   ├── PccScheduleAdditionalTypeController.java
+│       │   │               │   ├── PccScheduleController.java
+│       │   │               │   ├── PccScheduleFileController.java
+│       │   │               │   ├── PccScheduleRemindController.java
+│       │   │               │   ├── PccScheduleTextController.java
+│       │   │               │   ├── PccScheduleUserController.java
+│       │   │               │   ├── PccTextController.java
+│       │   │               │   ├── PccUserController.java
+│       │   │               │   └── PccUserFriendController.java
+│       │   │               ├── dao
+│       │   │               │   ├── PccAdditionalInfoTypeMapper.java
+│       │   │               │   ├── PccChatMapper.java
+│       │   │               │   ├── PccFileMapper.java
+│       │   │               │   ├── PccRemindServiceMapper.java
+│       │   │               │   ├── PccScheduleAdditionalTypeMapper.java
+│       │   │               │   ├── PccScheduleFileMapper.java
+│       │   │               │   ├── PccScheduleMapper.java
+│       │   │               │   ├── PccScheduleRemindMapper.java
+│       │   │               │   ├── PccScheduleTextMapper.java
+│       │   │               │   ├── PccScheduleUserMapper.java
+│       │   │               │   ├── PccTextMapper.java
+│       │   │               │   ├── PccUserFriendMapper.java
+│       │   │               │   └── PccUserMapper.java
+│       │   │               ├── file
+│       │   │               │   ├── FileOperatorUtil.java
+│       │   │               │   └── FileReaderUtil.java
+│       │   │               ├── model
+│       │   │               │   ├── PccAdditionalInfoType.java
+│       │   │               │   ├── PccChat.java
+│       │   │               │   ├── PccFile.java
+│       │   │               │   ├── PccRemindService.java
+│       │   │               │   ├── PccSchedule.java
+│       │   │               │   ├── PccScheduleAdditionalType.java
+│       │   │               │   ├── PccScheduleFile.java
+│       │   │               │   ├── PccScheduleRemind.java
+│       │   │               │   ├── PccScheduleText.java
+│       │   │               │   ├── PccScheduleUser.java
+│       │   │               │   ├── PccText.java
+│       │   │               │   ├── PccUser.java
+│       │   │               │   ├── PccUserFriend.java
+│       │   │               │   ├── builder
+│       │   │               │   │   ├── PccScheduleAdditionalTypeBuilder.java
+│       │   │               │   │   ├── PccScheduleFileBuilder.java
+│       │   │               │   │   ├── PccScheduleRemindBuilder.java
+│       │   │               │   │   ├── PccScheduleTextBuilder.java
+│       │   │               │   │   ├── PccScheduleUserBuilder.java
+│       │   │               │   │   └── PccTextBuilder.java
+│       │   │               │   ├── converter
+│       │   │               │   │   └── PccFileConverter.java
+│       │   │               │   └── dto
+│       │   │               │       ├── PccScheduleComplete.java
+│       │   │               │       └── PccScheduleDto.java
+│       │   │               └── service
+│       │   │                   ├── PccAdditionalInfoTypeService.java
+│       │   │                   ├── PccChatService.java
+│       │   │                   ├── PccFileService.java
+│       │   │                   ├── PccRemindServiceService.java
+│       │   │                   ├── PccScheduleAdditionalTypeService.java
+│       │   │                   ├── PccScheduleFileService.java
+│       │   │                   ├── PccScheduleRemindService.java
+│       │   │                   ├── PccScheduleService.java
+│       │   │                   ├── PccScheduleTextService.java
+│       │   │                   ├── PccScheduleUserService.java
+│       │   │                   ├── PccTextService.java
+│       │   │                   ├── PccUserFriendService.java
+│       │   │                   ├── PccUserService.java
+│       │   │                   └── impl
+│       │   │                       ├── PccAdditionalInfoTypeServiceImpl.java
+│       │   │                       ├── PccChatServiceImpl.java
+│       │   │                       ├── PccFileServiceImpl.java
+│       │   │                       ├── PccRemindServiceServiceImpl.java
+│       │   │                       ├── PccScheduleAdditionalTypeServiceImpl.java
+│       │   │                       ├── PccScheduleFileServiceImpl.java
+│       │   │                       ├── PccScheduleRemindServiceImpl.java
+│       │   │                       ├── PccScheduleServiceImpl.java
+│       │   │                       ├── PccScheduleTextServiceImpl.java
+│       │   │                       ├── PccScheduleUserServiceImpl.java
+│       │   │                       ├── PccTextServiceImpl.java
+│       │   │                       ├── PccUserFriendServiceImpl.java
+│       │   │                       └── PccUserServiceImpl.java
+│       │   └── resources
+│       │       ├── application-dev.properties
+│       │       ├── application.properties
+│       │       ├── fileTypeCode.properties
+│       │       └── mapper
+│       │           ├── PccAdditionalInfoTypeMapper.xml
+│       │           ├── PccChatMapper.xml
+│       │           ├── PccFileMapper.xml
+│       │           ├── PccRemindServiceMapper.xml
+│       │           ├── PccScheduleAdditionalTypeMapper.xml
+│       │           ├── PccScheduleFileMapper.xml
+│       │           ├── PccScheduleMapper.xml
+│       │           ├── PccScheduleRemindMapper.xml
+│       │           ├── PccScheduleTextMapper.xml
+│       │           ├── PccScheduleUserMapper.xml
+│       │           ├── PccTextMapper.xml
+│       │           ├── PccUserFriendMapper.xml
+│       │           └── PccUserMapper.xml
+│       └── test
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── pcc
+│           │               └── CodeGenerate.java
+│           └── resoureces
+│               └── code-generator.properties
+├── pom.xml
+├── rabbitmq
+│   ├── pom.xml
+│   └── src
+│       └── main
+│           ├── java
+│           │   └── group
+│           │       └── cc
+│           │           └── rabbitmq
+│           │               ├── consumer
+│           │               │   └── Consumer.java
+│           │               ├── mail
+│           │               │   ├── MailMessage.java
+│           │               │   └── MailMessageInfo.java
+│           │               ├── message
+│           │               │   └── Message.java
+│           │               └── producer
+│           │                   └── Producer.java
+│           └── resources
+└── readme.md
+
+82 directories, 167 files
