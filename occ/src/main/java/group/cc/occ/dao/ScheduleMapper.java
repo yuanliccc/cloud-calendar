@@ -5,6 +5,7 @@ import group.cc.occ.model.Schedule;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface ScheduleMapper extends Mapper<Schedule> {
 
     @Delete("DELETE FROM SCHEDULE WHERE ID IN (${ids})")
     public void deleteBatch(@Param("ids") String schedules);
+
+    @Update("UPDATE SCHEDULE SET STATE = '已撤销' WHERE ID = #{scheduleId}")
+    public void revoke(@Param("scheduleId") Integer scheduleId);
 }

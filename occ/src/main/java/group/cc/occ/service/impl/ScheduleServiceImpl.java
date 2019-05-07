@@ -26,12 +26,14 @@ public class ScheduleServiceImpl extends AbstractService<Schedule> implements Sc
     public List<Schedule> listByKey(String key, String value, LoginUserDto login){
         value = "%" + value + "%";
         List<Schedule> list = scheduleMapper.listByKey(key, value, login.getOrganization().getId());
+
         return list;
     }
 
     @Override
     public List<Schedule> findAllByLoginOrgId(LoginUserDto login) {
-        return null;
+        List<Schedule> list = scheduleMapper.listByKey("id","", login.getOrganization().getId());
+        return list;
     }
 
     @Override
@@ -44,5 +46,10 @@ public class ScheduleServiceImpl extends AbstractService<Schedule> implements Sc
         scheduleSb.deleteCharAt(scheduleSb.length() - 1);
 
         scheduleMapper.deleteBatch(scheduleSb.toString());
+    }
+
+    @Override
+    public void revoke(Integer scheduleId) {
+        this.scheduleMapper.revoke(scheduleId);
     }
 }

@@ -13,4 +13,5 @@ public interface ScheduleService extends Service<Schedule> {
     public List<Schedule> findAllByLoginOrgId(LoginUserDto login);
     public List<Schedule> listByKey(String key, String value, LoginUserDto login);
     public void deleteBatch(List<Schedule> schedules);
+    public void revoke(Integer scheduleId);
 }
