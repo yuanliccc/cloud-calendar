@@ -30,4 +30,11 @@ public interface DfCollectFormService extends Service<DfCollectForm> {
      * @return
      */
     Map<String, Object> findCollectFormByCondition(Map<String, Object> conditionMap);
+
+    /**
+     * 查询符合条件的当前用户所填写的表单信息
+     * @param conditionMap
+     * @return
+     */
+    Map<String, Object> findSelfSubmitFormByCondition(Map<String, Object> conditionMap);
 }

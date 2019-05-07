@@ -82,4 +82,11 @@ public class DfCollectFormController {
         Map<String, Object> resultMap = this.dfCollectFormService.findCollectFormByCondition(conditionMap);
         return ResultGenerator.genSuccessResult(resultMap);
     }
+
+    @ApiOperation("查询符合条件的当前用户所填写的表单信息")
+    @PostMapping("/findSelfSubmitFormByCondition")
+    public Result findSelfSubmitFormByCondition(@RequestBody Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = this.dfCollectFormService.findSelfSubmitFormByCondition(conditionMap);
+        return ResultGenerator.genSuccessResult(resultMap);
+    }
 }
