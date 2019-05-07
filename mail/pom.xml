@@ -16,6 +16,17 @@
         <velocity.starter.version>1.4.7.RELEASE</velocity.starter.version>
     </properties>
 
+    <build>
+        <finalName>mail</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
 
         <dependency>

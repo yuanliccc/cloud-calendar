@@ -1,6 +1,5 @@
 /*
  Navicat Premium Data Transfer
-
  Source Server         : 106.12.215.87
  Source Server Type    : MySQL
  Source Server Version : 50724
