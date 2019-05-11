@@ -310,6 +310,16 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
         return resultMap;
     }
 
+    @Override
+    public List<DfCollectFormDTO> findFormLikeName(String formName) {
+        DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
+        if (user != null) {
+            List<DfCollectFormDTO> dto = this.dfCollectFormMapper.findLikeFormNameAndSubmiterId(formName, user.getId());
+            return dto;
+        }
+        return new ArrayList<>();
+    }
+
     /**
      * 将CollectForm列表转化为CollectFormDTO列表
      * @param collectFormList

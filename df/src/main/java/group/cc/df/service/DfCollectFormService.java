@@ -1,7 +1,9 @@
 package group.cc.df.service;
+import group.cc.df.dto.DfCollectFormDTO;
 import group.cc.df.model.DfCollectForm;
 import group.cc.core.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,4 +39,11 @@ public interface DfCollectFormService extends Service<DfCollectForm> {
      * @return
      */
     Map<String, Object> findSelfSubmitFormByCondition(Map<String, Object> conditionMap);
+
+    /**
+     * 根据表单名称模糊查询当前用户提交的表单信息
+     * @param formName
+     * @return
+     */
+    List<DfCollectFormDTO> findFormLikeName(String formName);
 }
