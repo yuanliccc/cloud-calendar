@@ -48,4 +48,19 @@ public interface DfCollectFormMapper extends Mapper<DfCollectForm> {
      */
     List<DfCollectFormDTO> findLikeFormNameAndSubmiterId(@Param("formName") String formName,
                                                          @Param("submiterId") Integer submiterId);
+
+
+    /**
+     * 根据表单名称查询收集表单信息
+     * @param formId
+     * @return
+     */
+    List<DfCollectForm> findCollectFormByFormId(Integer formId);
+
+    /**
+     * 根据表单Id删除收集表单信息
+     * @param formId
+     * @return
+     */
+    int deleteCollectFormByFormId(Integer formId);
 }

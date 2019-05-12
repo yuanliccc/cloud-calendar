@@ -51,6 +51,15 @@
     WHERE form.name LIKE CONCAT('%', #{formName} ,'%') AND user.id = #{submiterId}
   </select>
 
+  <select id="findCollectFormByFormId" resultType="group.cc.df.model.DfCollectForm">
+    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS submitTime
+    FROM df_collect_form WHERE form_id = #{formId}
+  </select>
+
+  <delete id="deleteCollectFormByFormId">
+    DELETE FROM df_collect_form WHERE form_id = #{formId}
+  </delete>
+
   <resultMap id="simpleCollectDTOResultMap" type="group.cc.df.dto.DfCollectFormDTO">
     <association property="collectForm" javaType="group.cc.df.model.DfCollectForm">
       <id column="collectId" property="id"/>
