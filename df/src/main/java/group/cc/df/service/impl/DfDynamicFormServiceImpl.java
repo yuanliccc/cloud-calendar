@@ -587,4 +587,11 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         dynamicForm.setPublishState(DynamicFormPublishState.PUBLISH);
         this.dfDynamicFormMapper.updateDynamicForm(dynamicForm);
     }
+
+    @Override
+    public void closePublishForm(Integer formId) {
+        DfDynamicForm dynamicForm = this.dfDynamicFormMapper.selectByPrimaryKey(formId);
+        dynamicForm.setPublishState(DynamicFormPublishState.CLOSED);
+        this.dfDynamicFormMapper.updateDynamicForm(dynamicForm);
+    }
 }
