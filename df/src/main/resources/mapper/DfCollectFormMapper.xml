@@ -43,4 +43,33 @@
       AND form_id = #{formId}
     </if>
   </select>
+
+  <select id="findLikeFormNameAndSubmiterId" resultMap="simpleCollectDTOResultMap">
+    SELECT form.id AS id, form.name AS name, collect.id AS collectId, user.id AS userId FROM df_collect_form AS collect
+    LEFT JOIN df_dynamic_form AS form ON collect.form_id = form.id
+    LEFT JOIN df_user AS user ON collect.employee_id = user.id
+    WHERE form.name LIKE CONCAT('%', #{formName} ,'%') AND user.id = #{submiterId}
+  </select>
+
+  <select id="findCollectFormByFormId" resultType="group.cc.df.model.DfCollectForm">
+    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS submitTime
+    FROM df_collect_form WHERE form_id = #{formId}
+  </select>
+
+  <delete id="deleteCollectFormByFormId">
+    DELETE FROM df_collect_form WHERE form_id = #{formId}
+  </delete>
+
+  <resultMap id="simpleCollectDTOResultMap" type="group.cc.df.dto.DfCollectFormDTO">
+    <association property="collectForm" javaType="group.cc.df.model.DfCollectForm">
+      <id column="collectId" property="id"/>
+    </association>
+    <association property="dynamicForm" javaType="group.cc.df.model.DfDynamicForm">
+      <id column="id" property="id"/>
+      <result column="name" property="name"/>
+    </association>
+    <association property="submiter" javaType="group.cc.df.model.DfUser">
+      <id column="userId" property="id"/>
+    </association>
+  </resultMap>
 </mapper>

@@ -96,7 +96,7 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
     }
 
     @Override
-    public void cloneDynamicForm(Integer sharedId, Integer formId) {
+    public synchronized void cloneDynamicForm(Integer sharedId, Integer formId) {
         DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
 
         // 首先查询分享的表单记录,更新其克隆数量

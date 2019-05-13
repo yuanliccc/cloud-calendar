@@ -45,4 +45,8 @@
     SELECT id AS id, holder_id AS holderId, form_id AS formId, share_time AS shareTime, state AS state,
     cloned_count AS clonedCount FROM df_shared_dynamic_form WHERE form_id = #{formId}
   </select>
+
+  <delete id="deleteSharedDynamicFormByFormId">
+    DELETE FROM df_shared_dynamic_form WHERE form_id = #{formId}
+  </delete>
 </mapper>

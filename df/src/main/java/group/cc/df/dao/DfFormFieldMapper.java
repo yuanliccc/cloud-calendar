@@ -38,4 +38,11 @@ public interface DfFormFieldMapper extends Mapper<DfFormField> {
      * @return
      */
     List<DfFormField> findCollectFormFieldByCollectFormId(Integer formId);
+
+    /**
+     * 根据收集表单Id删除收集表单条目信息
+     * @param collectFormId
+     * @return
+     */
+    int deleteCollectFormFieldByCollectFormId(Integer collectFormId);
 }

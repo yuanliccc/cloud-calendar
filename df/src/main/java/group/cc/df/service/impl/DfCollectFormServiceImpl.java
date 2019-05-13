@@ -290,6 +290,36 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
         return resultMap;
     }
 
+    @Override
+    public Map<String, Object> findSelfSubmitFormByCondition(Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        Integer pageSize = (Integer) conditionMap.get("pageSize");
+        Integer pageNum = (Integer) conditionMap.get("pageNum");
+        Integer offset = (pageNum - 1) * pageSize;
+        conditionMap.put("offset", offset);
+
+        // 因为在mapper中该方法利用了动态SQL,所以可以在此进行服用
+        List<DfCollectForm> selfSubmitFormList = this.dfCollectFormMapper.findCollectFormByCondition(conditionMap);
+        int total = this.dfCollectFormMapper.findCollectFormCountByCondition(conditionMap);
+
+        List<DfCollectFormDTO> collectFormDTOList = this.handleCollectFormList2CollectFormDTOList(selfSubmitFormList);
+
+        resultMap.put("listInfo", collectFormDTOList);
+        resultMap.put("total", total);
+        return resultMap;
+    }
+
+    @Override
+    public List<DfCollectFormDTO> findFormLikeName(String formName) {
+        DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
+        if (user != null) {
+            List<DfCollectFormDTO> dto = this.dfCollectFormMapper.findLikeFormNameAndSubmiterId(formName, user.getId());
+            return dto;
+        }
+        return new ArrayList<>();
+    }
+
     /**
      * 将CollectForm列表转化为CollectFormDTO列表
      * @param collectFormList
