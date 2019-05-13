@@ -12,4 +12,5 @@ import group.cc.occ.model.dto.LoginUserDto;
 public interface EventService extends Service<Event> {
     public List<Event> listByKey(String key, String value, LoginUserDto loginUserDto);
     public void deleteBatch(List<Event> events);
+    public List<Event> getTheEventByScheduleId(Integer id);
 }

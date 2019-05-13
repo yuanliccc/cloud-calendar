@@ -16,4 +16,7 @@ public interface EventMapper extends Mapper<Event> {
 
     @Delete("DELETE FROM EVENT WHERE ID IN (${ids})")
     public void deleteBatch(@Param("ids") String eventIds);
+
+    @Select("SELECT * FROM EVENT WHERE SCHEDULEID = #{id}")
+    public List<Event> getTheEventByScheduleId(@Param("id")Integer id);
 }

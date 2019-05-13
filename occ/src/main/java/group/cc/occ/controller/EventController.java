@@ -92,4 +92,11 @@ public class EventController {
         eventService.deleteBatch(events);
         return ResultGenerator.genSuccessResult();
     }
+
+    @ApiOperation("根据ScheduleId获取 Event")
+    @GetMapping("/getTheEventByScheduleId")
+    public Result getTheEventByScheduleId(@RequestParam()Integer id){
+        List<Event> list = this.eventService.getTheEventByScheduleId(id);
+        return ResultGenerator.genSuccessResult(list);
+    }
 }

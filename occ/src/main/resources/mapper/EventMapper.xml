@@ -15,5 +15,6 @@
     <result column="scheduleId" jdbcType="INTEGER" property="scheduleid" />
     <result column="submitUserId" jdbcType="INTEGER" property="submituserid" />
     <result column="submitTime" jdbcType="TIMESTAMP" property="submittime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
   </resultMap>
 </mapper>

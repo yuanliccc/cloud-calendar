@@ -40,4 +40,10 @@ public class EventServiceImpl extends AbstractService<Event> implements EventSer
 
         eventMapper.deleteBatch(eventSb.toString());
     }
+
+    @Override
+    public List<Event> getTheEventByScheduleId(Integer id) {
+        List<Event> list = this.eventMapper.getTheEventByScheduleId(id);
+        return list;
+    }
 }

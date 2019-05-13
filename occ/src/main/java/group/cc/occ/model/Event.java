@@ -31,6 +31,17 @@ public class Event {
     @Column(name = "submitTime")
     private Date submittime;
 
+    @Column(name = "state")
+    private String state;
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     /**
      * @return id
      */
