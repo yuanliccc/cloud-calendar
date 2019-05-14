@@ -1,10 +1,7 @@
 package group.cc.df.service.impl;
 
 import group.cc.core.AbstractService;
-import group.cc.df.dao.DfCollectFormMapper;
-import group.cc.df.dao.DfDynamicFormMapper;
-import group.cc.df.dao.DfFormFieldMapper;
-import group.cc.df.dao.DfUserMapper;
+import group.cc.df.dao.*;
 import group.cc.df.dto.DfCollectFormDTO;
 import group.cc.df.model.*;
 import group.cc.df.service.DfCollectFormService;
@@ -36,6 +33,9 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
 
     @Resource
     private DfUserMapper dfUserMapper;
+
+    @Resource
+    private DfFormItemMapper dfFormItemMapper;
 
     @Override
     public void saveCollectForm(Map<String, Object> collectFormMap) {
@@ -112,7 +112,6 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
                 this.dfFormFieldMapper.saveCollectFormField(dfField);
                 int formFieldId = dfField.getId();
 
-                /* 收集信息时不需要存储表单域
                 if (fieldType.equals("checkbox") || fieldType.equals("radio") || fieldType.equals("select")) {
                     List<DfFormItem> itemList = handleFieldItem(optionsMap);
 
@@ -121,7 +120,7 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
                         item.setFormFieldId(formFieldId);
                         this.dfFormItemMapper.saveCollectFormItem(item);
                     }
-                }*/
+                }
             } else {
                 dfField.setFormId(collectFormId);
                 // 保存表单域信息

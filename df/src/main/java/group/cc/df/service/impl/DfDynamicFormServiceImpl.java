@@ -234,6 +234,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 Integer formId = (Integer) configMap.get("id");
+                String publishState = (String) configMap.get("publishState");
 
                 df.setId(formId);
                 try {
@@ -241,6 +242,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                df.setPublishState(publishState);
                 df.setEmployeeId((Integer) configMap.get("employeeId"));
                 df.setEnctype((String) configMap.get("enctype"));
                 df.setAction("action");
