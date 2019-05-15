@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gxd
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/df/collect/form/edit/apply")
+@RequestMapping("/api/df/collect/form/edit/apply")
 public class DfCollectFormEditApplyController {
     @Resource
     private DfCollectFormEditApplyService dfCollectFormEditApplyService;
@@ -58,5 +59,17 @@ public class DfCollectFormEditApplyController {
         List<DfCollectFormEditApply> list = dfCollectFormEditApplyService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("提交编辑收集表单申请")
+    @PostMapping("/submitCollectFormEditApply")
+    public Result submitCollectFormEditApply(@RequestBody DfCollectFormEditApply applyInfo) {
+        this.dfCollectFormEditApplyService.submitCollectFormEditApply(applyInfo);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("分页查询申请信息")
+    public Result findCollectFormEditApply(@RequestBody Map<String, Object> conditionMap) {
+        return ResultGenerator.genSuccessResult();
     }
 }

@@ -5,6 +5,7 @@ import group.cc.df.dao.*;
 import group.cc.df.dto.DfCollectFormDTO;
 import group.cc.df.model.*;
 import group.cc.df.service.DfCollectFormService;
+import group.cc.df.utils.CollectFormStateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,9 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
     @Resource
     private DfFormItemMapper dfFormItemMapper;
 
+    @Resource
+    private DfCollectFormEditApplyMapper dfCollectFormEditApplyMapper;
+
     @Override
     public void saveCollectForm(Map<String, Object> collectFormMap) {
         DfCollectForm collectForm = this.handleFormInfo(collectFormMap);
@@ -44,6 +48,7 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
             return;
         }
 
+        collectForm.setState(CollectFormStateUtil.NO_EDITOR);
         this.dfCollectFormMapper.saveCollectForm(collectForm);
 
         Integer collectFormId = collectForm.getId();
@@ -335,11 +340,14 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
             DfUser user = this.dfUserMapper.selectByPrimaryKey(userId);
             Integer formId = collectForm.getFormId();
             DfDynamicForm form = this.dfDynamicFormMapper.selectByPrimaryKey(formId);
+            DfCollectFormEditApply applyInfo = this.dfCollectFormEditApplyMapper
+                    .findCollectFormEditApplyByEmployeeIdAndCollectFormId(collectForm.getEmployeeId(), collectForm.getId());
 
             DfCollectFormDTO dto = new DfCollectFormDTO();
             dto.setCollectForm(collectForm);
             dto.setDynamicForm(form);
             dto.setSubmiter(user);
+            dto.setApplyInfo(applyInfo);
 
             dfCollectFormDTOList.add(dto);
         }

@@ -18,6 +18,9 @@ public class DfCollectForm {
     @Column(name = "submit_time")
     private Date submitTime;
 
+    @Column(name = "state")
+    private String state;
+
     /**
      * @return id
      */
@@ -72,5 +75,13 @@ public class DfCollectForm {
      */
     public void setSubmitTime(Date submitTime) {
         this.submitTime = submitTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

@@ -12,17 +12,17 @@
   </resultMap>
 
   <insert id="saveCollectForm" useGeneratedKeys="true" keyProperty="id" parameterType="group.cc.df.model.DfCollectForm">
-    INSERT INTO df_collect_form(form_id, employee_id, submit_time)
-    VALUES(#{formId}, #{employeeId}, #{submitTime})
+    INSERT INTO df_collect_form(form_id, employee_id, submit_time, state)
+    VALUES(#{formId}, #{employeeId}, #{submitTime}, #{state})
   </insert>
 
   <select id="findCollectFormByEmployeeIdAndFormId" resultType="group.cc.df.model.DfCollectForm">
-    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS submitTime FROM df_collect_form
+    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS submitTime, state FROM df_collect_form
     WHERE employee_id = #{employeeId} AND form_id = #{formId}
   </select>
 
   <select id="findCollectFormByCondition" resultType="group.cc.df.model.DfCollectForm">
-    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS  submitTime FROM df_collect_form
+    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS  submitTime, state FROM df_collect_form
     WHERE 1 = 1
     <if test="userId != null and userId != ''">
       AND employee_id = #{userId}
@@ -52,7 +52,7 @@
   </select>
 
   <select id="findCollectFormByFormId" resultType="group.cc.df.model.DfCollectForm">
-    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS submitTime
+    SELECT id AS id, form_id AS formId, employee_id AS employeeId, submit_time AS submitTime, state
     FROM df_collect_form WHERE form_id = #{formId}
   </select>
 

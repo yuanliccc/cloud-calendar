@@ -1,6 +1,7 @@
 package group.cc.df.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "df_collect_form_edit_apply")
 public class DfCollectFormEditApply {
@@ -17,6 +18,15 @@ public class DfCollectFormEditApply {
     private String state;
 
     private String message;
+
+    @Column(name = "holder_id")
+    private Integer holderId;
+
+    @Column(name = "apply_date")
+    private Date applyDate;
+
+    @Column(name = "handle_date")
+    private Date handleDate;
 
     /**
      * @return id
@@ -86,5 +96,30 @@ public class DfCollectFormEditApply {
      */
     public void setMessage(String message) {
         this.message = message;
+    }
+
+
+    public Integer getHolderId() {
+        return holderId;
+    }
+
+    public void setHolderId(Integer holderId) {
+        this.holderId = holderId;
+    }
+
+    public Date getApplyDate() {
+        return applyDate;
+    }
+
+    public void setApplyDate(Date applyDate) {
+        this.applyDate = applyDate;
+    }
+
+    public Date getHandleDate() {
+        return handleDate;
+    }
+
+    public void setHandleDate(Date handleDate) {
+        this.handleDate = handleDate;
     }
 }

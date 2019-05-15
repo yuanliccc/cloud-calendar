@@ -11,4 +11,21 @@
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="message" jdbcType="VARCHAR" property="message" />
   </resultMap>
+
+  <insert id="saveCollectFormEditApply" keyProperty="id" useGeneratedKeys="true"
+          parameterType="group.cc.df.model.DfCollectFormEditApply">
+    INSERT INTO df_collect_form_edit_apply (collect_form_id, employee_id, state, message, holder_id, apply_date, handle_date)
+    VALUES (#{collectFormId}, #{employeeId}, #{state}, #{message}, #{holderId}, #{applyDate}, #{handleDate})
+  </insert>
+
+  <select id="findCollectFormEditApplyByEmployeeIdAndCollectFormId" resultType="group.cc.df.model.DfCollectFormEditApply">
+    SELECT id, collect_form_id AS collectFormId, employee_id AS employeeId, state, message, holder_id AS holderId,
+    apply_date AS applyDate, handle_date AS handleDate
+    FROM df_collect_form_edit_apply WHERE employee_id = #{employeeId} AND collect_form_id = #{collectFormId}
+  </select>
+
+  <update id="updateCollectFormEditApply" parameterType="group.cc.df.model.DfCollectFormEditApply">
+    UPDATE df_collect_form_edit_apply SET collect_form_id = #{collectFormId}, employee_id = #{employeeId}, state = #{state},
+    message = #{message}, holder_id = #{holderId}, apply_date = #{applyDate}, handle_date = #{handleDate} WHERE id = #{id}
+  </update>
 </mapper>
