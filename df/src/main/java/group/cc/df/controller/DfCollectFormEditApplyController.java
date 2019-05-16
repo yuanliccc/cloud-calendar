@@ -2,6 +2,7 @@ package group.cc.df.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.df.dto.DfCollectFormEditApplyDTO;
 import group.cc.df.model.DfCollectFormEditApply;
 import group.cc.df.service.DfCollectFormEditApplyService;
 import com.github.pagehelper.PageHelper;
@@ -69,7 +70,23 @@ public class DfCollectFormEditApplyController {
     }
 
     @ApiOperation("分页查询申请信息")
+    @PostMapping("/findCollectFormEditApply")
     public Result findCollectFormEditApply(@RequestBody Map<String, Object> conditionMap) {
+        PageInfo<DfCollectFormEditApplyDTO> pageInfo = this.dfCollectFormEditApplyService.findCollectFormEditApply(conditionMap);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("通过申请")
+    @GetMapping("/adoptApply/{applyId}")
+    public Result adoptApply(@PathVariable("applyId") Integer applyId) {
+        this.dfCollectFormEditApplyService.adoptApply(applyId);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("拒绝申请")
+    @GetMapping("/refuseApply/{applyId}")
+    public Result refuseApply(@PathVariable("applyId") Integer applyId) {
+        this.dfCollectFormEditApplyService.refuseApply(applyId);
         return ResultGenerator.genSuccessResult();
     }
 }

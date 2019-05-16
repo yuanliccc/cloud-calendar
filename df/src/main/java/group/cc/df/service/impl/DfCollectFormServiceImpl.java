@@ -237,11 +237,15 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
         if (fieldMap != null) {
             String type = (String) fieldMap.get("type");
             String label = (String) fieldMap.get("label");
+            String key = (String) fieldMap.get("key");
+            String model = (String) fieldMap.get("model");
 
             dfField = new DfFormField();
 
             dfField.setType(type);
             dfField.setLabel(label);
+            dfField.setKey(key);
+            dfField.setModel(model);
         }
 
         return dfField;

@@ -63,4 +63,10 @@ public interface DfCollectFormMapper extends Mapper<DfCollectForm> {
      * @return
      */
     int deleteCollectFormByFormId(Integer formId);
+
+    /**
+     * 更新收集表单信息
+     * @param collectForm
+     */
+    void updateCollectForm(DfCollectForm collectForm);
 }

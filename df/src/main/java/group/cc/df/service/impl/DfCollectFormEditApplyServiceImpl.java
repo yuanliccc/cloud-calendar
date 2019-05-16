@@ -12,6 +12,7 @@ import group.cc.df.model.DfDynamicForm;
 import group.cc.df.model.DfUser;
 import group.cc.df.service.DfCollectFormEditApplyService;
 import group.cc.core.AbstractService;
+import group.cc.df.utils.CollectFormStateUtil;
 import group.cc.df.utils.EditFormApplyStateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 
@@ -46,7 +48,7 @@ public class DfCollectFormEditApplyServiceImpl extends AbstractService<DfCollect
         DfDynamicForm dynamicForm = this.dfDynamicFormMapper.selectByPrimaryKey(collectForm.getFormId());
         DfCollectFormEditApply preApplyInfo = this.dfCollectFormEditApplyMapper
                 .findCollectFormEditApplyByEmployeeIdAndCollectFormId(user.getId(), applyInfo.getCollectFormId());
-        Integer holderId = dynamicForm.getId();
+        Integer holderId = dynamicForm.getEmployeeId();
         Date currentDate = new Date();
         if (preApplyInfo == null) {
             applyInfo.setEmployeeId(user.getId());
@@ -60,6 +62,7 @@ public class DfCollectFormEditApplyServiceImpl extends AbstractService<DfCollect
             preApplyInfo.setEmployeeId(user.getId());
             preApplyInfo.setState(EditFormApplyStateUtil.AUDIT);
             preApplyInfo.setApplyDate(currentDate);
+            preApplyInfo.setHandleDate(null);
             this.dfCollectFormEditApplyMapper.updateCollectFormEditApply(preApplyInfo);
         }
     }
@@ -69,7 +72,26 @@ public class DfCollectFormEditApplyServiceImpl extends AbstractService<DfCollect
         Integer pageNum = (Integer) conditionMap.get("pageNum");
         Integer pageSize = (Integer) conditionMap.get("pageSize");
         PageHelper.startPage(pageNum, pageSize);
-        // TODO 调用Mapper,查询申请表单
-        return null;
+        List<DfCollectFormEditApplyDTO> dtoList = this.dfCollectFormEditApplyMapper.findCollectFormEditApply(conditionMap);
+        return new PageInfo<>(dtoList);
+    }
+
+    @Override
+    public void adoptApply(Integer applyId) {
+        DfCollectFormEditApply apply = this.dfCollectFormEditApplyMapper.selectByPrimaryKey(applyId);
+        DfCollectForm collectForm = this.dfCollectFormMapper.selectByPrimaryKey(apply.getCollectFormId());
+        collectForm.setState(CollectFormStateUtil.EDITABLE);
+        apply.setState(EditFormApplyStateUtil.PASS);
+        apply.setHandleDate(new Date());
+        this.dfCollectFormEditApplyMapper.updateCollectFormEditApply(apply);
+        this.dfCollectFormMapper.updateCollectForm(collectForm);
+    }
+
+    @Override
+    public void refuseApply(Integer applyId) {
+        DfCollectFormEditApply apply = this.dfCollectFormEditApplyMapper.selectByPrimaryKey(applyId);
+        apply.setState(EditFormApplyStateUtil.REFUSE);
+        apply.setHandleDate(new Date());
+        this.dfCollectFormEditApplyMapper.updateCollectFormEditApply(apply);
     }
 }

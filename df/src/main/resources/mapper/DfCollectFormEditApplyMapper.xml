@@ -28,4 +28,49 @@
     UPDATE df_collect_form_edit_apply SET collect_form_id = #{collectFormId}, employee_id = #{employeeId}, state = #{state},
     message = #{message}, holder_id = #{holderId}, apply_date = #{applyDate}, handle_date = #{handleDate} WHERE id = #{id}
   </update>
+
+  <select id="findCollectFormEditApply" resultMap="DfCollectFormEditApplyDTOResultMap">
+    SELECT apply.id AS applyId, apply.collect_form_id AS applyCollectFormId, apply.employee_id AS applyEmployeeId,
+    apply.state AS applyState, apply.message AS applyMessage, apply.holder_id AS applyHolderId, apply.apply_date AS applyDate,
+    apply.handle_date AS applyHandleDate, applyUser.id AS applyUserId, applyUser.name AS applyUserName, holder.id AS holderId,
+    holder.name AS holderName, form.id AS formId, form.name AS formName
+    FROM df_collect_form_edit_apply AS apply LEFT JOIN df_user AS applyUser
+    ON apply.employee_id = applyUser.id
+    LEFT JOIN df_user AS holder ON apply.holder_id = holder.id
+    LEFT JOIN df_collect_form AS collect_form ON apply.collect_form_id = collect_form.id
+    LEFT JOIN df_dynamic_form AS form ON collect_form.form_id = form.id
+    WHERE 1 = 1
+    <if test="applyUserId != null">
+      AND apply.employee_id = #{applyUserId}
+    </if>
+    <if test="holderId != null">
+      AND apply.holder_id = #{holderId}
+    </if>
+    ORDER BY apply.apply_date DESC
+  </select>
+
+  <resultMap id="DfCollectFormEditApplyDTOResultMap" type="group.cc.df.dto.DfCollectFormEditApplyDTO">
+    <association property="applyInfo" javaType="group.cc.df.model.DfCollectFormEditApply">
+      <id column="applyId" property="id"/>
+      <result column="applyCollectFormId" property="collectFormId"/>
+      <result column="applyEmployeeId" property="employeeId"/>
+      <result column="applyState" property="state"/>
+      <result column="applyMessage" property="message"/>
+      <result column="applyHolderId" property="holderId"/>
+      <result column="applyDate" property="applyDate"/>
+      <result column="applyHandleDate" property="handleDate"/>
+    </association>
+    <association property="applyUser" javaType="group.cc.df.model.DfUser">
+      <id column="applyUserId" property="id"/>
+      <result column="applyUserName" property="name"/>
+    </association>
+    <association property="holder" javaType="group.cc.df.model.DfUser">
+      <id column="holderId" property="id"/>
+      <result column="holderName" property="name"/>
+    </association>
+    <association property="dfDynamicForm" javaType="group.cc.df.model.DfDynamicForm">
+      <id column="formId" property="id"/>
+      <result column="formName" property="name"/>
+    </association>
+  </resultMap>
 </mapper>
