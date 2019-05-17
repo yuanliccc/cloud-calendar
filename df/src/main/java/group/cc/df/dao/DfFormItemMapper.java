@@ -20,4 +20,6 @@ public interface DfFormItemMapper extends Mapper<DfFormItem> {
     int deleteFormItemByFieldId(Integer formFieldId);
 
     int saveCollectFormItem(DfFormItem dfFormItem);
+
+    List<DfFormItem> findCollectFormItemsByCollectFormFieldId(Integer collectFormFieldId);
 }

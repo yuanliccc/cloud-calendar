@@ -46,4 +46,10 @@ public interface DfCollectFormService extends Service<DfCollectForm> {
      * @return
      */
     List<DfCollectFormDTO> findFormLikeName(String formName);
+
+    /**
+     * 更新收集表单信息
+     * @param collectFormMap
+     */
+    void updateCollectForm(Map<String, Object> collectFormMap);
 }

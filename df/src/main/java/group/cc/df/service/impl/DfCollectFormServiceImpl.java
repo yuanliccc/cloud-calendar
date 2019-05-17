@@ -358,4 +358,60 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
 
         return dfCollectFormDTOList;
     }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void updateCollectForm(Map<String, Object> collectFormMap) {
+        // 更新收集表单信息
+        Map<String, Object> configMap = (Map<String, Object>) collectFormMap.get("config");
+        Integer collectFormId = (Integer) configMap.get("collectFormId");
+        DfCollectForm collectForm = this.dfCollectFormMapper.selectByPrimaryKey(collectFormId);
+        collectForm.setSubmitTime(new Date());
+        collectForm.setState(CollectFormStateUtil.NO_EDITOR);
+        this.dfCollectFormMapper.updateCollectForm(collectForm);
+
+        List<Map<String, Object>> collectFormFieldList = (List<Map<String, Object>>) collectFormMap.get("list");
+        this.updateFormField(collectFormFieldList);
+    }
+
+    private void updateFormField(List<Map<String, Object>> collectFormFieldList) {
+        for (Map<String, Object> map: collectFormFieldList) {
+            Integer fieldId = (Integer) map.get("id");
+            DfFormField formField = this.dfFormFieldMapper.findCollectFormFieldByFieldId(fieldId);
+
+            String defaultValue = "";
+            if (!formField.getType().equals("grid")) {
+                Map<String, Object> optionsMap = (Map<String, Object>) map.get("options");
+
+                if (formField.getType().equals("checkbox")) {
+                    List<String> checkboxList = (List<String>) optionsMap.get("defaultValue");
+
+                    for (String str: checkboxList) {
+                        if (!"".equals(str)) {
+                            defaultValue += str + ",";
+                        }
+                    }
+
+                    if (!defaultValue.equals("")) {
+                        defaultValue = defaultValue.substring(0, defaultValue.length() - 1);
+                    }
+
+                } else if (formField.getType().equals("date")) {
+                    String dateUTC = (String) optionsMap.get("defaultValue");
+                    defaultValue = UTC2Date(dateUTC);
+                } else {
+                    defaultValue = (String) optionsMap.get("defaultValue");
+                }
+
+                formField.setValue(defaultValue);
+                this.dfFormFieldMapper.updateCollectFormField(formField);
+            } else {
+                List<Map<String, Object>> columnList = (List<Map<String, Object>>) map.get("columns");
+                for (Map<String, Object> columnMap: columnList) {
+                    List<Map<String, Object>> list = (List<Map<String, Object>>) columnMap.get("list");
+                    this.updateFormField(list);
+                }
+            }
+        }
+    }
 }

@@ -57,4 +57,9 @@
     INSERT INTO df_collect_form_item(collect_field_id, value, label, item_index)
     VALUES(#{formFieldId}, #{value}, #{label}, #{itemIndex})
   </insert>
+
+  <select id="findCollectFormItemsByCollectFormFieldId" resultType="group.cc.df.model.DfFormItem">
+    SELECT id, collect_field_id AS formFieldId, value, label, item_index AS itemIndex FROM df_collect_form_item
+    WHERE collect_field_id = #{collectFormFieldId}
+  </select>
 </mapper>

@@ -98,4 +98,11 @@ public class DfCollectFormController {
         List<DfCollectFormDTO> formList = this.dfCollectFormService.findFormLikeName(formName);
         return ResultGenerator.genSuccessResult(formList);
     }
+
+    @ApiOperation("更新收集表单信息")
+    @PostMapping("/updateCollectForm")
+    public Result updateCollectForm(@RequestBody Map<String, Object> collectFormMap) {
+        this.dfCollectFormService.updateCollectForm(collectFormMap);
+        return ResultGenerator.genSuccessResult();
+    }
 }
