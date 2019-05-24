@@ -41,6 +41,7 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
     @Resource
     private DfCollectFormEditApplyMapper dfCollectFormEditApplyMapper;
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void saveCollectForm(Map<String, Object> collectFormMap) {
         DfCollectForm collectForm = this.handleFormInfo(collectFormMap);
