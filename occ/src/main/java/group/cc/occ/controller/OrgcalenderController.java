@@ -8,6 +8,7 @@ import group.cc.occ.service.OrgcalenderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import group.cc.occ.util.RedisUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -91,5 +93,21 @@ public class OrgcalenderController {
     public Result deleteBatch(@RequestBody List<Orgcalender> orgcalenders) {
         orgcalenderService.deleteBatch(orgcalenders);
         return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("获取当月某机构的日历")
+    @GetMapping("/findAllOrgCalenderThisMonth")
+    public Result findAllOrgCalenderThisMonth(@RequestParam()String dayTime) {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<Orgcalender> list = orgcalenderService.findAllOrgCalenderThisMonth(login, new Date(dayTime));
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    @ApiOperation("获取当天某机构的日历")
+    @GetMapping("/findAllOrgCalenderToday")
+    public Result findAllOrgCalenderToday() {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<Orgcalender> list = orgcalenderService.findAllOrgCalenderToday(login);
+        return ResultGenerator.genSuccessResult(list);
     }
 }

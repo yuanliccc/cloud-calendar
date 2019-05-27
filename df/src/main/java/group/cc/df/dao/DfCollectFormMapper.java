@@ -1,6 +1,7 @@
 package group.cc.df.dao;
 
 import group.cc.core.Mapper;
+import group.cc.df.dto.DfCollectFormDTO;
 import group.cc.df.model.DfCollectForm;
 import org.apache.ibatis.annotations.Param;
 
@@ -38,4 +39,34 @@ public interface DfCollectFormMapper extends Mapper<DfCollectForm> {
      * @return
      */
     int findCollectFormCountByCondition(Map<String, Object> conditionMap);
+
+    /**
+     * 根据表单名称和提交人Id查询收集表单信息
+     * @param formName
+     * @param submiterId
+     * @return
+     */
+    List<DfCollectFormDTO> findLikeFormNameAndSubmiterId(@Param("formName") String formName,
+                                                         @Param("submiterId") Integer submiterId);
+
+
+    /**
+     * 根据表单名称查询收集表单信息
+     * @param formId
+     * @return
+     */
+    List<DfCollectForm> findCollectFormByFormId(Integer formId);
+
+    /**
+     * 根据表单Id删除收集表单信息
+     * @param formId
+     * @return
+     */
+    int deleteCollectFormByFormId(Integer formId);
+
+    /**
+     * 更新收集表单信息
+     * @param collectForm
+     */
+    void updateCollectForm(DfCollectForm collectForm);
 }

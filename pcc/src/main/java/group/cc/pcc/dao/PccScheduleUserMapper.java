@@ -18,4 +18,12 @@ public interface PccScheduleUserMapper extends Mapper<PccScheduleUser> {
             "AND " +
             "psu.pcc_user_id=#{pccUserId} ")
     void complete(@Param("pccUserId") Integer pccUserId, @Param("pccScheduleId") Integer pccScheduleId, @Param("date") Date date);
+
+    @Update("UPDATE " +
+            "pcc_schedule_user as psu " +
+            "set " +
+            "psu.is_remind = '是' " +
+            "where " +
+            "psu.id = #{id}")
+    void remind(@Param("id") Integer id);
 }

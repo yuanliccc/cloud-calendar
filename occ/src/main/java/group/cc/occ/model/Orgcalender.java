@@ -30,6 +30,39 @@ public class Orgcalender {
     @Column(name = "orgId")
     private Integer orgid;
 
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "startTime")
+    private Date starttime;
+
+    @Column(name = "endTime")
+    private Date endtime;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getStarttime() {
+        return starttime;
+    }
+
+    public void setStarttime(Date starttime) {
+        this.starttime = starttime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
+    }
+
     /**
      * @return id
      */

@@ -24,5 +24,5 @@ public interface DfFormFieldService extends Service<DfFormField> {
      * @param formId
      * @return
      */
-    List<DfFormField> findCollectFormFieldByCollectFormId(Integer formId);
+    List<DfFieldComponentDTO> findCollectFormFieldByCollectFormId(Integer formId);
 }

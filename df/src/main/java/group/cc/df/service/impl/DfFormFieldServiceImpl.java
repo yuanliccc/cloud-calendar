@@ -35,12 +35,12 @@ public class DfFormFieldServiceImpl extends AbstractService<DfFormField> impleme
         List<DfFormField> formFields = dfFormFieldMapper.findDynamicFormFieldsByFormId(formId);
 
         // 根据每个表单域的类型,查询子项目,附件等信息
-        List<DfFieldComponentDTO> list = handleFormFields(formFields);
+        List<DfFieldComponentDTO> list = handleFormFields(formFields, "formField");
 
         return list;
     }
 
-    private List<DfFieldComponentDTO> handleFormFields(List<DfFormField> formFields) {
+    private List<DfFieldComponentDTO> handleFormFields(List<DfFormField> formFields, String type) {
         if (formFields == null) {
             return null;
         }
@@ -55,8 +55,13 @@ public class DfFormFieldServiceImpl extends AbstractService<DfFormField> impleme
             // 查询条目
             if (field.getType().equals("checkbox") || field.getType().equals("radio")
                   || field.getType().equals("select")) {
-                // 查询条目信息
-                List<DfFormItem> dfFormItems = dfFormItemMapper.findDfFormItemsByFieldId(field.getId());
+                List<DfFormItem> dfFormItems = new ArrayList<>();
+                if ("formField".equals(type)) {
+                    // 查询条目信息
+                    dfFormItems = dfFormItemMapper.findDfFormItemsByFieldId(field.getId());
+                } else if ("collectFormId".equals(type)) {
+                    dfFormItems = dfFormItemMapper.findCollectFormItemsByCollectFormFieldId(field.getId());
+                }
 
                 // 对条目进行排序
                 Collections.sort(dfFormItems);
@@ -75,7 +80,10 @@ public class DfFormFieldServiceImpl extends AbstractService<DfFormField> impleme
     }
 
     @Override
-    public List<DfFormField> findCollectFormFieldByCollectFormId(Integer formId) {
-        return this.dfFormFieldMapper.findCollectFormFieldByCollectFormId(formId);
+    public List<DfFieldComponentDTO> findCollectFormFieldByCollectFormId(Integer formId) {
+        List<DfFormField> formFields = this.dfFormFieldMapper.findCollectFormFieldByCollectFormId(formId);
+        // 根据每个表单域的类型,查询子项目,附件等信息
+        List<DfFieldComponentDTO> list = handleFormFields(formFields, "collectFormId");
+        return list;
     }
 }

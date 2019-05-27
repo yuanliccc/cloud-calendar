@@ -55,4 +55,10 @@ public interface DfDynamicFormService extends Service<DfDynamicForm> {
      * @param formId
      */
     void publishDynamicForm(Integer formId);
+
+    /**
+     * 关闭已经发布的表单动态
+     * @param formId
+     */
+    void closePublishForm(Integer formId);
 }

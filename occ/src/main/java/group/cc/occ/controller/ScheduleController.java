@@ -4,10 +4,12 @@ import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.occ.model.Schedule;
 import group.cc.occ.model.dto.LoginUserDto;
+import group.cc.occ.model.dto.ScheduleDto;
 import group.cc.occ.service.ScheduleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import group.cc.occ.util.RedisUtil;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,11 +82,20 @@ public class ScheduleController {
         List<Schedule> list = null;
         LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
         if("".equals(key))
-            list = scheduleService.findAllByLoginOrgId(login);
+            list = scheduleService.listByKey("name", "", login);
         else
             list = scheduleService.listByKey(key, value, login);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("获取当前组织机构所有日程")
+    @GetMapping("/findAllSchedule")
+    public Result findAllSchedule() {
+        List<Schedule> list = null;
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        list = scheduleService.findAllByLoginOrgId(login);
+        return ResultGenerator.genSuccessResult(list);
     }
 
     @ApiOperation("批量删除 Schedule")
@@ -91,5 +103,30 @@ public class ScheduleController {
     public Result deleteBatch(@RequestBody List<Schedule> schedules) {
         scheduleService.deleteBatch(schedules);
         return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("撤销该条日程")
+    @GetMapping("/revoke")
+    public Result revoke(@RequestParam()Integer id){
+        scheduleService.revoke(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("获取当前组织机构当月所有日程")
+    @GetMapping("/findAllScheduleThisMonth")
+    public Result findAllScheduleThisMonth(@RequestParam()String dayTime) {
+        List<ScheduleDto> list = null;
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        list = scheduleService.findAllScheduleThisMonth(login, new Date(dayTime));
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    @ApiOperation("获取当前组织机构今天所有日程")
+    @GetMapping("/findAllScheduleToday")
+    public Result findAllScheduleToday() {
+        List<ScheduleDto> list = null;
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        list = scheduleService.findAllScheduleToday(login);
+        return ResultGenerator.genSuccessResult(list);
     }
 }

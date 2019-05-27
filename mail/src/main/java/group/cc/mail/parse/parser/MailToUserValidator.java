@@ -1,6 +1,5 @@
 package group.cc.mail.parse.parser;
 
-import com.yl.common.util.PrintUtil;
 import group.cc.mail.MailException;
 import group.cc.mail.validate.MailValidator;
 import group.cc.mail.validate.Validator;

@@ -1,6 +1,7 @@
 package group.cc.df.dto;
 
 import group.cc.df.model.DfCollectForm;
+import group.cc.df.model.DfCollectFormEditApply;
 import group.cc.df.model.DfDynamicForm;
 import group.cc.df.model.DfUser;
 
@@ -23,6 +24,8 @@ public class DfCollectFormDTO {
      * 提交人信息
      */
     private DfUser submiter;
+
+    private DfCollectFormEditApply applyInfo;
 
     public DfCollectForm getCollectForm() {
         return collectForm;
@@ -48,12 +51,21 @@ public class DfCollectFormDTO {
         this.submiter = submiter;
     }
 
+    public DfCollectFormEditApply getApplyInfo() {
+        return applyInfo;
+    }
+
+    public void setApplyInfo(DfCollectFormEditApply applyInfo) {
+        this.applyInfo = applyInfo;
+    }
+
     @Override
     public String toString() {
         return "DfCollectFormDTO{" +
                 "collectForm=" + collectForm +
                 ", dynamicForm=" + dynamicForm +
                 ", submiter=" + submiter +
+                ", applyInfo=" + applyInfo +
                 '}';
     }
 }

@@ -72,6 +72,7 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
         return null;
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     private List<DfSharedDynamicFormDTO> sharedDynamicFormListToSharedDynamicFormDTOList(List<DfSharedDynamicForm> sharedDynamicFormList) {
         if (sharedDynamicFormList == null || sharedDynamicFormList.isEmpty()) {
             return null;
@@ -95,8 +96,9 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
         return dfSharedDynamicFormDTOList;
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
-    public void cloneDynamicForm(Integer sharedId, Integer formId) {
+    public synchronized void cloneDynamicForm(Integer sharedId, Integer formId) {
         DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
 
         // 首先查询分享的表单记录,更新其克隆数量

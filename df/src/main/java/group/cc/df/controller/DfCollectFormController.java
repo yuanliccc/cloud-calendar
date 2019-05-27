@@ -2,7 +2,9 @@ package group.cc.df.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.df.dto.DfCollectFormDTO;
 import group.cc.df.model.DfCollectForm;
+import group.cc.df.model.DfDynamicForm;
 import group.cc.df.service.DfCollectFormService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -81,5 +83,26 @@ public class DfCollectFormController {
     public Result findCollectFormByCondition(@RequestBody Map<String, Object> conditionMap) {
         Map<String, Object> resultMap = this.dfCollectFormService.findCollectFormByCondition(conditionMap);
         return ResultGenerator.genSuccessResult(resultMap);
+    }
+
+    @ApiOperation("查询符合条件的当前用户所填写的表单信息")
+    @PostMapping("/findSelfSubmitFormByCondition")
+    public Result findSelfSubmitFormByCondition(@RequestBody Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = this.dfCollectFormService.findSelfSubmitFormByCondition(conditionMap);
+        return ResultGenerator.genSuccessResult(resultMap);
+    }
+
+    @ApiOperation("根据表单名称模糊查询表单信息")
+    @GetMapping("/findFormLikeName/{formName}")
+    public Result findFormLikeName(@PathVariable("formName") String formName) {
+        List<DfCollectFormDTO> formList = this.dfCollectFormService.findFormLikeName(formName);
+        return ResultGenerator.genSuccessResult(formList);
+    }
+
+    @ApiOperation("更新收集表单信息")
+    @PostMapping("/updateCollectForm")
+    public Result updateCollectForm(@RequestBody Map<String, Object> collectFormMap) {
+        this.dfCollectFormService.updateCollectForm(collectFormMap);
+        return ResultGenerator.genSuccessResult();
     }
 }

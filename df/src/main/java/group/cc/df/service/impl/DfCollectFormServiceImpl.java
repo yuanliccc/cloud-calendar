@@ -1,13 +1,11 @@
 package group.cc.df.service.impl;
 
 import group.cc.core.AbstractService;
-import group.cc.df.dao.DfCollectFormMapper;
-import group.cc.df.dao.DfDynamicFormMapper;
-import group.cc.df.dao.DfFormFieldMapper;
-import group.cc.df.dao.DfUserMapper;
+import group.cc.df.dao.*;
 import group.cc.df.dto.DfCollectFormDTO;
 import group.cc.df.model.*;
 import group.cc.df.service.DfCollectFormService;
+import group.cc.df.utils.CollectFormStateUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +35,13 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
     @Resource
     private DfUserMapper dfUserMapper;
 
+    @Resource
+    private DfFormItemMapper dfFormItemMapper;
+
+    @Resource
+    private DfCollectFormEditApplyMapper dfCollectFormEditApplyMapper;
+
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void saveCollectForm(Map<String, Object> collectFormMap) {
         DfCollectForm collectForm = this.handleFormInfo(collectFormMap);
@@ -44,6 +49,7 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
             return;
         }
 
+        collectForm.setState(CollectFormStateUtil.NO_EDITOR);
         this.dfCollectFormMapper.saveCollectForm(collectForm);
 
         Integer collectFormId = collectForm.getId();
@@ -112,7 +118,6 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
                 this.dfFormFieldMapper.saveCollectFormField(dfField);
                 int formFieldId = dfField.getId();
 
-                /* 收集信息时不需要存储表单域
                 if (fieldType.equals("checkbox") || fieldType.equals("radio") || fieldType.equals("select")) {
                     List<DfFormItem> itemList = handleFieldItem(optionsMap);
 
@@ -121,7 +126,7 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
                         item.setFormFieldId(formFieldId);
                         this.dfFormItemMapper.saveCollectFormItem(item);
                     }
-                }*/
+                }
             } else {
                 dfField.setFormId(collectFormId);
                 // 保存表单域信息
@@ -233,11 +238,15 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
         if (fieldMap != null) {
             String type = (String) fieldMap.get("type");
             String label = (String) fieldMap.get("label");
+            String key = (String) fieldMap.get("key");
+            String model = (String) fieldMap.get("model");
 
             dfField = new DfFormField();
 
             dfField.setType(type);
             dfField.setLabel(label);
+            dfField.setKey(key);
+            dfField.setModel(model);
         }
 
         return dfField;
@@ -290,6 +299,36 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
         return resultMap;
     }
 
+    @Override
+    public Map<String, Object> findSelfSubmitFormByCondition(Map<String, Object> conditionMap) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        Integer pageSize = (Integer) conditionMap.get("pageSize");
+        Integer pageNum = (Integer) conditionMap.get("pageNum");
+        Integer offset = (pageNum - 1) * pageSize;
+        conditionMap.put("offset", offset);
+
+        // 因为在mapper中该方法利用了动态SQL,所以可以在此进行服用
+        List<DfCollectForm> selfSubmitFormList = this.dfCollectFormMapper.findCollectFormByCondition(conditionMap);
+        int total = this.dfCollectFormMapper.findCollectFormCountByCondition(conditionMap);
+
+        List<DfCollectFormDTO> collectFormDTOList = this.handleCollectFormList2CollectFormDTOList(selfSubmitFormList);
+
+        resultMap.put("listInfo", collectFormDTOList);
+        resultMap.put("total", total);
+        return resultMap;
+    }
+
+    @Override
+    public List<DfCollectFormDTO> findFormLikeName(String formName) {
+        DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
+        if (user != null) {
+            List<DfCollectFormDTO> dto = this.dfCollectFormMapper.findLikeFormNameAndSubmiterId(formName, user.getId());
+            return dto;
+        }
+        return new ArrayList<>();
+    }
+
     /**
      * 将CollectForm列表转化为CollectFormDTO列表
      * @param collectFormList
@@ -306,15 +345,74 @@ public class DfCollectFormServiceImpl extends AbstractService<DfCollectForm> imp
             DfUser user = this.dfUserMapper.selectByPrimaryKey(userId);
             Integer formId = collectForm.getFormId();
             DfDynamicForm form = this.dfDynamicFormMapper.selectByPrimaryKey(formId);
+            DfCollectFormEditApply applyInfo = this.dfCollectFormEditApplyMapper
+                    .findCollectFormEditApplyByEmployeeIdAndCollectFormId(collectForm.getEmployeeId(), collectForm.getId());
 
             DfCollectFormDTO dto = new DfCollectFormDTO();
             dto.setCollectForm(collectForm);
             dto.setDynamicForm(form);
             dto.setSubmiter(user);
+            dto.setApplyInfo(applyInfo);
 
             dfCollectFormDTOList.add(dto);
         }
 
         return dfCollectFormDTOList;
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void updateCollectForm(Map<String, Object> collectFormMap) {
+        // 更新收集表单信息
+        Map<String, Object> configMap = (Map<String, Object>) collectFormMap.get("config");
+        Integer collectFormId = (Integer) configMap.get("collectFormId");
+        DfCollectForm collectForm = this.dfCollectFormMapper.selectByPrimaryKey(collectFormId);
+        collectForm.setSubmitTime(new Date());
+        collectForm.setState(CollectFormStateUtil.NO_EDITOR);
+        this.dfCollectFormMapper.updateCollectForm(collectForm);
+
+        List<Map<String, Object>> collectFormFieldList = (List<Map<String, Object>>) collectFormMap.get("list");
+        this.updateFormField(collectFormFieldList);
+    }
+
+    private void updateFormField(List<Map<String, Object>> collectFormFieldList) {
+        for (Map<String, Object> map: collectFormFieldList) {
+            Integer fieldId = (Integer) map.get("id");
+            DfFormField formField = this.dfFormFieldMapper.findCollectFormFieldByFieldId(fieldId);
+
+            String defaultValue = "";
+            if (!formField.getType().equals("grid")) {
+                Map<String, Object> optionsMap = (Map<String, Object>) map.get("options");
+
+                if (formField.getType().equals("checkbox")) {
+                    List<String> checkboxList = (List<String>) optionsMap.get("defaultValue");
+
+                    for (String str: checkboxList) {
+                        if (!"".equals(str)) {
+                            defaultValue += str + ",";
+                        }
+                    }
+
+                    if (!defaultValue.equals("")) {
+                        defaultValue = defaultValue.substring(0, defaultValue.length() - 1);
+                    }
+
+                } else if (formField.getType().equals("date")) {
+                    String dateUTC = (String) optionsMap.get("defaultValue");
+                    defaultValue = UTC2Date(dateUTC);
+                } else {
+                    defaultValue = (String) optionsMap.get("defaultValue");
+                }
+
+                formField.setValue(defaultValue);
+                this.dfFormFieldMapper.updateCollectFormField(formField);
+            } else {
+                List<Map<String, Object>> columnList = (List<Map<String, Object>>) map.get("columns");
+                for (Map<String, Object> columnMap: columnList) {
+                    List<Map<String, Object>> list = (List<Map<String, Object>>) columnMap.get("list");
+                    this.updateFormField(list);
+                }
+            }
+        }
     }
 }

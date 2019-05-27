@@ -11,4 +11,6 @@ public interface PccScheduleUserService extends Service<PccScheduleUser> {
 
     void complete(Integer pccUserId, Integer pccScheduleId);
 
+    void remind(Integer id);
+
 }

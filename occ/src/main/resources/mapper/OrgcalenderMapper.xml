@@ -14,5 +14,8 @@
     <result column="submitTime" jdbcType="TIMESTAMP" property="submittime" />
     <result column="subordinateCanSeen" jdbcType="VARCHAR" property="subordinatecanseen" />
     <result column="orgId" jdbcType="INTEGER" property="orgid" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
   </resultMap>
 </mapper>

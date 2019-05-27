@@ -3,6 +3,7 @@ package group.cc.df.service.impl;
 import group.cc.df.dao.*;
 import group.cc.df.dto.DfDynamicFormDTO;
 import group.cc.df.model.*;
+import group.cc.df.service.DfCollectFormService;
 import group.cc.df.service.DfDynamicFormService;
 import group.cc.core.AbstractService;
 import group.cc.df.utils.DynamicFormPublishState;
@@ -39,6 +40,10 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     @Resource
     private DfSharedDynamicFormMapper dfSharedDynamicFormMapper;
 
+    @Resource
+    private DfCollectFormMapper dfCollectFormMapper;
+
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void saveDynamicForm(Map<String, Object> dfMap) {
         DfDynamicForm df = handleFormConfig(dfMap);
@@ -59,8 +64,11 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         this.saveFormField(fieldList , 0, dfFormId, -1);
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void deleteDynamicForm(Integer id) {
+        // 查询要删除的表单信息
+        DfDynamicForm dynamicForm = this.dfDynamicFormMapper.selectByPrimaryKey(id);
         // 首先根据Id删除表单信息
         this.dfDynamicFormMapper.deleteByPrimaryKey(id);
         // 然后查询出该表单下的表单域
@@ -77,6 +85,22 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
             // 删除表单域信息
             this.dfFormFieldMapper.deleteFormFieldById(formField.getId());
         }
+
+        // 删除分享表单信息
+        this.dfSharedDynamicFormMapper.deleteSharedDynamicFormByFormId(id);
+
+        // 如果表单是已发布状态
+        if (DynamicFormPublishState.PUBLISH.equals(dynamicForm.getPublishState())) {
+            List<DfCollectForm> collectFormList = this.dfCollectFormMapper.findCollectFormByFormId(id);
+
+            // 删除表单域信息
+            for (DfCollectForm collectForm: collectFormList) {
+                this.dfFormFieldMapper.deleteCollectFormFieldByCollectFormId(collectForm.getId());
+            }
+            // 删除表单信息
+            this.dfCollectFormMapper.deleteCollectFormByFormId(id);
+        }
+
     }
 
     private void saveFormField(List<Map<String, Object>> fieldList, Integer displayIndex, int dfFormId, int parentId) {
@@ -211,6 +235,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 Integer formId = (Integer) configMap.get("id");
+                String publishState = (String) configMap.get("publishState");
 
                 df.setId(formId);
                 try {
@@ -218,6 +243,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                df.setPublishState(publishState);
                 df.setEmployeeId((Integer) configMap.get("employeeId"));
                 df.setEnctype((String) configMap.get("enctype"));
                 df.setAction("action");
@@ -311,6 +337,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         }
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void updateDynamicForm(Map<String, Object> dfMap) {
         // 首先更新表单信息
@@ -562,6 +589,13 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         DfDynamicForm dynamicForm = this.dfDynamicFormMapper.selectByPrimaryKey(formId);
         // 修改设备状态为已发布状态
         dynamicForm.setPublishState(DynamicFormPublishState.PUBLISH);
+        this.dfDynamicFormMapper.updateDynamicForm(dynamicForm);
+    }
+
+    @Override
+    public void closePublishForm(Integer formId) {
+        DfDynamicForm dynamicForm = this.dfDynamicFormMapper.selectByPrimaryKey(formId);
+        dynamicForm.setPublishState(DynamicFormPublishState.CLOSED);
         this.dfDynamicFormMapper.updateDynamicForm(dynamicForm);
     }
 }

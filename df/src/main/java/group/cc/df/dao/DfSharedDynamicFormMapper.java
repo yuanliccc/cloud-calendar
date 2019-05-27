@@ -36,4 +36,11 @@ public interface DfSharedDynamicFormMapper extends Mapper<DfSharedDynamicForm> {
      * @return
      */
     List<DfSharedDynamicForm> findSharedDynamicFormByFormId(Integer formId);
+
+    /**
+     * 根据表单Id删除分享表单信息
+     * @param formId
+     * @return
+     */
+    int deleteSharedDynamicFormByFormId(Integer formId);
 }

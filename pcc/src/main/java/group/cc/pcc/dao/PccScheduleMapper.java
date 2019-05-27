@@ -348,4 +348,19 @@ public interface PccScheduleMapper extends Mapper<PccSchedule> {
     List<Map<String, Object>> counts(@Param("pccUserId") Integer pccUserId,
                                      @Param("startDate") String startDate,
                                      @Param("endDate") String endDate);
+
+
+    @Select("select " +
+            "ps.*," +
+            "pu.name," +
+            "pu.email," +
+            "psu.id as psu_id " +
+            "from pcc_schedule as ps " +
+            "left join pcc_schedule_user as psu on psu.pcc_schedule_id=ps.id " +
+            "left join pcc_user as pu on pu.id=psu.pcc_user_id " +
+            "where " +
+            "psu.is_dead_remind = '否' and " +
+            "ps.deadline <= from_unixtime(unix_timestamp(now()) + #{between_mils})")
+    List<Map<String, Object>> willDeadSchedule(@Param("between_mils")Long mils);
+
 }

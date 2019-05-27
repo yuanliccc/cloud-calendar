@@ -8,4 +8,6 @@ public final class DynamicFormPublishState {
     public static final String PUBLISH = "已发布";
 
     public static final String NO_PUBLISH = "未发布";
+
+    public static final String CLOSED = "关闭";
 }

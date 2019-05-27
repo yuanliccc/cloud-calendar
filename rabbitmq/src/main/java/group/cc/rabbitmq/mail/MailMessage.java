@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class MailMessage extends Message {
 
+    private String type;
+
     /**
      * json
      */
@@ -29,7 +31,7 @@ public class MailMessage extends Message {
     private String subject;
 
     /**
-     * 邮件内容
+     * json
      */
     private String content;
 
@@ -61,6 +63,14 @@ public class MailMessage extends Message {
 
     public String getContent() {
         return content;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setContent(String content) {
@@ -106,6 +116,10 @@ public class MailMessage extends Message {
      */
     public Object fromUserJSON(Object key) {
         return JSONUtil.get(fromUser, key);
+    }
+
+    public Object fromContentJSON(Object key) {
+        return JSONUtil.get(content, key);
     }
 
     /**

@@ -119,4 +119,11 @@ public class DfDynamicFormController {
         this.dfDynamicFormService.publishDynamicForm(formId);
         return ResultGenerator.genSuccessResult();
     }
+
+    @ApiOperation("关闭已经发布的表单")
+    @GetMapping("/closePublishForm/{formId}")
+    public Result closePublishForm(@PathVariable("formId") Integer formId) {
+        this.dfDynamicFormService.closePublishForm(formId);
+        return ResultGenerator.genSuccessResult();
+    }
 }

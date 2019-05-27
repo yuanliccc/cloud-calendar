@@ -38,4 +38,6 @@ public interface PccScheduleService extends Service<PccSchedule> {
     List<Map<String,Object>> historyAssignedCount(Integer pccUserId);
 
     List<Map<String, Object>> counts(Integer pccUserId, Date startDate, Date endDate);
+
+    List<Map<String, Object>> willDeadSchedule(Long mils);
 }
