@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitConfigurer {
-
     private static final Logger log = LoggerFactory.getLogger(RabbitConfigurer.class);
 
     @Autowired
@@ -34,10 +33,13 @@ public class RabbitConfigurer {
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
 
         rabbitTemplate.setConfirmCallback((CorrelationData correlationData, boolean ack, String cause) -> {
-            log.info("消息发送成功 : correlationData({}),ack({}),cause({})", correlationData, ack, cause);
+            log.info("消息发送成功 : correlationData({}),ack({}),cause({})",
+                    correlationData, ack, cause);
         });
-        rabbitTemplate.setReturnCallback((Message message, int replyCode, String replyText, String exchange, String routingKey) -> {
-            log.info("消息丢失 : exchange({}),route({}),replyCode({}),replyText({}),message:{}", exchange, routingKey, replyCode, replyText, message);
+        rabbitTemplate.setReturnCallback((Message message, int replyCode, String replyText,
+                                          String exchange, String routingKey) -> {
+            log.info("消息丢失 : exchange({}),route({}),replyCode({}),replyText({}),message:{}",
+                    exchange, routingKey, replyCode, replyText, message);
         });
 
         return rabbitTemplate;

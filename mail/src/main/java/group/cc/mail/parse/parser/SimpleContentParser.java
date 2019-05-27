@@ -23,11 +23,8 @@ public class SimpleContentParser implements ContentParser {
         String[] toUsersMail = mailToUserValidator.validate(mailMessage);
 
         message.setTo(toUsersMail);
-
         message.setSubject(mailMessage.getSubject());
-
         message.setText(mailMessage.getContent());
-
     }
 
 

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
@@ -43,7 +44,7 @@ public class MailConfigurer {
     private Parser<String, String[]> mailParser;
 
     @Bean(value = "defaultMailSender")
-    public MailSender mailSender() throws MailException {
+    public JavaMailSender mailSender() throws MailException {
         // 构造 mail 对象
         Mail mail = new Mail.MailBuilder(defaultMailSender, mailValidator, mailParser).build();
 

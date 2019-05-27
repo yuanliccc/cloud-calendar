@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>　
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    　　<title>新任务通知</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<div class="schedule-block">
+    <div class="schedule-block-title">个人云日历</div>
+    <div class="schedule-content-block">
+        <div>亲爱的用户，<span class="user-name">${fromUser} </span>完成了您指派的任务</div>
+        <div class="content-block">
+            <div>${content}</div>
+            <div class="time">截止时间：${endTime}</div>
+        </div>
+        <div class="click-block">
+            <a class="click" link="www.baidu.com">查看</a>
+        </div>
+    </div>
+</div>
+</body>
+<style type="text/css">
+    .click-block {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: right;
+    }
+    .click {
+        text-decoration: none;
+        color: white;
+        width: 56px;
+        height: 25px;
+        background: #333333;
+        border: 1px solid #9E9E9E;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    .time {
+        text-align: right;
+        font-size: 14px;
+    }
+    .content-block {
+        margin-top: 6px;
+        border-top: 1px solid #9e9e9e7d;
+        color: #525151;
+        padding-top: 10px;
+        font-size: 16px;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        font-family: 'pingfang SC','helvetica neue',arial,'hiragino sans gb','microsoft yahei ui','microsoft yahei',simsun,sans-serif;
+        font-size: 15px;
+    }
+    .schedule-content-block {
+        margin: 15px;
+    }
+    .user-name {
+        font-weight: 600;
+    }
+    .schedule-block{
+        width:600px;
+        webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px -1px, rgba(0, 0, 0, 0.14) 0px 4px 5px 0px, rgba(0, 0, 0, 0.12) 0px 1px 10px 0px;
+        border-radius: 5px;
+    }
+    .schedule-block-title {
+        background: #333333;
+        height: 30px;
+        color: white;
+        font-size: 20px;
+        padding-left: 5px;
+    }
+</style>
+</html>
