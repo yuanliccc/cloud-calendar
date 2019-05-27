@@ -72,6 +72,7 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
         return null;
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     private List<DfSharedDynamicFormDTO> sharedDynamicFormListToSharedDynamicFormDTOList(List<DfSharedDynamicForm> sharedDynamicFormList) {
         if (sharedDynamicFormList == null || sharedDynamicFormList.isEmpty()) {
             return null;
@@ -95,6 +96,7 @@ public class DfSharedDynamicFormServiceImpl extends AbstractService<DfSharedDyna
         return dfSharedDynamicFormDTOList;
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public synchronized void cloneDynamicForm(Integer sharedId, Integer formId) {
         DfUser user = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");

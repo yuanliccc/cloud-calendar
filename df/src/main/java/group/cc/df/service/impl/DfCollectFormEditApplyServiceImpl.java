@@ -76,6 +76,7 @@ public class DfCollectFormEditApplyServiceImpl extends AbstractService<DfCollect
         return new PageInfo<>(dtoList);
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void adoptApply(Integer applyId) {
         DfCollectFormEditApply apply = this.dfCollectFormEditApplyMapper.selectByPrimaryKey(applyId);

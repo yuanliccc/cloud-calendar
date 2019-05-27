@@ -43,6 +43,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     @Resource
     private DfCollectFormMapper dfCollectFormMapper;
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void saveDynamicForm(Map<String, Object> dfMap) {
         DfDynamicForm df = handleFormConfig(dfMap);
@@ -63,8 +64,8 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         this.saveFormField(fieldList , 0, dfFormId, -1);
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
-    @Transactional
     public void deleteDynamicForm(Integer id) {
         // 查询要删除的表单信息
         DfDynamicForm dynamicForm = this.dfDynamicFormMapper.selectByPrimaryKey(id);
@@ -336,6 +337,7 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         }
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void updateDynamicForm(Map<String, Object> dfMap) {
         // 首先更新表单信息
