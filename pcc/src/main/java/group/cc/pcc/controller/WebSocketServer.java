@@ -2,7 +2,7 @@
  * Copyright (c) 2019 YuanLi. All rights reserved.
  */
 
-package group.cc.pcc.server;
+package group.cc.pcc.controller;
 
 import group.cc.pcc.SpringUtils;
 import group.cc.pcc.model.PccUser;

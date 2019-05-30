@@ -92,6 +92,7 @@ public class MailListener {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
             helper.setFrom(FROM_EMAIL);
+
             helper.setSubject(mailMessage.getSubject());
 
             String[] toUsersMail = new MailToUserValidator().validate(mailMessage);

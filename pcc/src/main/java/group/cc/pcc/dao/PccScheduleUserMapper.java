@@ -22,7 +22,7 @@ public interface PccScheduleUserMapper extends Mapper<PccScheduleUser> {
     @Update("UPDATE " +
             "pcc_schedule_user as psu " +
             "set " +
-            "psu.is_remind = '是' " +
+            "psu.is_dead_remind = '是' " +
             "where " +
             "psu.id = #{id}")
     void remind(@Param("id") Integer id);

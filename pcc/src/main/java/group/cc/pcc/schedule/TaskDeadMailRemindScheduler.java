@@ -52,6 +52,10 @@ public class TaskDeadMailRemindScheduler {
         List<Map<String, Object>> willDeadTasks = pccScheduleService.willDeadSchedule(300l);
         logger.info("到期任务列表: " + willDeadTasks.toString());
 
+        if(willDeadTasks.size() == 0) {
+            return;
+        }
+
         // 分组
         Map<Integer, List<Map<String, Object>>> groups = willDeadTasks
                 .parallelStream()
