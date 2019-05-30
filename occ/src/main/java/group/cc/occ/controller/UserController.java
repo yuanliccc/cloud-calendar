@@ -141,8 +141,6 @@ public class UserController {
         PageHelper.startPage(page, size);
         List<User> list = null;
         LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
-        if(login == null)
-            return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户未登录！");
 
         if("".equals(key))
             list = userService.findAllByLoginOrg(login);
@@ -153,9 +151,10 @@ public class UserController {
     }
 
     @ApiOperation("分页查询 User 列表带模糊查询")
-    @GetMapping("/findUserByAccountOrName")
-    public Result findUserByAccountOrName(@RequestParam(defaultValue = "") String value) {
-        List<User> list = userService.findUserByIdOrName(value);
+    @GetMapping("/findUserByIdOrNameByLoginOrg")
+    public Result findUserByIdOrNameByLoginOrg(@RequestParam(defaultValue = "") String value) {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        List<User> list = userService.findUserByIdOrNameNotLoginOrg(value, login.getOrganization().getId());
         return ResultGenerator.genSuccessResult(list);
     }
 
@@ -179,5 +178,24 @@ public class UserController {
         LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
         List<User> list = userService.getUserByLoginOrgId(login);
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    @ApiOperation("查找该机构的用户")
+    @GetMapping("/removeUser")
+    public Result removeUser(@RequestParam()Integer userId) {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        this.userService.removeUser(userId, login.getOrganization().getId());
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("查找该机构的用户")
+    @GetMapping("/removeAllUser")
+    public Result removeUser(@RequestParam()List<Integer> userIds) {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        userIds.forEach(userId ->{
+            this.userService.removeUser(userId, login.getOrganization().getId());
+        });
+
+        return ResultGenerator.genSuccessResult();
     }
 }

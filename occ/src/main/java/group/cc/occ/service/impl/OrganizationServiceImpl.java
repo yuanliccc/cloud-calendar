@@ -1,10 +1,13 @@
 package group.cc.occ.service.impl;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import group.cc.occ.dao.OrganizationMapper;
+import group.cc.occ.model.OrgApply;
 import group.cc.occ.model.Organization;
 import group.cc.occ.model.Role;
 import group.cc.occ.model.User;
 import group.cc.occ.model.dto.LoginUserDto;
+import group.cc.occ.service.OrgApplyService;
 import group.cc.occ.service.OrganizationService;
 import group.cc.core.AbstractService;
 import group.cc.occ.service.RoleService;
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -34,27 +37,42 @@ public class OrganizationServiceImpl extends AbstractService<Organization> imple
     @Resource
     private UserService userService;
 
+    @Resource
+    private OrgApplyService orgApplyService;
+
+    /*
+    * 机构展示（包括该机构下的所有子机构）
+    * */
     @Override
     public List<Organization> listByKey(String key, String value, LoginUserDto loginUserDto) {
         value = "%" + value + "%";
-        List<Organization> list = organizationMapper.listByKey(key, value, loginUserDto.getOrganization().getId());
-        return list;
+        List<Organization> organizations = new ArrayList<>();
+        List<Organization> list = this.organizationMapper.findOrgById(key, value,loginUserDto.getOrganization().getId());
+        Stack<Organization> stack = new Stack<>();
+        stack.addAll(list);
+        organizations.addAll(list);
+
+        while(!stack.isEmpty()){
+            list = this.organizationMapper.findChildOrg(key, value, stack.pop().getId());
+
+            stack.addAll(list);
+            organizations.addAll(list);
+        }
+
+        return organizations;
     }
 
-    @Override
-    public List<Organization> findAllByLoginOrg(LoginUserDto loginUserDto) {
-        List<Organization> list = organizationMapper.listByKey("NAME", "%%", loginUserDto.getOrganization().getId());
-        return list;
-    }
-
+    /**
+     * 添加机构
+     * */
     @Override
     public void addOrg(Organization organization) {
         Organization rootOrg = null;
-        //判断是否为根模块或者父模块
+        //判断是否为根机构或者父机构
         if(organization.getParentorgid() != null && organization.getRootorgid() == null){
             rootOrg = this.findById(organization.getParentorgid());
 
-            //若为根模块
+            //若为根机构
             if(rootOrg.getRootorgid() == null && rootOrg.getParentorgid() == null)
                 organization.setRootorgid(rootOrg.getId());
             else if(rootOrg.getRootorgid() != null) //若为父模块
@@ -92,6 +110,34 @@ public class OrganizationServiceImpl extends AbstractService<Organization> imple
         userService.saveRole(user.getId(), manager.getId());
     }
 
+    /**
+     * 机构入驻申请同意后新增机构
+     * */
+    @Override
+    public void orgApply(Integer applyId, Integer orgManagerId) {
+        OrgApply orgApply = this.orgApplyService.findById(applyId);
+
+        Organization organization = new Organization();
+        organization.setName(orgApply.getName());
+        organization.setOrgkey(orgApply.getOrgkey());
+        this.save(organization);
+
+        organization = this.findBy("orgkey", organization.getOrgkey());
+
+        //创建管理员和成员角色
+        Role man = new Role(organization.getName() + "管理员", organization.getOrgkey() + "Manager", organization.getId(), 5);
+        Role mer = new Role(organization.getName() + "成员", organization.getOrgkey() + "Member", organization.getId(), 1);
+        roleService.save(man);
+        roleService.save(mer);
+
+
+        //设置管理员角色
+        userService.saveRole(orgManagerId, man.getId());
+    }
+
+    /**
+     * 删除机构
+     * */
     @Override
     public void deleteOrg(Integer orgId) {
         Organization org = this.findById(orgId);
@@ -102,10 +148,13 @@ public class OrganizationServiceImpl extends AbstractService<Organization> imple
         this.deleteById(orgId);
     }
 
+    /**
+     * 机构数据更新
+     * */
     @Override
     public void updateOrg(Organization organization) {
         Organization rootOrg = null;
-        //判断是否为根模块或者父模块
+        //判断是否为根机构或者父机构
         if(organization.getParentorgid() != null && organization.getRootorgid() == null){
             rootOrg = this.findById(organization.getParentorgid());
 
@@ -123,9 +172,33 @@ public class OrganizationServiceImpl extends AbstractService<Organization> imple
         organizationMapper.updateOrg(organization);
     }
 
+    /**
+     * 获取当前登录用户加入的所有机构
+     * */
     @Override
     public List<Organization> getAllLoginUserOrg(LoginUserDto loginUserDto) {
         List<Organization> list = organizationMapper.getAllLoginUserOrg(loginUserDto.getUser().getId());
         return list;
+    }
+
+    /**
+     * 获取当前机构的所有子机构（非顶层机构）
+     * */
+    public List<Organization> getAllChildOrg(Integer orgId){
+        LoginUserDto loginUserDto = new LoginUserDto();
+        loginUserDto.setOrganization(new Organization());
+        loginUserDto.getOrganization().setId(orgId);
+
+        return this.listByKey("Name", "%%", loginUserDto);
+    }
+
+    /**
+     * 是否有子机构
+     * */
+    @Override
+    public Boolean hasChildOrg(Integer orgId) {
+        List<Organization> list = this.organizationMapper.findChildOrg("NAME", "%%", orgId);
+        Boolean sel = (list == null || list.size() == 0) ? false : true;
+        return sel;
     }
 }

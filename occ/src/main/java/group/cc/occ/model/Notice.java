@@ -25,6 +25,17 @@ public class Notice {
 
     private String type;
 
+    @Column(name = "listId")
+    private Integer listid;
+
+    public Integer getListid() {
+        return listid;
+    }
+
+    public void setListid(Integer listid) {
+        this.listid = listid;
+    }
+
     /**
      * @return id
      */

@@ -43,8 +43,10 @@ public class OrganizationController {
     }
 
     @ApiOperation("删除 Organization")
-    @DeleteMapping("/delete")
+    @GetMapping("/delete")
     public Result delete(@RequestParam Integer id) {
+        if(this.organizationService.hasChildOrg(id))
+            return ResultGenerator.genFailResult("该机构存在子机构，清先删除子机构！");
         organizationService.deleteOrg(id);
         return ResultGenerator.genSuccessResult();
     }
@@ -83,7 +85,7 @@ public class OrganizationController {
     @GetMapping("/getAllOrgByThisOrLow")
     public Result getAllOrgByThisOrLow() {
         LoginUserDto loginUserDto = RedisUtil.getLoginInfo(redisTemplate, request);
-        List<Organization> list = organizationService.findAllByLoginOrg(loginUserDto);
+        List<Organization> list = organizationService.listByKey("NAME","%%", loginUserDto);
         return ResultGenerator.genSuccessResult(list);
     }
 
@@ -98,7 +100,7 @@ public class OrganizationController {
             return new Result().setCode(ResultCode.UNAUTHORIZED).setMessage("用户未登录！");
 
         if("".equals(key))
-            list = organizationService.findAllByLoginOrg(login);
+            list = organizationService.listByKey("NAME","%%", login);
         else
             list = organizationService.listByKey(key, value, login);
         PageInfo<Organization> pageInfo = new PageInfo<>(list);

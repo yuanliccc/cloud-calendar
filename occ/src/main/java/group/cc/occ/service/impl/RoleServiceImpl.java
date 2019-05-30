@@ -124,4 +124,21 @@ public class RoleServiceImpl extends AbstractService<Role> implements RoleServic
         Role role = roleMapper.getRoleByUserId(userId, orgId);
         return role;
     }
+
+    /**
+     * 查找该机构普通成员角色
+     * */
+    @Override
+    public Role findOrgMemberRole(Integer orgId) {
+        Role role = roleMapper.findOrgMemberRole(orgId);
+        return role;
+    }
+
+    /**
+     * 移除成员出本机构
+     * */
+    @Override
+    public void deleteUserRoleByUserIdAndRoleId(Integer userId, Integer roleId) {
+        this.roleMapper.deleteUserRoleByUserIdAndRoleId(userId, roleId);
+    }
 }
