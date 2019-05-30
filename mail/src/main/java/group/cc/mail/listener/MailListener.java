@@ -65,7 +65,7 @@ public class MailListener {
         MimeMessage mimeMessage = defaultMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
-            helper.setFrom(mailMessage.fromUserJSON("email").toString());
+            helper.setFrom("yl123456789lxp@163.com");
             helper.setSubject(mailMessage.getSubject());
 
             String[] toUsersMail = new MailToUserValidator().validate(mailMessage);
@@ -85,7 +85,7 @@ public class MailListener {
 
     private void sendDefaultMail(MailMessage mailMessage) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(mailMessage.fromUserJSON("email").toString());
+        simpleMailMessage.setFrom("yl123456789lxp@163.com");
         simpleMailMessage.setSubject(mailMessage.getSubject());
 
         MailToUserValidator mailToUserValidator = new MailToUserValidator();
@@ -108,7 +108,7 @@ public class MailListener {
         MimeMessage mimeMessage = defaultMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
-            helper.setFrom(mailMessage.fromUserJSON("email").toString());
+            helper.setFrom("yl123456789lxp@163.com");
             helper.setSubject(mailMessage.getSubject());
 
             String[] toUsersMail = new MailToUserValidator().validate(mailMessage);
@@ -128,7 +128,7 @@ public class MailListener {
 
     private void sendNewScheduleMail(MailMessage mailMessage) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(mailMessage.fromUserJSON("email").toString());
+        simpleMailMessage.setFrom("yl123456789lxp@163.com");
         simpleMailMessage.setSubject(mailMessage.getSubject());
 
         MailToUserValidator mailToUserValidator = new MailToUserValidator();

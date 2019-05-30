@@ -1,5 +1,10 @@
-package group.cc.pcc.server;
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
 
+package group.cc.pcc.controller;
+
+import group.cc.pcc.SpringUtils;
 import group.cc.pcc.model.PccUser;
 import group.cc.pcc.service.PccUserService;
 import org.slf4j.Logger;
@@ -19,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketServer {
 
     @Autowired
-    private PccUserService pccUserService;
+    private PccUserService pccUserService = (PccUserService) SpringUtils.getBean("pccUserServiceImpl");
 
     private Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
 
