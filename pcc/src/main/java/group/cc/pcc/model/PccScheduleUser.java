@@ -36,9 +36,18 @@ public class PccScheduleUser {
     @Column(name = "complete_date")
     private Date completeDate;
 
+
+    /**
+     * 是否提醒
+     */
+    @Column(name = "is_remind")
+    private String isRemind;
+
+    @Column(name = "is_dead_remind")
+    private String isDeadRemind;
+
     /**
      * 获取主键
-     *
      * @return id - 主键
      */
     public Integer getId() {

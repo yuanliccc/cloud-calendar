@@ -25,4 +25,9 @@ public class PccScheduleUserServiceImpl extends AbstractService<PccScheduleUser>
     public void complete(Integer pccUserId, Integer pccScheduleId) {
         pccScheduleUserMapper.complete(pccUserId, pccScheduleId, new Date());
     }
+
+    @Override
+    public void remind(Integer id) {
+        pccScheduleUserMapper.remind(id);
+    }
 }

@@ -99,9 +99,12 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
                 .map(id -> id + "")
                 .collect(Collectors.joining(","));
 
+        // 获取接收者列表
         List<PccUser> receivers = pccUserMapper.selectByIds(receiversIds);
+        // 获取发送者信息
         PccUser sender = pccUserMapper.selectByPrimaryKey(pccScheduleDto.getPccSchedule().getPccUserId());
-        // 邮件通知
+
+        // 构建邮件信息对象
         MailMessage mailMessage = new MailMessage();
         mailMessage.setFromUser(JSONObject.toJSONString(sender));
 
@@ -110,9 +113,14 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
             receiversJSON[i] = JSONObject.toJSONString(receivers.get(i));
         }
         mailMessage.setToUsers(receiversJSON);
+        mailMessage.setSubject("个人日历-新任务通知");
+        mailMessage.setType("new-schedule");
+        mailMessage.setContent(JSONObject.toJSONString(pccScheduleDto.getPccSchedule()));
 
-        mailMessage.setContent(pccScheduleDto.getPccSchedule().toInfo());
+        sendToMQ(mailMessage);
+    }
 
+    private void sendToMQ(MailMessage mailMessage) {
         MessageProperties messageProperties = new MessageProperties();
         messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
         Message message = MessageBuilder
@@ -171,6 +179,23 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
         // 更新 pcc_schedule_user 表为完成任务
         pccScheduleUserMapper.complete(pccScheduleComplete.getPccUserId(),
                 pccScheduleComplete.getPccScheduleId(), new Date());
+
+        PccSchedule pccSchedule = pccScheduleMapper.selectByPrimaryKey(pccScheduleComplete.getPccScheduleId());
+        PccUser completeUser = pccUserMapper.selectByPrimaryKey(pccScheduleComplete.getPccUserId());
+        PccUser scheduleUser = pccUserMapper.selectByPrimaryKey(pccSchedule.getPccUserId());
+        String[] toUsers = new String[1];
+        toUsers[0] = JSONObject.toJSONString(scheduleUser);
+
+        MailMessage mailMessage = new MailMessage();
+        mailMessage.setType("complete-schedule");
+        mailMessage.setSubject("个人日历-任务完成通知");
+
+        mailMessage.setFromUser(JSONObject.toJSONString(completeUser));
+        mailMessage.setToUsers(toUsers);
+
+        mailMessage.setContent(JSONObject.toJSONString(pccSchedule));
+
+        sendToMQ(mailMessage);
     }
 
     @Override
@@ -310,5 +335,9 @@ public class PccScheduleServiceImpl extends AbstractService<PccSchedule> impleme
         }
         re.add(items);
         return re;
+    }
+
+    public List<Map<String, Object>> willDeadSchedule(Long mils) {
+        return pccScheduleMapper.willDeadSchedule(mils);
     }
 }

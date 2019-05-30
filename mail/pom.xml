@@ -13,7 +13,7 @@
 
     <properties>
         <mail.version>1.4.7</mail.version>
-        <velocity.starter.version>1.4.7.RELEASE</velocity.starter.version>
+        <freemarker.starter.version>1.4.7.RELEASE</freemarker.starter.version>
     </properties>
 
     <build>
@@ -28,7 +28,6 @@
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>group.calendar</groupId>
             <artifactId>rabbitmq</artifactId>
@@ -37,14 +36,13 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-velocity</artifactId>
-            <version>${velocity.starter.version}</version>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>${mail.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+
     </dependencies>
 </project>
