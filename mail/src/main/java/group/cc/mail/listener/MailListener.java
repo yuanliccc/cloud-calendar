@@ -35,6 +35,8 @@ public class MailListener {
     @Autowired
     private FreeMarkerConfigurer configurer;
 
+    private static final String FROM_EMAIL = "yl123456789lxp@163.com";
+
     private Logger logger = LoggerFactory.getLogger(MailListener.class);
 
     @RabbitListener(queues = "calendar.mail.queue", containerFactory = "singleListenerContainer")
@@ -55,9 +57,33 @@ public class MailListener {
                 sendCompleteScheduleMailHtml(mailMessage);
                 break;
             }
+            case "will-dead-schedule" : {
+                sendWillDeadScheduleMailHtml(mailMessage);
+            }
             default: {
                 sendDefaultMail(mailMessage);
             }
+        }
+    }
+
+    private void sendWillDeadScheduleMailHtml(MailMessage mailMessage) {
+        MimeMessage mimeMessage = defaultMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
+            helper.setSubject(mailMessage.getSubject());
+
+            String[] toUsersMail = new MailToUserValidator().validate(mailMessage);
+            helper.setTo(toUsersMail);
+
+            Template template = configurer.getConfiguration().getTemplate("mail-complete-schedule.vm");
+            String text = FreeMarkerTemplateUtils
+                    .processTemplateIntoString(template, sendNewScheduleMailMap(mailMessage));
+            helper.setText(text, true);
+            defaultMailSender.send(mimeMessage);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            logger.error("邮件处理错误", e);
         }
     }
 
@@ -65,7 +91,7 @@ public class MailListener {
         MimeMessage mimeMessage = defaultMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
-            helper.setFrom(mailMessage.fromUserJSON("email").toString());
+            helper.setFrom(FROM_EMAIL);
             helper.setSubject(mailMessage.getSubject());
 
             String[] toUsersMail = new MailToUserValidator().validate(mailMessage);
@@ -85,7 +111,7 @@ public class MailListener {
 
     private void sendDefaultMail(MailMessage mailMessage) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(mailMessage.fromUserJSON("email").toString());
+        simpleMailMessage.setFrom(FROM_EMAIL);
         simpleMailMessage.setSubject(mailMessage.getSubject());
 
         MailToUserValidator mailToUserValidator = new MailToUserValidator();
@@ -108,7 +134,7 @@ public class MailListener {
         MimeMessage mimeMessage = defaultMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
-            helper.setFrom(mailMessage.fromUserJSON("email").toString());
+            helper.setFrom(FROM_EMAIL);
             helper.setSubject(mailMessage.getSubject());
 
             String[] toUsersMail = new MailToUserValidator().validate(mailMessage);
@@ -128,7 +154,7 @@ public class MailListener {
 
     private void sendNewScheduleMail(MailMessage mailMessage) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(mailMessage.fromUserJSON("email").toString());
+        simpleMailMessage.setFrom(FROM_EMAIL);
         simpleMailMessage.setSubject(mailMessage.getSubject());
 
         MailToUserValidator mailToUserValidator = new MailToUserValidator();

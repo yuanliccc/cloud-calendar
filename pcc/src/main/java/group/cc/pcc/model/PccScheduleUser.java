@@ -43,6 +43,9 @@ public class PccScheduleUser {
     @Column(name = "is_remind")
     private String isRemind;
 
+    @Column(name = "is_dead_remind")
+    private String isDeadRemind;
+
     /**
      * 获取主键
      * @return id - 主键
