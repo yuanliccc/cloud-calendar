@@ -52,10 +52,14 @@ public class TaskDeadMailRemindScheduler {
         List<Map<String, Object>> willDeadTasks = pccScheduleService.willDeadSchedule(300l);
         logger.info("到期任务列表: " + willDeadTasks.toString());
 
+        if(willDeadTasks.size() == 0) {
+            return;
+        }
+
         // 分组
-        Map<Long, List<Map<String, Object>>> groups = willDeadTasks
+        Map<Integer, List<Map<String, Object>>> groups = willDeadTasks
                 .parallelStream()
-                .collect(Collectors.groupingBy(item -> (Long)item.get("id")));
+                .collect(Collectors.groupingBy(item -> (Integer)item.get("id")));
 
         groups.forEach((key, value) -> {
             sendToMQ(parse(value));
