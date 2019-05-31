@@ -38,7 +38,8 @@ public class OrganizationController {
     @ApiOperation("添加 Organization")
     @PostMapping("/add")
     public Result add(@RequestBody Organization organization) {
-        organizationService.addOrg(organization);
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        organizationService.addOrg(organization, login);
         return ResultGenerator.genSuccessResult();
     }
 

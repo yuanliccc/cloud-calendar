@@ -5,6 +5,7 @@ import group.cc.core.ResultGenerator;
 import group.cc.occ.model.WorkArrange;
 import group.cc.occ.model.dto.LoginUserDto;
 import group.cc.occ.model.dto.WorkArrangeDto;
+import group.cc.occ.service.NoticeListService;
 import group.cc.occ.service.WorkArrangeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -35,10 +36,14 @@ public class WorkArrangeController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private NoticeListService noticeListService;
+
     @ApiOperation("添加 WorkArrange")
     @PostMapping("/add")
     public Result add(@RequestBody WorkArrange workArrange) {
         workArrangeService.save(workArrange);
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
         return ResultGenerator.genSuccessResult();
     }
 

@@ -60,6 +60,9 @@ public class WorkArrangeServiceImpl extends AbstractService<WorkArrange> impleme
         workArrangeMapper.deleteBatch(workArrangeSb.toString());
     }
 
+    /**
+     * 将该工作安排的某用户移除工作
+     * */
     public void deleteUserWork(Integer workArrangeId){
         List<Integer> list = this.userWorkArrangeMapper.getWorkUserIdByWorkId(workArrangeId);
         StringBuffer userWorkSb = new StringBuffer();
@@ -73,6 +76,9 @@ public class WorkArrangeServiceImpl extends AbstractService<WorkArrange> impleme
         this.userWorkArrangeMapper.deleteBatch(userWorkSb.toString());
     }
 
+    /**
+     * 添加某用户负责该工作安排
+     * */
     @Override
     public void saveUserForWork(WorkArrangeDto workArrangeDto) {
         WorkArrange workArrange = this.findById(workArrangeDto.getWorkarrangeid());
@@ -82,6 +88,9 @@ public class WorkArrangeServiceImpl extends AbstractService<WorkArrange> impleme
         }
     }
 
+    /**
+     * 获取该工作安排的用户
+     * */
     @Override
     public List<Integer> getWorkUser(Integer workId) {
         List<Integer> userIds =  this.userWorkArrangeMapper.getWorkUser(workId);

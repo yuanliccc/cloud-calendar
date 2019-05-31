@@ -14,7 +14,7 @@ import java.util.List;
 public interface OrganizationService extends Service<Organization> {
     public List<Organization> listByKey(String key, String value, LoginUserDto loginUserDto);
 
-    public void addOrg(Organization organization);
+    public void addOrg(Organization organization, LoginUserDto login);
 
     public void deleteOrg(Integer orgId);
 

@@ -28,4 +28,6 @@ public interface PermissionService extends Service<Permission> {
     public List<Permission> listByKey(String key, String value);
 
     public void deleteBatch(List<Permission> pers);
+
+    public void assignPer(String[] pers, Integer roleId);
 }

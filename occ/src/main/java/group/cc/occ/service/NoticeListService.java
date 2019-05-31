@@ -13,4 +13,5 @@ public interface NoticeListService extends Service<NoticeList> {
     public List<NoticeList> listByKey(String key, String value);
     public void deleteBatch(List<NoticeList> noticeLists);
     public void saveNoticeList(NoticeList noticeList, LoginUserDto login);
+    public void notice(Integer submitUserId, String title, String content, String type, String subordinatecanseen, LoginUserDto login);
 }

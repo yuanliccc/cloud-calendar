@@ -2,6 +2,7 @@ package group.cc.occ.service.impl;
 
 import group.cc.occ.dao.NoticeListMapper;
 import group.cc.occ.model.NoticeList;
+import group.cc.occ.model.Schedule;
 import group.cc.occ.model.dto.LoginUserDto;
 import group.cc.occ.service.NoticeListService;
 
@@ -45,6 +46,19 @@ public class NoticeListServiceImpl extends AbstractService<NoticeList> implement
         noticeListSb.deleteCharAt(noticeListSb.length() - 1);
 
         noticeListMapper.deleteBatch(noticeListSb.toString());
+    }
+
+    /**
+     * 通知
+     * */
+    public void notice(Integer submitUserId, String title, String content, String type, String subordinatecanseen, LoginUserDto login){
+        NoticeList noticeList = new NoticeList();
+        noticeList.setSubmituserid(submitUserId);
+        noticeList.setTitle(title);
+        noticeList.setContent(content);
+        noticeList.setType(type);
+        noticeList.setSubordinatecanseen(subordinatecanseen);
+        this.saveNoticeList(noticeList, login);
     }
 
     @Override
