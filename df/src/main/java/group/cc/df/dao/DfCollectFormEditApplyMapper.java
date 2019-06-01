@@ -18,4 +18,13 @@ public interface DfCollectFormEditApplyMapper extends Mapper<DfCollectFormEditAp
     void updateCollectFormEditApply(DfCollectFormEditApply applyInfo);
 
     List<DfCollectFormEditApplyDTO> findCollectFormEditApply(Map<String, Object> conditionMap);
+
+    List<DfCollectFormEditApplyDTO> findFormLikeFormNameAndHolderId(@Param("formName") String formName,
+                                                                    @Param("holderId") Integer holderId);
+
+    /**
+     * 删除收集表单申请信息
+     * @param collectFormId
+     */
+    void deleteCollectFormEditApplyByCollectFormId(Integer collectFormId);
 }
