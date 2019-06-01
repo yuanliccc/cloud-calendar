@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -94,6 +93,10 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         userMapper.saveRole(userId, roleId);
     }
 
+
+    /**
+     * 更新上次登录信息
+     * */
     private void updateLastLoginInfo(LoginUserDto userDto){
         Lastloginorg last = lastloginorgService.findBy("userid", userDto.getUser().getId());
         Role role = null;
@@ -154,12 +157,12 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
 
 
     /***
-     * 通过账号或者姓名查找用户
+     * 通过账号或者姓名查找非当前机构用户
      * */
     @Override
-    public List<User> findUserByIdOrName(String value) {
+    public List<User> findUserByIdOrNameNotLoginOrg(String value, Integer orgId) {
         value = "%" + value + "%";
-        List<User> list =  this.userMapper.findUserByIdOrName(value);
+        List<User> list =  this.userMapper.findUserByIdOrNameNotLoginOrg(value, orgId);
         return list;
     }
 
@@ -200,9 +203,57 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         return login;
     }
 
+    /**
+     * @param LoginUserDto
+     * @deprecated  获取当前机构所有用户（不包括子机构）
+     * */
     @Override
     public List<User> getUserByLoginOrgId(LoginUserDto loginUserDto) {
         List<User> list = this.userMapper.getUserByLoginOrgId(loginUserDto.getOrganization().getId());
         return list;
+    }
+
+    /**
+     * 获取当前机构所有用户（包括子机构）
+     * */
+    @Override
+    public List<User> getUserForAllChildOrgByOrgId(Integer orgId) {
+        Set<User> userSet = new HashSet<>();
+        List<Organization> list = this.organizationService.getAllChildOrg(orgId);
+        for (Organization o: list){
+            List<User> users = this.getUserByOrgId(orgId);
+            userSet.addAll(users);
+        }
+        List<User> userList = new ArrayList<>();
+
+        userList.addAll(userSet);
+
+        return userList;
+    }
+
+    /**
+     * @param Integer
+     * @deprecated 获取当前机构所有用户（不包括子机构）
+     * */
+    @Override
+    public List<User> getUserByOrgId(Integer orgId) {
+        return this.userMapper.getUserByLoginOrgId(orgId);
+    }
+
+    /**
+     * 判断用户是否在该机构中
+     * */
+    public Boolean isUserInTheOrganization(Integer userId, Integer orgid){
+        return false;
+    }
+
+    /**
+     * 移除用户出机构
+     * */
+    @Override
+    public void removeUser(Integer userId, Integer orgId) {
+        Role role = this.roleService.findByUserIdAndOrgId(userId, orgId);
+
+        this.roleService.deleteUserRoleByUserIdAndRoleId(userId, role.getId());
     }
 }

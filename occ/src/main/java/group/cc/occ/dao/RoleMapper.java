@@ -44,4 +44,10 @@ public interface RoleMapper extends Mapper<Role> {
     @Select("SELECT R.* FROM ROLE R LEFT JOIN USER_ROLE UR ON UR.ROLEID = R.ID WHERE UR.USERID = #{userId} AND R.ORGID = #{orgId}")
     public Role getRoleByUserId(@Param("userId")Integer userId, @Param("orgId")Integer orgId);
 
+    @Select("SELECT * FROM ROLE WHERE ORGID = #{orgId} AND ROLEKEY LIKE '%Member'")
+    public Role findOrgMemberRole(Integer orgId);
+
+    @Select("DELETE FROM USER_ROLE WHERE USERID = #{userId} AND ROLEID = #{roleid}")
+    public void deleteUserRoleByUserIdAndRoleId(@Param("userId") Integer userId, @Param("roleid") Integer roleId);
+
 }

@@ -3,10 +3,14 @@ package group.cc.occ.controller;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.occ.model.Event;
+import group.cc.occ.model.NoticeList;
+import group.cc.occ.model.Schedule;
 import group.cc.occ.model.dto.LoginUserDto;
 import group.cc.occ.service.EventService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import group.cc.occ.service.NoticeListService;
+import group.cc.occ.service.ScheduleService;
 import group.cc.occ.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,10 +38,22 @@ public class EventController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private ScheduleService scheduleService;
+
+    @Resource
+    private NoticeListService noticeListService;
+
     @ApiOperation("添加 Event")
     @PostMapping("/add")
     public Result add(@RequestBody Event event) {
         eventService.save(event);
+
+        Schedule schedule = this.scheduleService.findById(event.getScheduleid());
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        this.noticeListService.notice(login.getUser().getId(),"机构管理员发布了工作日程" + event.getType() +"：" + schedule.getTitle(),
+                schedule.getContent(), "机构通知", schedule.getSubordinatecanseen(), login);
+
         return ResultGenerator.genSuccessResult();
     }
 
@@ -52,6 +68,11 @@ public class EventController {
     @PutMapping("/update")
     public Result update(@RequestBody Event event) {
         eventService.update(event);
+
+        Schedule schedule = this.scheduleService.findById(event.getScheduleid());
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        this.noticeListService.notice(login.getUser().getId(),"机构管理员更新了工作日程" + event.getType() +"：" + schedule.getTitle(),
+                schedule.getContent(), "机构通知", schedule.getSubordinatecanseen(), login);
         return ResultGenerator.genSuccessResult();
     }
 

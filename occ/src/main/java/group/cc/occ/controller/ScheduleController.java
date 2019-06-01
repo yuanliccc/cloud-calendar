@@ -2,9 +2,11 @@ package group.cc.occ.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.occ.model.NoticeList;
 import group.cc.occ.model.Schedule;
 import group.cc.occ.model.dto.LoginUserDto;
 import group.cc.occ.model.dto.ScheduleDto;
+import group.cc.occ.service.NoticeListService;
 import group.cc.occ.service.ScheduleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -37,10 +39,18 @@ public class ScheduleController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private NoticeListService noticeListService;
+
     @ApiOperation("添加 Schedule")
     @PostMapping("/add")
     public Result add(@RequestBody Schedule schedule) {
         scheduleService.save(schedule);
+
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        this.noticeListService.notice(login.getUser().getId(),"机构管理员发布了工作日程：" + schedule.getTitle(),
+                schedule.getContent(), "机构通知", schedule.getSubordinatecanseen(), login);
+
         return ResultGenerator.genSuccessResult();
     }
 
@@ -55,6 +65,9 @@ public class ScheduleController {
     @PutMapping("/update")
     public Result update(@RequestBody Schedule schedule) {
         scheduleService.update(schedule);
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        this.noticeListService.notice(login.getUser().getId(),"机构管理员更新了工作日程：" + schedule.getTitle(),
+                schedule.getContent(), "机构通知", schedule.getSubordinatecanseen(), login);
         return ResultGenerator.genSuccessResult();
     }
 

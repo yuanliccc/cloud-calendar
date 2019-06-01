@@ -31,4 +31,8 @@ public interface RoleService extends Service<Role> {
     public Role getRoleByUserId(Integer userId, Integer orgId);
 
     public List<Role> findAllByLoginOrg(Integer orgId);
+
+    public Role findOrgMemberRole(Integer orgId);
+
+    public void deleteUserRoleByUserIdAndRoleId(Integer userId, Integer roleId);
 }
