@@ -1,8 +1,6 @@
 package group.cc.pcc.file;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * @description 此类只读取ClassPath及其下面的文件</br>

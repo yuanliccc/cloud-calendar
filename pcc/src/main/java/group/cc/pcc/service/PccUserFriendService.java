@@ -9,4 +9,17 @@ import group.cc.core.Service;
  */
 public interface PccUserFriendService extends Service<PccUserFriend> {
 
+    void remark(Integer pccUserId, Integer friendPccUserId, String remark);
+
+    void deleteByIdes(Integer pccUserId, Integer friendPccUserId);
+
+    void saveFriend(Integer pccUserId, Integer friendPccUserId);
+
+    void friendApply(Integer pccUserId, Integer friendPccUserId);
+
+    void friendApplyEmail(Integer pccUserId, String email);
+
+    boolean isFriend(Integer pccUserId, String email);
+
+    boolean isFriend(Integer pccUserId, Integer friendPccUserId);
 }

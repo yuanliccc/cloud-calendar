@@ -3,6 +3,7 @@ package group.cc.pcc.controller;
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
 import group.cc.pcc.model.PccUserFriend;
+import group.cc.pcc.service.PccNoticeService;
 import group.cc.pcc.service.PccUserFriendService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +23,9 @@ import java.util.List;
 public class PccUserFriendController {
     @Resource
     private PccUserFriendService pccUserFriendService;
+
+    @Resource
+    private PccNoticeService pccNoticeService;
 
     @ApiOperation("添加 PccUserFriend")
     @PostMapping
@@ -58,5 +62,58 @@ public class PccUserFriendController {
         List<PccUserFriend> list = pccUserFriendService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @ApiOperation("修改remark")
+    @GetMapping("/remark")
+    public Result remark(@RequestParam("pccUserId") Integer pccUserId,
+                         @RequestParam("friendPccUserId") Integer friendPccUserId,
+                         @RequestParam("remark") String remark) {
+        pccUserFriendService.remark(pccUserId, friendPccUserId, remark);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("delete")
+    @GetMapping("/delete")
+    public Result delete(@RequestParam("pccUserId") Integer pccUserId,
+                         @RequestParam("friendPccUserId") Integer friendPccUserId) {
+        pccUserFriendService.deleteByIdes(pccUserId, friendPccUserId);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("加好友实际操作")
+    @GetMapping("/save/friend")
+    public Result saveFriend(@RequestParam("pccUserId") Integer pccUserId,
+                         @RequestParam("friendPccUserId") Integer friendPccUserId) {
+        if(pccUserFriendService.isFriend(pccUserId, friendPccUserId)) {
+            return ResultGenerator.genSuccessResult("你们已经是好友了");
+        }
+
+        pccUserFriendService.saveFriend(pccUserId, friendPccUserId);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    public Result friendApply(@RequestParam("pccUserId") Integer pccUserId,
+                              @RequestParam("friendPccUserId") Integer friendPccUserId) {
+
+        pccUserFriendService.friendApply(pccUserId, friendPccUserId);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @ApiOperation("加好友实际操作")
+    @GetMapping("/apply")
+    public Result friendApplyEmail(@RequestParam("pccUserId") Integer pccUserId,
+                              @RequestParam("email") String email) {
+
+        if(pccUserFriendService.isFriend(pccUserId, email)) {
+            return ResultGenerator.genSuccessResult("你们已经是好友了");
+        }
+
+        if(pccNoticeService.isApply(pccUserId, email)) {
+            return ResultGenerator.genSuccessResult("已经提交过申请了，请勿重复申请");
+        }
+
+        pccUserFriendService.friendApplyEmail(pccUserId, email);
+        return ResultGenerator.genSuccessResult("以提交好友申请，请等待对方同意");
     }
 }

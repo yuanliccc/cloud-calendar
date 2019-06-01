@@ -50,4 +50,14 @@ public class PccUserServiceImpl extends AbstractService<PccUser> implements PccU
     public void updatePassword(Integer pccUserId, String password) {
         pccUserMapper.updatePassword(pccUserId, password);
     }
+
+    @Override
+    public PccUser findByEmail(String email) {
+        return pccUserMapper.findByEmail(email);
+    }
+
+    @Override
+    public boolean isSign(String email) {
+        return findByEmail(email) == null ? false : true;
+    }
 }
