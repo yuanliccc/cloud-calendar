@@ -95,4 +95,12 @@ public class DfCollectFormEditApplyServiceImpl extends AbstractService<DfCollect
         apply.setHandleDate(new Date());
         this.dfCollectFormEditApplyMapper.updateCollectFormEditApply(apply);
     }
+
+    @Override
+    public List<DfCollectFormEditApplyDTO> findFormLikeFormName(String formName) {
+        DfUser holder = (DfUser) SecurityUtils.getSubject().getSession().getAttribute("user");
+        List<DfCollectFormEditApplyDTO> dto = this.dfCollectFormEditApplyMapper.findFormLikeFormNameAndHolderId(formName,
+                holder.getId());
+        return dto;
+    }
 }

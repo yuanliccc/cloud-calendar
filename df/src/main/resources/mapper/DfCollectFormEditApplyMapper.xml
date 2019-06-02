@@ -46,8 +46,35 @@
     <if test="holderId != null">
       AND apply.holder_id = #{holderId}
     </if>
+    <if test="collectFormId != null">
+      AND apply.collect_form_id = #{collectFormId}
+    </if>
     ORDER BY apply.apply_date DESC
   </select>
+
+  <select id="findFormLikeFormNameAndHolderId" resultMap="simpleDfCollectFormEditApplyDTOResultMap">
+    SELECT apply.id AS applyId, apply.holder_id AS applyHolderId, collect.id AS collectId, form.id AS formId,
+    form.name AS formName FROM df_collect_form_edit_apply AS apply
+    LEFT JOIN df_collect_form AS collect ON apply.collect_form_id = collect.id
+    LEFT JOIN df_dynamic_form AS form ON collect.form_id = form.id
+    WHERE form.name LIKE CONCAT('%', #{formName}, '%') AND apply.holder_id = #{holderId}
+  </select>
+
+
+  <delete id="deleteCollectFormEditApplyByCollectFormId">
+    DELETE FROM df_collect_form_edit_apply WHERE collect_form_id = #{collectFormId}
+  </delete>
+
+  <resultMap id="simpleDfCollectFormEditApplyDTOResultMap" type="group.cc.df.dto.DfCollectFormEditApplyDTO">
+    <association property="applyInfo" javaType="group.cc.df.model.DfCollectFormEditApply">
+      <id column="applyId" property="id"/>
+      <result column="collectId" property="collectFormId"/>
+    </association>
+    <association property="dfDynamicForm" javaType="group.cc.df.model.DfDynamicForm">
+      <id column="formId" property="id"/>
+      <id column="formName" property="name"/>
+    </association>
+  </resultMap>
 
   <resultMap id="DfCollectFormEditApplyDTOResultMap" type="group.cc.df.dto.DfCollectFormEditApplyDTO">
     <association property="applyInfo" javaType="group.cc.df.model.DfCollectFormEditApply">
