@@ -15,7 +15,7 @@ public interface UserService extends Service<User> {
     public LoginUserDto login(String account, String password) throws Exception;
     public LoginUserDto register(User user)throws Exception;
     public List<User> listByKey(String key, String value, LoginUserDto login);
-    public List<User>findUserByIdOrName(String value);
+    public List<User>findUserByIdOrNameNotLoginOrg(String value, Integer orgId);
     public List<User> findAllByLoginOrg(LoginUserDto login);
 
     public void saveRole(Integer userId, Integer roleId);
@@ -23,4 +23,10 @@ public interface UserService extends Service<User> {
     public LoginUserDto switchOrg(Integer orgId, LoginUserDto login) throws Exception;
 
     public List<User> getUserByLoginOrgId(LoginUserDto loginUserDto);
+
+    public List<User> getUserForAllChildOrgByOrgId(Integer orgId);
+
+    public List<User> getUserByOrgId(Integer orgId);
+
+    public void removeUser(Integer userId, Integer orgId);
 }

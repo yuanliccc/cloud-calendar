@@ -4,6 +4,7 @@ package group.cc.occ.service.impl;
 import group.cc.occ.dao.NoticeMapper;
 import group.cc.occ.model.Chat;
 import group.cc.occ.model.Notice;
+import group.cc.occ.model.NoticeList;
 import group.cc.occ.model.User;
 import group.cc.occ.model.dto.ChatUser;
 import group.cc.occ.model.dto.LoginUserDto;
@@ -176,5 +177,47 @@ public class NoticeServiceImpl extends AbstractService<Notice> implements Notice
     @Override
     public void seeAllMessage(Integer sendUserId, LoginUserDto loginUserDto) {
         this.noticeMapper.seeAllChat(sendUserId, loginUserDto.getUser().getId(), loginUserDto.getOrganization().getId());
+    }
+
+    /**
+     * 发送机构通知
+     * */
+    public void organizationNotice(NoticeList noticeList){
+        List<User> users = null;
+        if("是".equals(noticeList.getSubordinatecanseen())){
+            users = this.userService.getUserForAllChildOrgByOrgId(noticeList.getOrgid());
+        }else {
+            users = this.userService.getUserByOrgId(noticeList.getOrgid());
+        }
+
+        for (User u: users){
+            this.userNotice(noticeList, u.getId());
+        }
+    }
+
+    /**
+     * 发送个人通知
+     * */
+    public void userNotice(NoticeList noticeList, Integer userId){
+        Notice notice = new Notice();
+        notice.setState("未读");
+        notice.setType(noticeList.getType());
+        notice.setStarttime(noticeList.getSubmittime());
+        notice.setTitle(noticeList.getTitle());
+        notice.setListid(noticeList.getId());
+        notice.setContent(noticeList.getContent());
+        notice.setUserid(userId);
+        this.save(notice);
+    }
+
+    /**
+     * 发送系统通知
+     * */
+    public void systemNotice(NoticeList noticeList){
+        List<User> users = this.userService.findAll();
+
+        for (User u: users){
+            this.userNotice(noticeList, u.getId());
+        }
     }
 }

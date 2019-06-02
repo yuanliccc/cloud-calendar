@@ -4,6 +4,7 @@ import group.cc.df.dto.DfCollectFormEditApplyDTO;
 import group.cc.df.model.DfCollectFormEditApply;
 import group.cc.core.Service;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,4 +38,11 @@ public interface DfCollectFormEditApplyService extends Service<DfCollectFormEdit
      * @param applyId
      */
     void refuseApply(Integer applyId);
+
+    /**
+     * 根据表单名称模糊查询当前用户需要审批的表单信息
+     * @param formName
+     * @return
+     */
+    List<DfCollectFormEditApplyDTO> findFormLikeFormName(String formName);
 }

@@ -3,6 +3,7 @@ import group.cc.occ.model.Chat;
 import group.cc.occ.model.Notice;
 import java.util.List;
 import group.cc.core.Service;
+import group.cc.occ.model.NoticeList;
 import group.cc.occ.model.dto.ChatUser;
 import group.cc.occ.model.dto.LoginUserDto;
 
@@ -25,4 +26,11 @@ public interface NoticeService extends Service<Notice> {
     public List<ChatUser> getChatUser(LoginUserDto loginUserDto);
 
     public void seeAllMessage(Integer sendUserId, LoginUserDto loginUserDto);
+
+    /**
+     * 发送机构通知
+     * */
+    public void organizationNotice(NoticeList noticeList);
+    public void userNotice(NoticeList noticeList, Integer userId);
+    public void systemNotice(NoticeList noticeList);
 }

@@ -2,8 +2,10 @@ package group.cc.occ.controller;
 
 import group.cc.core.Result;
 import group.cc.core.ResultGenerator;
+import group.cc.occ.model.NoticeList;
 import group.cc.occ.model.Orgcalender;
 import group.cc.occ.model.dto.LoginUserDto;
+import group.cc.occ.service.NoticeListService;
 import group.cc.occ.service.OrgcalenderService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -36,17 +38,30 @@ public class OrgcalenderController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private NoticeListService noticeListService;
+
     @ApiOperation("添加 Orgcalender")
     @PostMapping("/add")
     public Result add(@RequestBody Orgcalender orgcalender) {
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
         orgcalenderService.save(orgcalender);
+
+        this.noticeListService.notice(login.getUser().getId(),"机构管理员发布了机构日历：" + orgcalender.getTitle(),
+                orgcalender.getContent(), "机构通知", orgcalender.getSubordinatecanseen(), login);
+
         return ResultGenerator.genSuccessResult();
     }
 
     @ApiOperation("删除 Orgcalender")
     @GetMapping("/delete")
     public Result delete(@RequestParam Integer id) {
+        String canBeSeen = this.orgcalenderService.findById(id).getSubordinatecanseen();
         orgcalenderService.deleteById(id);
+
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        this.noticeListService.notice(login.getUser().getId(),"机构管理员删除了机构日历！" ,
+                "机构管理员删除了机构日历！" , "机构通知", canBeSeen, login);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -54,6 +69,10 @@ public class OrgcalenderController {
     @PutMapping("/update")
     public Result update(@RequestBody Orgcalender orgcalender) {
         orgcalenderService.update(orgcalender);
+
+        LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+        this.noticeListService.notice(login.getUser().getId(),"机构管理员更新了机构日历：" + orgcalender.getTitle(),
+                orgcalender.getContent(), "机构通知", orgcalender.getSubordinatecanseen(), login);
         return ResultGenerator.genSuccessResult();
     }
 

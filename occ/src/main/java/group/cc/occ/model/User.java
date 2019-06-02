@@ -119,4 +119,14 @@ public class User implements Serializable{
     public void setSex(String sex) {
         this.sex = sex;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj instanceof  User){
+            User u = (User)obj;
+            return u.getId() == this.id;
+        }
+
+        return false;
+    }
 }

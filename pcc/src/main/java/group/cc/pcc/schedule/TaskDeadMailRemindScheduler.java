@@ -44,9 +44,9 @@ public class TaskDeadMailRemindScheduler {
     private RabbitTemplate rabbitTemplate;
 
     /**
-     * 每五分钟进行任务检测
+     * 每两分钟进行任务检测
      */
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 120000)
     public void remindTaskDead() {
         logger.info("任务到期检测开始");
         List<Map<String, Object>> willDeadTasks = pccScheduleService.willDeadSchedule(300l);

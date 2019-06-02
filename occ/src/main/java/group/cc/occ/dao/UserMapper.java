@@ -21,9 +21,23 @@ public interface UserMapper extends Mapper<User> {
             " R.ORGID = #{orgId} AND U.${key} like #{value}")
     public List<User> listByKey(@Param("key")String key, @Param("value")String value, @Param("orgId")Integer orgId);
 
-    @Select("SELECT * FROM USER WHERE name like #{value} or account like #{value}")
-    public List<User> findUserByIdOrName(@Param("value")String value);
+    @Select("SELECT\n" +
+            "\t*\n" +
+            "FROM\n" +
+            "\tUSER\n" +
+            "WHERE\n" +
+            "\tID NOT IN (\n" +
+            "\t\tSELECT\n" +
+            "\t\t\tU.ID\n" +
+            "\t\tFROM\n" +
+            "\t\t\tUSER U\n" +
+            "\t\tLEFT JOIN USER_ROLE UR ON UR.USERID = U.ID\n" +
+            "\t\tLEFT JOIN ROLE R ON R.ID = UR.ROLEID\n" +
+            "\t\tWHERE\n" +
+            "\t\t\tR.ORGID = #{orgId}) AND (NAME LIKE #{value} OR ACCOUNT LIKE #{value})")
+    public List<User> findUserByIdOrNameNotLoginOrg(@Param("value")String value, @Param("orgId")Integer orgId);
 
     @Select("SELECT U.* FROM USER U LEFT JOIN USER_ROLE UR ON UR.USERID = U.ID LEFT JOIN ROLE R ON R.ID = UR.ROLEID WHERE R.ORGID = #{orgId}")
     public List<User> getUserByLoginOrgId(@Param("orgId")Integer orgId);
+
 }

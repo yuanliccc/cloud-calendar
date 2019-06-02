@@ -43,6 +43,9 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
     @Resource
     private DfCollectFormMapper dfCollectFormMapper;
 
+    @Resource
+    private DfCollectFormEditApplyMapper dfCollectFormEditApplyMapper;
+
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void saveDynamicForm(Map<String, Object> dfMap) {
@@ -89,13 +92,14 @@ public class DfDynamicFormServiceImpl extends AbstractService<DfDynamicForm> imp
         // 删除分享表单信息
         this.dfSharedDynamicFormMapper.deleteSharedDynamicFormByFormId(id);
 
-        // 如果表单是已发布状态
-        if (DynamicFormPublishState.PUBLISH.equals(dynamicForm.getPublishState())) {
+        // 如果表单的发布状态时关闭状态
+        if (DynamicFormPublishState.CLOSED.equals(dynamicForm.getPublishState())) {
             List<DfCollectForm> collectFormList = this.dfCollectFormMapper.findCollectFormByFormId(id);
 
             // 删除表单域信息
             for (DfCollectForm collectForm: collectFormList) {
                 this.dfFormFieldMapper.deleteCollectFormFieldByCollectFormId(collectForm.getId());
+                this.dfCollectFormEditApplyMapper.deleteCollectFormEditApplyByCollectFormId(collectForm.getId());
             }
             // 删除表单信息
             this.dfCollectFormMapper.deleteCollectFormByFormId(id);
