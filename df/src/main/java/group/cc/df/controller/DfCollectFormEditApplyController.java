@@ -89,4 +89,11 @@ public class DfCollectFormEditApplyController {
         this.dfCollectFormEditApplyService.refuseApply(applyId);
         return ResultGenerator.genSuccessResult();
     }
+
+    @ApiOperation("根据表单名称模糊查询当前用户需要审批的表单信息")
+    @GetMapping("/findFormLikeFormName/{formName}")
+    public Result findFormLikeFormName(@PathVariable("formName") String formName) {
+        List<DfCollectFormEditApplyDTO> dto = this.dfCollectFormEditApplyService.findFormLikeFormName(formName);
+        return ResultGenerator.genSuccessResult(dto);
+    }
 }

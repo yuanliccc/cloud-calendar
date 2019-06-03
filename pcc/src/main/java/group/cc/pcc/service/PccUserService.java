@@ -22,4 +22,8 @@ public interface PccUserService extends Service<PccUser> {
     void updateImg(Integer pccUserId, Integer pccFileId);
 
     void updatePassword(Integer pccUserId, String password);
+
+    PccUser findByEmail(String email);
+
+    boolean isSign(String email);
 }

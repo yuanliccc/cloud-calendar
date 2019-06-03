@@ -70,4 +70,7 @@ public interface PccUserMapper extends Mapper<PccUser> {
             "where " +
             "pu.id=#{pccUserId}")
     void updatePassword(Integer pccUserId, String password);
+
+    @Select("select * from pcc_user where email=#{email}")
+    PccUser findByEmail(@Param("email") String email);
 }
