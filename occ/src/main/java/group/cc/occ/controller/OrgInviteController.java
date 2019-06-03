@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,6 +41,9 @@ public class OrgInviteController {
     @PostMapping("/add")
     public Result add(@RequestBody OrgInvite orgInvite) {
         try {
+            LoginUserDto login = RedisUtil.getLoginInfo(redisTemplate, request);
+            Organization organization = login.getOrganization();
+            orgInvite.setContent(organization.getName() + "邀请您加入本机构！");
             orgInviteService.addInvite(orgInvite);
         } catch (Exception e) {
             return ResultGenerator.genFailResult(e.getMessage());
@@ -103,7 +107,9 @@ public class OrgInviteController {
     @GetMapping("/approveInvite")
     public Result approveInvite(Integer inviteId, String state) {
         OrgInvite orgInvite = this.orgInviteService.findById(inviteId);
+
         orgInvite.setState(state);
+        orgInvite.setChecktime(new Date());
 
         orgInviteService.approveInvite(orgInvite);
         return ResultGenerator.genSuccessResult();
