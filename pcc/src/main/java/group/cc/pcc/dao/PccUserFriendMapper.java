@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.dao;
 
 import group.cc.core.Mapper;
@@ -19,7 +23,7 @@ public interface PccUserFriendMapper extends Mapper<PccUserFriend> {
     @Delete("delete from pcc_user_friend where " +
             "(pcc_user_id=#{pccUserId} and friend_pcc_user_id=#{friendPccUserId}) or " +
             "(pcc_user_id=#{friendPccUserId} and friend_pcc_user_id=#{pccUserId})")
-    void deleteByIdes(@Param("pccUserId")Integer pccUserId,@Param("friendPccUserId") Integer friendPccUserId);
+    void deleteByIdes(@Param("pccUserId") Integer pccUserId, @Param("friendPccUserId") Integer friendPccUserId);
 
     @Select("select puf.* from pcc_user_friend as puf " +
             "left join pcc_user as pu on pu.id=puf.friend_pcc_user_id " +

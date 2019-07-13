@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.service.impl;
 
 import group.cc.pcc.dao.PccNoticeMapper;
@@ -40,6 +44,6 @@ public class PccNoticeServiceImpl extends AbstractService<PccNotice> implements 
     public boolean isApply(Integer pccUserId, String email) {
 
         List<PccNotice> pccNotices = pccNoticeMapper.applyListEmail(pccUserId, email);
-        return pccNotices.size() == 0 ? true : false;
+        return pccNotices.size() == 0 ? false : true;
     }
 }

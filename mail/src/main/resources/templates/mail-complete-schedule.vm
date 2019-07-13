@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>　
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    　　<title>新任务通知</title>
+    　　<title>任务完成通知</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
@@ -13,9 +13,6 @@
         <div class="content-block">
             <div>${content}</div>
             <div class="time">截止时间：${endTime}</div>
-        </div>
-        <div class="click-block">
-            <a class="click" link="www.baidu.com">查看</a>
         </div>
     </div>
 </div>

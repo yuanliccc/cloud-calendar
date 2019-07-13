@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.dao;
 
 import group.cc.core.Mapper;
@@ -44,5 +48,5 @@ public interface PccNoticeMapper extends Mapper<PccNotice> {
             "where " +
             "pu2.email=#{email} and " +
             "pu1.id=#{pccUserId}")
-    List<PccNotice> applyListEmail(@Param("pccUserId")Integer pccUserId, @Param("email") String email);
+    List<PccNotice> applyListEmail(@Param("pccUserId") Integer pccUserId, @Param("email") String email);
 }

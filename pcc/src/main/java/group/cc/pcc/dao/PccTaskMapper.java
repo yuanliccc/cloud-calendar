@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.dao;
 
 import group.cc.core.Mapper;
@@ -26,7 +30,8 @@ public interface PccTaskMapper extends Mapper<PccTask> {
             "left join pcc_user as pu " +
             "on pt.pcc_user_id=pu.id " +
             "where " +
-            "pt.time <= from_unixtime(unix_timestamp(now()) + 20) and " +
+            "pt.time between from_unixtime(unix_timestamp(now()) - 28780) and " +
+            "from_unixtime(unix_timestamp(now()) + 28820) and " +
             "pt.is_delete = '否' and " +
             "pt.is_remind = '否'")
     List<Map<String, Object>> willDeadList();
@@ -36,7 +41,7 @@ public interface PccTaskMapper extends Mapper<PccTask> {
             "date_format(time, '%Y-%m-%d')=#{day} " +
             "and is_delete='否' and " +
             "pcc_user_id=#{pccUserId}")
-    List<PccTask> listDayUser(@Param("day")String day, @Param("pccUserId") Integer pccUserId);
+    List<PccTask> listDayUser(@Param("day") String day, @Param("pccUserId") Integer pccUserId);
 
     @Update("update pcc_task set is_delete='是' where id=#{id}")
     void deleteImitate(@Param("id") Integer id);
@@ -54,4 +59,7 @@ public interface PccTaskMapper extends Mapper<PccTask> {
     List<Map<String, Object>> counts(@Param("pccUserId") Integer pccUserId,
                                      @Param("startDay") String startDay,
                                      @Param("endDay") String endDay);
+
+    @Update("update pcc_task set is_remind='是' where id=#{id}")
+    void isRemind(@Param("id") Integer id);
 }

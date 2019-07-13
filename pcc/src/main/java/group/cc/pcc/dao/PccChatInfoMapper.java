@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.dao;
 
 import group.cc.core.Mapper;
@@ -16,13 +20,13 @@ public interface PccChatInfoMapper extends Mapper<PccChatInfo> {
             "or" +
             "(send_user_id=#{receiveUserId} and receive_user_id=#{sendUseId})")
     List<PccChatInfo> friendChatInfo(@Param("sendUseId") Integer sendUserId
-            ,@Param("receiveUserId") Integer receiveUserId);
+            , @Param("receiveUserId") Integer receiveUserId);
 
     @Select("select count(id) from pcc_chat_info " +
             "where " +
             "receive_user_id=#{receiveUserId} and " +
             "is_received='否'")
-    Integer count(@Param("receiveUserId")Integer receiveUserId);
+    Integer count(@Param("receiveUserId") Integer receiveUserId);
 
     @Select("select count(id) from pcc_chat_info " +
             "where " +

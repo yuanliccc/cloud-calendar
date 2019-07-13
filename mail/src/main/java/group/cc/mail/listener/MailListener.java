@@ -59,6 +59,11 @@ public class MailListener {
             }
             case "will-dead-schedule" : {
                 sendWillDeadScheduleMailHtml(mailMessage);
+                break;
+            }
+            case "dead-task" : {
+                sendDeadTaskMailHtml(mailMessage);
+                break;
             }
             default: {
                 sendDefaultMail(mailMessage);
@@ -66,18 +71,54 @@ public class MailListener {
         }
     }
 
-    private void sendWillDeadScheduleMailHtml(MailMessage mailMessage) {
+    private void sendDeadTaskMailHtml(MailMessage mailMessage) {
         MimeMessage mimeMessage = defaultMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
+            helper.setFrom(FROM_EMAIL);
             helper.setSubject(mailMessage.getSubject());
 
             String[] toUsersMail = new MailToUserValidator().validate(mailMessage);
             helper.setTo(toUsersMail);
 
-            Template template = configurer.getConfiguration().getTemplate("mail-complete-schedule.vm");
+            Template template = configurer.getConfiguration().getTemplate("mail-dead-task.vm");
             String text = FreeMarkerTemplateUtils
-                    .processTemplateIntoString(template, sendNewScheduleMailMap(mailMessage));
+                    .processTemplateIntoString(template, sendDeadTaskMailMap(mailMessage));
+            helper.setText(text, true);
+            defaultMailSender.send(mimeMessage);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            logger.error("邮件处理错误", e);
+        }
+    }
+
+    private Map<String, Object> sendDeadTaskMailMap(MailMessage mailMessage) {
+        Map<String, Object> res = new HashMap<>();
+
+        res.put("content", mailMessage.fromContentJSON("content"));
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatTime = simpleDateFormat.format(new Date((long)mailMessage.fromContentJSON("endTime")));
+
+        res.put("endTime", formatTime);
+
+        return res;
+    }
+
+    private void sendWillDeadScheduleMailHtml(MailMessage mailMessage) {
+        MimeMessage mimeMessage = defaultMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
+            helper.setFrom(FROM_EMAIL);
+            helper.setSubject(mailMessage.getSubject());
+
+            String[] toUsersMail = new MailToUserValidator().validate(mailMessage);
+            helper.setTo(toUsersMail);
+
+            Template template = configurer.getConfiguration().getTemplate("mail-dead-schedule.vm");
+            String text = FreeMarkerTemplateUtils
+                    .processTemplateIntoString(template, sendDeadScheduleMailMap(mailMessage));
             helper.setText(text, true);
             defaultMailSender.send(mimeMessage);
         }
@@ -174,6 +215,14 @@ public class MailListener {
             e.printStackTrace();
             logger.error("邮件处理错误", e);
         }
+    }
+
+    private Map<String, Object> sendDeadScheduleMailMap(MailMessage mailMessage) {
+        Map<String, Object> res = new HashMap<>();
+
+        res.put("content", mailMessage.getContent());
+
+        return res;
     }
 
     private Map<String, Object> sendNewScheduleMailMap(MailMessage mailMessage) {

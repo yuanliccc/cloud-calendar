@@ -56,4 +56,9 @@ public class PccTaskServiceImpl extends AbstractService<PccTask> implements PccT
 
         return res;
     }
+
+    @Override
+    public void isRemind(Integer id) {
+        pccTaskMapper.isRemind(id);
+    }
 }

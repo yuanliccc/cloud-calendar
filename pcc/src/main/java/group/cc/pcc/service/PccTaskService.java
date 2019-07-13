@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.service;
 import group.cc.pcc.model.PccTask;
 import group.cc.core.Service;
@@ -21,4 +25,6 @@ public interface PccTaskService extends Service<PccTask> {
     void deleteImitate(Integer id);
 
     Map<String, Long> counts(Integer pccUserId, String startDay, String endDay);
+
+    void isRemind(Integer id);
 }

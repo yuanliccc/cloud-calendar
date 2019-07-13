@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.service.impl;
 
 import com.alibaba.fastjson.JSONObject;

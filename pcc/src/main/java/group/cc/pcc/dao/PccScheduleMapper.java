@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 YuanLi. All rights reserved.
+ */
+
 package group.cc.pcc.dao;
 
 import group.cc.core.Mapper;
@@ -359,8 +363,9 @@ public interface PccScheduleMapper extends Mapper<PccSchedule> {
             "left join pcc_schedule_user as psu on psu.pcc_schedule_id=ps.id " +
             "left join pcc_user as pu on pu.id=psu.pcc_user_id " +
             "where " +
-            "psu.is_dead_remind = '否' and " +
-            "ps.deadline <= from_unixtime(unix_timestamp(now()) + #{between_mils})")
-    List<Map<String, Object>> willDeadSchedule(@Param("between_mils")Long mils);
+            "(psu.is_dead_remind = '否' or psu.is_dead_remind is null) and " +
+            "psu.is_complete='否' and " +
+            "ps.deadline <= from_unixtime(unix_timestamp(now()) + #{between_mils} + 28800)")
+    List<Map<String, Object>> willDeadSchedule(@Param("between_mils") Long mils);
 
 }

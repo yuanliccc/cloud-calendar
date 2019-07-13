@@ -14,9 +14,6 @@
             <div>${content}</div>
             <div class="time">截止时间：${endTime}</div>
         </div>
-        <div class="click-block">
-            <a class="click" link="www.baidu.com">查看</a>
-        </div>
     </div>
 </div>
 </body>
